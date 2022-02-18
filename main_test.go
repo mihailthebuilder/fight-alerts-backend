@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,9 +8,8 @@ import (
 
 func TestCorrectUrl(t *testing.T) {
 
-	received := getDataFromUrl(mmaUrl)
+	received, err := getDataFromUrl(mmaUrl)
 
-	fmt.Println(received, nil)
-
+	assert.Equal(t, err, nil)
 	assert.NotEqual(t, received, nil)
 }

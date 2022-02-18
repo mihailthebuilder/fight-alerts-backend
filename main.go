@@ -9,7 +9,11 @@ const mmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Champion
 func main() {
 	fmt.Println("Started")
 
-	data := getDataFromUrl(mmaUrl)
+	data, err := getDataFromUrl(mmaUrl)
+
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Println(data)
 
@@ -25,6 +29,6 @@ func main() {
 	fmt.Println("Ended")
 }
 
-func getDataFromUrl(url string) []string {
-	return nil
+func getDataFromUrl(url string) ([]string, error) {
+	return nil, fmt.Errorf("unable to generate data")
 }
