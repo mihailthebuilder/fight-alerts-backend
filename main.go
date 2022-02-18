@@ -7,9 +7,16 @@ import (
 )
 
 func main() {
-	fmt.Println("Starting")
+	fmt.Println("Started")
 
 	// Instantiate default collector
 	c := colly.NewCollector()
-	c.Visit("https://abs")
+
+	c.OnError(func(r *colly.Response, err error) {
+		fmt.Println("Request URL:", r.Request.URL, "failed with response:", *r, "\nError:", err)
+	})
+
+	c.Visit("https://abs.fiejfi")
+
+	fmt.Println("Ended")
 }
