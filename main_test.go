@@ -1,12 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCorrectUrl(t *testing.T) {
 
-	if getDataFromUrl(mmaUrl) == nil {
-		t.Error("Test with correct URL failed")
-	}
+	received := getDataFromUrl(mmaUrl)
+
+	fmt.Println(received, nil)
+
+	assert.NotEqual(t, received, nil)
 }
