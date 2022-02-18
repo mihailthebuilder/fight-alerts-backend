@@ -13,7 +13,7 @@ func main() {
 	c := colly.NewCollector()
 
 	c.OnError(func(r *colly.Response, err error) {
-		fmt.Println("Request URL:", r.Request.URL, "failed with response:", *r, "\nError:", err)
+		fmt.Printf("Request URL: %v\n\nfailed with response: %#v\n\nError: %v\n", r.Request.URL, r, err)
 	})
 
 	c.Visit("https://abs.fiejfi")
