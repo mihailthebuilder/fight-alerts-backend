@@ -18,7 +18,7 @@ func TestGetDataFromUrl(t *testing.T) {
 		gotResults, gotError := len(results) > 0, err != nil
 
 		if gotError != test.wantError {
-			t.Errorf("getDataFromUrl(%v) error = %#v | want error = %v", test.input, err, test.wantError)
+			t.Errorf("getDataFromUrl(%v) error = %#v | want error = %v", test.input, err.Error(), test.wantError)
 		}
 
 		if gotResults != test.wantResults {
