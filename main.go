@@ -10,12 +10,16 @@ type Scraper struct {
 	url string
 }
 
+type IScraper interface {
+	getDataFromUrl() ([]string, error)
+}
+
 const mmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"
 
 func main() {
 	fmt.Println("Started")
 
-	scraper := Scraper{mmaUrl}
+	var scraper IScraper = &Scraper{mmaUrl}
 
 	data, err := scraper.getDataFromUrl()
 
