@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/gocolly/colly"
 )
 
 const mmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"
@@ -17,18 +19,21 @@ func main() {
 
 	fmt.Println(data)
 
-	// // Instantiate default collector
-	// c := colly.NewCollector()
-
-	// c.OnError(func(r *colly.Response, err error) {
-	// 	fmt.Printf("Request URL: %v\n\nfailed with response: %#v\n\nError: %v\n", r.Request.URL, r, err)
-	// })
-
-	// c.Visit("https://abs.fiejfi")
-
 	fmt.Println("Ended")
 }
 
 func getDataFromUrl(url string) ([]string, error) {
-	return nil, fmt.Errorf("unable to generate data")
+	// Instantiate default collector
+	c := colly.NewCollector()
+
+	var data []string
+	errOut := fmt.Errorf("something unknown went wrong")
+
+	c.OnError(func(r *colly.Response, err error) {
+		errOut = fmt.Errorf("request URL - %v - failed with status code - %v - error - %v", r.Request.URL, r.StatusCode, err)
+	})
+
+	c.Visit("https://abs.fiejfi")
+
+	return data, errOut
 }
