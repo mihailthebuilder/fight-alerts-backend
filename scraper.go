@@ -11,14 +11,19 @@ type Scraper struct {
 }
 
 type IScraper interface {
-	getResultsFromUrl() ([]string, error)
+	getResultsFromUrl() ([]FightData, error)
 }
 
-func (s Scraper) getResultsFromUrl() ([]string, error) {
+type FightData struct {
+	Date     string
+	Headline string
+}
+
+func (s Scraper) getResultsFromUrl() ([]FightData, error) {
 	// Instantiate default collector
 	c := colly.NewCollector()
 
-	var results []string
+	var results []FightData
 	errOut := fmt.Errorf("unable to find any results")
 
 	c.OnError(func(r *colly.Response, err error) {
@@ -26,7 +31,10 @@ func (s Scraper) getResultsFromUrl() ([]string, error) {
 	})
 
 	c.OnHTML("#upcoming_tab table tr[onclick]", func(e *colly.HTMLElement) {
-		// fmt.Print(e.Text)
+		fightDate := e.ChildAttr("meta[content]", "content")
+		headline := e.ChildText("span[itemprop='name']")
+
+		results = append(results, FightData{fightDate, headline})
 		errOut = nil
 	})
 
