@@ -17,7 +17,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(data)
+	fmt.Printf("%#v", data)
 
 	fmt.Println("Ended")
 }
