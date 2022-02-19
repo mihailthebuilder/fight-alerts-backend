@@ -9,7 +9,7 @@ func TestGetDataFromUrl(t *testing.T) {
 		input       string
 		wantResults bool
 		wantError   bool
-	}{{"https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2", true, false}, {"ffefw.fdfsfs", false, true}, {"https://espn.co.uk", false, true}}
+	}{{mmaUrl, true, false}, {"ffefw.fdfsfs", false, true}, {"https://espn.co.uk", false, true}}
 
 	for _, test := range tests {
 		var scraper IScraper = Scraper{test.input}
