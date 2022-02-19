@@ -8,7 +8,9 @@ import (
 
 func TestCorrectUrl(t *testing.T) {
 
-	_, err := getDataFromUrl(mmaUrl)
+	scraper := Scraper{mmaUrl}
+
+	_, err := scraper.getDataFromUrl()
 
 	assert.Equal(t, nil, err)
 }

@@ -6,12 +6,18 @@ import (
 	"github.com/gocolly/colly"
 )
 
+type Scraper struct {
+	url string
+}
+
 const mmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"
 
 func main() {
 	fmt.Println("Started")
 
-	data, err := getDataFromUrl(mmaUrl)
+	scraper := Scraper{mmaUrl}
+
+	data, err := scraper.getDataFromUrl()
 
 	if err != nil {
 		panic(err)
@@ -22,7 +28,7 @@ func main() {
 	fmt.Println("Ended")
 }
 
-func getDataFromUrl(url string) ([]string, error) {
+func (s *Scraper) getDataFromUrl() ([]string, error) {
 	// Instantiate default collector
 	c := colly.NewCollector()
 
@@ -38,7 +44,7 @@ func getDataFromUrl(url string) ([]string, error) {
 		errOut = nil
 	})
 
-	c.Visit(url)
+	c.Visit(s.url)
 
 	return data, errOut
 }
