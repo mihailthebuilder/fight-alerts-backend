@@ -12,19 +12,24 @@ type Scraper struct {
 }
 
 type IScraper interface {
-	getResultsFromUrl() ([]FightRecord, error)
+	getResultsFromUrl() ([]ProcessedFightRecord, error)
 }
 
-type FightRecord struct {
+type ProcessedFightRecord struct {
 	DateTime time.Time
 	Headline string
 }
 
-func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
+type FightRecord struct {
+	RawRecord *colly.HTMLElement
+	ProcessedFightRecord
+}
+
+func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 	// Instantiate default collector
 	c := colly.NewCollector()
 
-	var results []FightRecord
+	var results []ProcessedFightRecord
 	errOut := fmt.Errorf("unable to find any results")
 
 	c.OnError(func(r *colly.Response, err error) {
@@ -44,7 +49,7 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 
 		headline := e.ChildText("span[itemprop='name']")
 
-		results = append(results, FightRecord{dateTimeParsed, headline})
+		results = append(results, ProcessedFightRecord{dateTimeParsed, headline})
 		errOut = nil
 	})
 
