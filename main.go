@@ -33,7 +33,12 @@ func getDataFromUrl(url string) ([]string, error) {
 		errOut = fmt.Errorf("request URL - %v - failed with status code - %v - error - %v", r.Request.URL, r.StatusCode, err)
 	})
 
-	c.Visit("https://abs.fiejfi")
+	c.OnHTML("#upcoming_tab table tr[onclick]", func(e *colly.HTMLElement) {
+		fmt.Println(e.Text)
+		errOut = nil
+	})
+
+	c.Visit(url)
 
 	return data, errOut
 }
