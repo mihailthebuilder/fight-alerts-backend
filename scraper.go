@@ -35,9 +35,9 @@ func (s Scraper) getResultsFromUrl() ([]FightData, error) {
 		dateTimeLayout := time.RFC822
 		dateTimeString := e.ChildAttr("meta[content]", "content")
 
-		dateTimeParsed, errTime := time.Parse(dateTimeLayout, dateTimeString)
+		dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
 
-		if errTime != nil {
+		if errTimeParse != nil {
 			errOut = fmt.Errorf("can't parse string %v", dateTimeString)
 			return
 		}
