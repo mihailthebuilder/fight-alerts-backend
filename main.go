@@ -11,7 +11,7 @@ type Scraper struct {
 }
 
 type IScraper interface {
-	getDataFromUrl() ([]string, error)
+	getResultsFromUrl() ([]string, error)
 }
 
 const mmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"
@@ -21,7 +21,7 @@ func main() {
 
 	var scraper IScraper = Scraper{mmaUrl}
 
-	data, err := scraper.getDataFromUrl()
+	data, err := scraper.getResultsFromUrl()
 
 	if err != nil {
 		panic(err)
@@ -32,12 +32,12 @@ func main() {
 	fmt.Println("Ended")
 }
 
-func (s Scraper) getDataFromUrl() ([]string, error) {
+func (s Scraper) getResultsFromUrl() ([]string, error) {
 	// Instantiate default collector
 	c := colly.NewCollector()
 
 	var data []string
-	errOut := fmt.Errorf("something unknown went wrong")
+	errOut := fmt.Errorf("unable to find any results")
 
 	c.OnError(func(r *colly.Response, err error) {
 		errOut = fmt.Errorf("request URL - %v - failed with status code - %v - error - %v", r.Request.URL, r.StatusCode, err)

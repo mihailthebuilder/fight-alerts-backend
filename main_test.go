@@ -2,31 +2,27 @@ package main
 
 import (
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
-func TestCorrectUrl(t *testing.T) {
+func TestGetDataFromUrl(t *testing.T) {
+	var tests = []struct {
+		input       string
+		wantResults bool
+		wantError   bool
+	}{{"https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2", true, false}, {"ffefw.fdfsfs", false, true}, {"https://espn.co.uk", false, true}}
 
-	scraper := Scraper{"https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"}
+	for _, test := range tests {
+		var scraper IScraper = Scraper{test.input}
 
-	data, err := scraper.getDataFromUrl()
+		results, err := scraper.getResultsFromUrl()
+		gotResults, gotError := len(results) > 0, err != nil
 
-	assert.Equal(t, nil, err, "Correct URL should not return an error")
-	assert.NotEqual(t, len(data), 0, "Correct URL should return some results")
-}
+		if gotError != test.wantError {
+			t.Errorf("getDataFromUrl(%v) error = %#v | want error = %v", test.input, err, test.wantError)
+		}
 
-func TestInvalidUrl(t *testing.T) {
-	scraper := Scraper{"fsfjfi.f32fji"}
-
-	_, err := scraper.getDataFromUrl()
-
-	assert.NotEqual(t, nil, err)
-}
-
-func TestIrrelevantUrl(t *testing.T) {
-	scraper := Scraper{"https://espn.co.uk"}
-
-	_, err := scraper.getDataFromUrl()
-	assert.NotEqual(t, nil, err)
+		if gotResults != test.wantResults {
+			t.Errorf("getDataFromUrl(%v) results = %#v | want results = %v", test.input, results, test.wantResults)
+		}
+	}
 }
