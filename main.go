@@ -40,7 +40,7 @@ func (s *Scraper) getDataFromUrl() ([]string, error) {
 	})
 
 	c.OnHTML("#upcoming_tab table tr[onclick]", func(e *colly.HTMLElement) {
-		fmt.Println(e.Text)
+		// fmt.Print(e.Text)
 		errOut = nil
 	})
 
