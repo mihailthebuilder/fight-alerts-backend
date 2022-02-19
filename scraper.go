@@ -38,7 +38,7 @@ func (s Scraper) getResultsFromUrl() ([]FightData, error) {
 		dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
 
 		if errTimeParse != nil {
-			errOut = fmt.Errorf("can't parse string %v", dateTimeString)
+			errOut = fmt.Errorf("can't parse string - %v", dateTimeString)
 			return
 		}
 
