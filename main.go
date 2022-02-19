@@ -19,7 +19,7 @@ const mmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Champion
 func main() {
 	fmt.Println("Started")
 
-	var scraper IScraper = &Scraper{mmaUrl}
+	var scraper IScraper = Scraper{mmaUrl}
 
 	data, err := scraper.getDataFromUrl()
 
@@ -32,7 +32,7 @@ func main() {
 	fmt.Println("Ended")
 }
 
-func (s *Scraper) getDataFromUrl() ([]string, error) {
+func (s Scraper) getDataFromUrl() ([]string, error) {
 	// Instantiate default collector
 	c := colly.NewCollector()
 
