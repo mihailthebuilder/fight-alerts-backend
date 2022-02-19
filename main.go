@@ -36,7 +36,7 @@ func (s Scraper) getResultsFromUrl() ([]string, error) {
 	// Instantiate default collector
 	c := colly.NewCollector()
 
-	var data []string
+	var results []string
 	errOut := fmt.Errorf("unable to find any results")
 
 	c.OnError(func(r *colly.Response, err error) {
@@ -50,5 +50,5 @@ func (s Scraper) getResultsFromUrl() ([]string, error) {
 
 	c.Visit(s.url)
 
-	return data, errOut
+	return results, errOut
 }
