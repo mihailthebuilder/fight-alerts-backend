@@ -32,7 +32,7 @@ func (s Scraper) getResultsFromUrl() ([]FightData, error) {
 	})
 
 	c.OnHTML("#upcoming_tab table tr[onclick]", func(e *colly.HTMLElement) {
-		dateTimeLayout := time.RFC822
+		dateTimeLayout := time.RFC3339
 		dateTimeString := e.ChildAttr("meta[content]", "content")
 
 		dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
