@@ -10,5 +10,5 @@ func TestCorrectUrl(t *testing.T) {
 
 	_, err := getDataFromUrl(mmaUrl)
 
-	assert.Equal(t, err, nil)
+	assert.Equal(t, nil, err)
 }
