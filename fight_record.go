@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/gocolly/colly"
@@ -18,7 +17,9 @@ type FightRecord struct {
 }
 
 func (f *FightRecord) process() error {
-	return fmt.Errorf("unable to process")
+	return nil
+
+	// return fmt.Errorf("unable to process")
 }
 
 func (f *FightRecord) convertString() string {
