@@ -20,3 +20,14 @@ type FightRecord struct {
 func (f *FightRecord) process() error {
 	return fmt.Errorf("unable to process")
 }
+
+func (f *FightRecord) convertString() string {
+	html, err := f.RawRecord.DOM.Html()
+	if err != nil {
+		return "{unknown}"
+		// fmt.Println("Error processing record {unknown}")
+	}
+
+	// fmt.Printf("Error processing record: %v\n", html)
+	return html
+}

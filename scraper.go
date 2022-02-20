@@ -33,12 +33,7 @@ func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 		errRecordProcess := fightRecord.process()
 
 		if errRecordProcess != nil {
-			domHtml, errHtml := e.DOM.Html()
-			if errHtml == nil {
-				fmt.Printf("Error processing record: %v\n", domHtml)
-			} else {
-				fmt.Println("Error processing record {unknown}")
-			}
+			fmt.Printf("Error processing record: %v\n", fightRecord.convertString())
 			return
 		}
 
