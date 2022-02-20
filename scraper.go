@@ -27,7 +27,19 @@ func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 
 	c.OnHTML("#upcoming_tab table tr[onclick]", func(e *colly.HTMLElement) {
 		fightRecord := FightRecord{RawRecord: e}
-		fightRecord.process()
+
+		// if we find an error in one of the records, we
+		// ignore that record and move on to the next
+		errRecordProcess := fightRecord.process()
+
+		if errRecordProcess != nil {
+			domHtml, errHtml := e.DOM.Html()
+			if errHtml == nil {
+				fmt.Printf("Error processing record: %v\n", domHtml)
+			} else {
+				fmt.Println("Error processing record {unknown}")
+			}
+		}
 
 		// dateTimeLayout := time.RFC3339
 		// dateTimeString := e.ChildAttr("meta[content]", "content")
