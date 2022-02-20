@@ -39,6 +39,7 @@ func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 			} else {
 				fmt.Println("Error processing record {unknown}")
 			}
+			return
 		}
 
 		// dateTimeLayout := time.RFC3339
