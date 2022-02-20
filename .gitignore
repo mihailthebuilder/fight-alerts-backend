@@ -1,3 +1,5 @@
 *.exe
 *_mocks.go
 test_results
+coverage.out
+coverage.html
