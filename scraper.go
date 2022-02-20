@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/gocolly/colly"
 )
@@ -14,16 +13,6 @@ type Scraper struct {
 type IScraper interface {
 	getResultsFromUrl() ([]ProcessedFightRecord, error)
 }
-
-type ProcessedFightRecord struct {
-	DateTime time.Time
-	Headline string
-}
-
-// type FightRecord struct {
-// 	RawRecord *colly.HTMLElement
-// 	ProcessedFightRecord
-// }
 
 func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 	// Instantiate default collector
@@ -37,19 +26,22 @@ func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 	})
 
 	c.OnHTML("#upcoming_tab table tr[onclick]", func(e *colly.HTMLElement) {
-		dateTimeLayout := time.RFC3339
-		dateTimeString := e.ChildAttr("meta[content]", "content")
+		fightRecord := FightRecord{RawRecord: e}
+		fightRecord.process()
 
-		dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
+		// dateTimeLayout := time.RFC3339
+		// dateTimeString := e.ChildAttr("meta[content]", "content")
 
-		if errTimeParse != nil {
-			errOut = fmt.Errorf("can't parse string - %v", dateTimeString)
-			return
-		}
+		// dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
 
-		headline := e.ChildText("span[itemprop='name']")
+		// if errTimeParse != nil {
+		// 	errOut = fmt.Errorf("can't parse string - %v", dateTimeString)
+		// 	return
+		// }
 
-		results = append(results, ProcessedFightRecord{dateTimeParsed, headline})
+		// headline := e.ChildText("span[itemprop='name']")
+
+		results = append(results, fightRecord.ProcessedFightRecord)
 		errOut = nil
 	})
 
