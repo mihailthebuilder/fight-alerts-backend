@@ -26,14 +26,14 @@ func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 	})
 
 	c.OnHTML("#upcoming_tab table tr[onclick]", func(e *colly.HTMLElement) {
-		fightRecord := FightRecord{RawRecord: e}
+		var fightRecord IFightRecord = FightRecord{*e}
+
+		processedRecord, err := fightRecord.getProcessedRecord()
 
 		// if we find an error in one of the records, we
 		// ignore that record and move on to the next
-		errRecordProcess := fightRecord.process()
-
-		if errRecordProcess != nil {
-			fmt.Printf("Error processing record: %v\n", fightRecord.convertString())
+		if err != nil {
+			fmt.Print(err)
 			return
 		}
 
@@ -49,7 +49,7 @@ func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 
 		// headline := e.ChildText("span[itemprop='name']")
 
-		results = append(results, fightRecord.ProcessedFightRecord)
+		results = append(results, processedRecord)
 		errOut = nil
 	})
 

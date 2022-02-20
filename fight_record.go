@@ -12,17 +12,21 @@ type ProcessedFightRecord struct {
 }
 
 type FightRecord struct {
-	RawRecord *colly.HTMLElement
-	ProcessedFightRecord
+	RawRecord colly.HTMLElement
 }
 
-func (f *FightRecord) process() error {
-	return nil
-
-	// return fmt.Errorf("unable to process")
+type IFightRecord interface {
+	getHtmlString() string
+	getProcessedRecord() (ProcessedFightRecord, error)
 }
 
-func (f *FightRecord) convertString() string {
+func (f FightRecord) getProcessedRecord() (ProcessedFightRecord, error) {
+	var processedFightRecord ProcessedFightRecord
+
+	return processedFightRecord, nil
+}
+
+func (f FightRecord) getHtmlString() string {
 	html, err := f.RawRecord.DOM.Html()
 	if err != nil {
 		return "{unknown}"
