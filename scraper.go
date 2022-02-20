@@ -20,10 +20,10 @@ type ProcessedFightRecord struct {
 	Headline string
 }
 
-type FightRecord struct {
-	RawRecord *colly.HTMLElement
-	ProcessedFightRecord
-}
+// type FightRecord struct {
+// 	RawRecord *colly.HTMLElement
+// 	ProcessedFightRecord
+// }
 
 func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 	// Instantiate default collector
