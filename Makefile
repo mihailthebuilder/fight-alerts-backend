@@ -1,14 +1,17 @@
-.PHONY build:
+BASE_DIR_LINUX=$(shell pwd)
+BASE_DIR_WINDOWS=$(shell cygpath -m $(BASE_DIR_LINUX))
+
+build:
 	go build
 
-.PHONY run: build
+run: build
 	./fight-alerts-backend.exe
 
-.PHONY test:
+test:
 	mockgen --source=scraper.go --destination=./scraper_mocks.go --package=main
 	mockgen --source=fight_record.go --destination=./fight_record_mocks.go --package=main
 	go test -coverprofile=coverage.out
 	go tool cover -html=coverage.out -o coverage.html
 
-.PHONY open-coverage:
-	start chrome $PWD/coverage.html
+open-coverage:
+	start chrome "$(BASE_DIR_WINDOWS)/coverage.html"
