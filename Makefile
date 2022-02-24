@@ -9,3 +9,6 @@
 	mockgen --source=fight_record.go --destination=./fight_record_mocks.go --package=main
 	go test -coverprofile=coverage.out
 	go tool cover -html=coverage.out -o coverage.html
+
+.PHONY open-coverage:
+	start chrome $PWD/coverage.html
