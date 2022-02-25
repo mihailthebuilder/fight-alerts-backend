@@ -2,10 +2,7 @@ module fight-alerts-backend
 
 go 1.17
 
-require (
-	github.com/gocolly/colly v1.2.0
-	github.com/golang/mock v1.6.0
-)
+require github.com/gocolly/colly v1.2.0
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
