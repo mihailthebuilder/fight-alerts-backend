@@ -15,4 +15,4 @@ test:
 	go tool cover -html=$(TEST_RESULTS_DIR)/coverage.out -o $(TEST_RESULTS_DIR)/coverage.html
 
 open-coverage:
-	start chrome "$(TEST_RESULTS_DIR)/	coverage.html"
+	start chrome "$(TEST_RESULTS_DIR)/coverage.html"
