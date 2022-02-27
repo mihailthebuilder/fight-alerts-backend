@@ -68,9 +68,9 @@ func parseCollyHtml(e ICollyHtmlElem) (FightRecord, error) {
 	fightRecord := FightRecord{}
 	var errOut error = nil
 
-	dateTimeLayout := time.RFC3339
 	dateTimeString := e.ChildAttr("meta[content]", "content")
 
+	dateTimeLayout := time.RFC3339
 	dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
 
 	if errTimeParse != nil {
