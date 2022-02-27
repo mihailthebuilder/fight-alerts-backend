@@ -7,11 +7,14 @@ import (
 const mmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"
 
 func main() {
+	scraper := Scraper{mmaUrl}
+	run(scraper)
+}
+
+func run(s IScraper) {
 	fmt.Println("Started")
 
-	var scraper IScraper = Scraper{mmaUrl}
-
-	data, err := scraper.getResultsFromUrl()
+	data, err := s.getResultsFromUrl()
 
 	if err != nil {
 		panic(err)
@@ -19,5 +22,5 @@ func main() {
 
 	fmt.Printf("%#v", data)
 
-	fmt.Println("Ended")
+	fmt.Println("\nEnded")
 }

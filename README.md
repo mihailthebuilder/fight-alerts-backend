@@ -16,5 +16,8 @@ make run
 ~~Using dynamic folder paths in `Makefile`~~
 - Move coverage, mocks, unit tests and service tests to separate folders
 
-Set up `fight_record.go` in an OOP way so that you can use mocks 
-- Use mockgen
+~~Use mockgen~~
+~~Convert `main_test.go` to table tests~~
+Consider using own mocks instead of mockgen in `main_test.go`
+
+Look into how to test `scraper.go`

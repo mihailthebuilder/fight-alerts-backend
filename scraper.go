@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/gocolly/colly"
 )
@@ -10,15 +11,20 @@ type Scraper struct {
 	url string
 }
 
-type IScraper interface {
-	getResultsFromUrl() ([]ProcessedFightRecord, error)
+type FightRecord struct {
+	DateTime time.Time
+	Headline string
 }
 
-func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
+type IScraper interface {
+	getResultsFromUrl() ([]FightRecord, error)
+}
+
+func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 	// Instantiate default collector
 	c := colly.NewCollector()
 
-	var results []ProcessedFightRecord
+	var results []FightRecord
 	errOut := fmt.Errorf("unable to find any results")
 
 	c.OnError(func(r *colly.Response, err error) {
@@ -26,16 +32,17 @@ func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 	})
 
 	c.OnHTML("#upcoming_tab table tr[onclick]", func(e *colly.HTMLElement) {
-		var fightRecord IFightRecord = FightRecord{*e}
+		// html, err := e.DOM.Html()
 
-		processedRecord, err := fightRecord.getProcessedRecord()
+		// // if we find an error in one of the records, we
+		// // ignore that record and move on to the next
+		// if err != nil {
+		// 	fmt.Print(err)
+		// 	return
+		// }
 
-		// if we find an error in one of the records, we
-		// ignore that record and move on to the next
-		if err != nil {
-			fmt.Print(err)
-			return
-		}
+		// fmt.Printf("Error processing record: %v\n", html)
+		// fmt.Println("Error processing record {unknown}")
 
 		// dateTimeLayout := time.RFC3339
 		// dateTimeString := e.ChildAttr("meta[content]", "content")
@@ -49,7 +56,7 @@ func (s Scraper) getResultsFromUrl() ([]ProcessedFightRecord, error) {
 
 		// headline := e.ChildText("span[itemprop='name']")
 
-		results = append(results, processedRecord)
+		results = append(results, FightRecord{})
 		errOut = nil
 	})
 
