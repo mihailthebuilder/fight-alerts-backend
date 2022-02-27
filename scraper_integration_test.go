@@ -2,9 +2,10 @@ package main
 
 import (
 	"testing"
+	"time"
 )
 
-func TestGetDataFromUrl(t *testing.T) {
+func Test_getDataFromUrl(t *testing.T) {
 	var tests = []struct {
 		input       string
 		wantResults bool
@@ -23,6 +24,14 @@ func TestGetDataFromUrl(t *testing.T) {
 
 		if gotResults != test.wantResults {
 			t.Errorf("getDataFromUrl(%v) results = %#v | want results = %v", test.input, results, test.wantResults)
+		}
+
+		if gotResults {
+			for _, record := range results {
+				if len(record.Headline) == 0 || time.Now().After(record.DateTime) {
+					t.Errorf("getDataFromUrl(%v) invalid record - %#v", test.input, record)
+				}
+			}
 		}
 	}
 }
