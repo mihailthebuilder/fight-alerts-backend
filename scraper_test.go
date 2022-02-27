@@ -16,9 +16,9 @@ func (e MockCollyElem) ChildAttr(selector string, attr string) string {
 	}
 
 	today := time.Now()
-	tomorrow := today.Add(time.Hour * 24 * 10)
+	future := today.Add(time.Hour * 24 * 10)
 
-	return tomorrow.String()
+	return future.String()
 }
 
 func (e MockCollyElem) ChildText(selector string) string {
