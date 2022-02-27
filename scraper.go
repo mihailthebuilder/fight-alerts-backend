@@ -32,31 +32,28 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 	})
 
 	c.OnHTML("#upcoming_tab table tr[onclick]", func(e *colly.HTMLElement) {
-		// html, err := e.DOM.Html()
+		html, err := e.DOM.Html()
 
-		// // if we find an error in one of the records, we
-		// // ignore that record and move on to the next
-		// if err != nil {
-		// 	fmt.Print(err)
-		// 	return
-		// }
+		// if we find an error in one of the records, we
+		// ignore that record and move on to the next
+		if err != nil {
+			fmt.Print(err)
+			html = "unknown"
+		}
 
-		// fmt.Printf("Error processing record: %v\n", html)
-		// fmt.Println("Error processing record {unknown}")
+		dateTimeLayout := time.RFC3339
+		dateTimeString := e.ChildAttr("meta[content]", "content")
 
-		// dateTimeLayout := time.RFC3339
-		// dateTimeString := e.ChildAttr("meta[content]", "content")
+		dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
 
-		// dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
+		if errTimeParse != nil {
+			fmt.Printf("can't parse date from html - %v", html)
+			return
+		}
 
-		// if errTimeParse != nil {
-		// 	errOut = fmt.Errorf("can't parse string - %v", dateTimeString)
-		// 	return
-		// }
+		headline := e.ChildText("span[itemprop='name']")
 
-		// headline := e.ChildText("span[itemprop='name']")
-
-		results = append(results, FightRecord{})
+		results = append(results, FightRecord{DateTime: dateTimeParsed, Headline: headline})
 		errOut = nil
 	})
 
