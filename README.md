@@ -14,10 +14,9 @@ make run
 
 # TODO
 ~~Using dynamic folder paths in `Makefile`~~
-- Move coverage, mocks, unit tests and service tests to separate folders
 
 ~~Use mockgen~~
 ~~Convert `main_test.go` to table tests~~
-Consider using own mocks instead of mockgen in `main_test.go`
+~~Consider using own mocks instead of mockgen in `main_test.go`~~
 
 Look into how to test `scraper.go`
