@@ -58,6 +58,8 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 
 	c.Visit(s.url)
 
+	// if len results > 0 return error
+
 	return results, errOut
 }
 
