@@ -81,25 +81,23 @@ func Test_parseDateTime(t *testing.T) {
 		s string
 	}
 
-	validTime := time.Now()
-
 	tests := []struct {
-		name    string
-		args    args
-		want    time.Time
-		wantErr bool
+		name     string
+		args     args
+		wantYear int
+		wantErr  bool
 	}{
 		{
-			name:    "valid date",
-			args:    args{s: validTime.String()},
-			want:    validTime,
-			wantErr: false,
+			name:     "valid date",
+			args:     args{s: "2050-03-05T00:00:00-08:00"},
+			wantYear: 2050,
+			wantErr:  false,
 		},
 		{
-			name:    "invalid date",
-			args:    args{s: "invalid date"},
-			want:    time.Time{},
-			wantErr: true,
+			name:     "invalid date",
+			args:     args{s: "invalid date"},
+			wantYear: 1,
+			wantErr:  true,
 		},
 	}
 	for _, tt := range tests {
@@ -109,8 +107,8 @@ func Test_parseDateTime(t *testing.T) {
 				t.Errorf("parseDateTime() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("parseDateTime() = %v, want %v", got, tt.want)
+			if !reflect.DeepEqual(got.Year(), tt.wantYear) {
+				t.Errorf("parseDateTime() = %v / year %v, want %v", got, got.Year(), tt.wantYear)
 			}
 		})
 	}

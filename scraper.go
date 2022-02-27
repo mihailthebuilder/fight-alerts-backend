@@ -82,9 +82,7 @@ func parseCollyHtml(e ICollyHtmlElem) (FightRecord, error) {
 func parseDateTime(s string) (time.Time, error) {
 	var errOut error = nil
 
-	layout := time.RFC3339
-
-	result, err := time.Parse(layout, s)
+	result, err := time.Parse("2006-01-02T00:00:00-08:00", s)
 
 	if err != nil {
 		errOut = fmt.Errorf("can't parse date from html - %v", err)
