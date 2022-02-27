@@ -28,8 +28,8 @@ func Test_run(t *testing.T) {
 		args      args
 		wantPanic bool
 	}{
-		{name: "Test run function successful", args: args{s: MockScraper{wantError: false}}},
-		{name: "Test run function failed", args: args{s: MockScraper{wantError: true}}, wantPanic: true},
+		{name: "run function should not return panic", args: args{s: MockScraper{wantError: false}}},
+		{name: "run function should return panic", args: args{s: MockScraper{wantError: true}}, wantPanic: true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
