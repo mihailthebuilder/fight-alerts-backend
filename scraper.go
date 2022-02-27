@@ -87,7 +87,7 @@ func parseDateTime(s string) (time.Time, error) {
 	result, err := time.Parse(layout, s)
 
 	if err != nil {
-		errOut = fmt.Errorf("can't parse date from html - %#v", err)
+		errOut = fmt.Errorf("can't parse date from html - %v", err)
 	}
 
 	return result, errOut
