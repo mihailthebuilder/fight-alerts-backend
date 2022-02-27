@@ -65,25 +65,30 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 
 func parseCollyHtml(e ICollyHtmlElem) (FightRecord, error) {
 
-	fightRecord := FightRecord{}
-	var errOut error = nil
+	dateTime, err := parseDateTime(e.ChildAttr("meta[content]", "content"))
 
-	dateTimeString := e.ChildAttr("meta[content]", "content")
-
-	dateTimeLayout := time.RFC3339
-	dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
-
-	if errTimeParse != nil {
-		errOut = fmt.Errorf("can't parse date from html")
+	if err != nil {
+		return FightRecord{}, err
 	}
-
-	fightRecord.DateTime = dateTimeParsed
 
 	headline := e.ChildText("span[itemprop='name']")
 	if len([]rune(headline)) == 0 {
-		errOut = fmt.Errorf("can't get headline from html")
+		return FightRecord{}, fmt.Errorf("can't get headline from html")
 	}
-	fightRecord.Headline = headline
 
-	return fightRecord, errOut
+	return FightRecord{DateTime: dateTime, Headline: headline}, nil
+}
+
+func parseDateTime(s string) (time.Time, error) {
+	var errOut error = nil
+
+	layout := time.RFC3339
+
+	result, err := time.Parse(layout, s)
+
+	if err != nil {
+		errOut = fmt.Errorf("can't parse date from html - %#v", err)
+	}
+
+	return result, errOut
 }
