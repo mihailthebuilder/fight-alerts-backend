@@ -16,10 +16,7 @@ func (e MockCollyElem) ChildAttr(selector string, attr string) string {
 		return "invalid date"
 	}
 
-	today := time.Now()
-	future := today.Add(time.Hour * 24 * 10)
-
-	return future.String()
+	return "2050-03-05T00:00:00-08:00"
 }
 
 func (e MockCollyElem) ChildText(selector string) string {
