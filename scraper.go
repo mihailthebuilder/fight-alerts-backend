@@ -21,8 +21,8 @@ type IScraper interface {
 }
 
 type ICollyHtmlElem interface {
-	ChildAttr(string, string) string
-	ChildText(string) string
+	ChildAttr(selector string, attr string) string
+	ChildText(selector string) string
 }
 
 func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
