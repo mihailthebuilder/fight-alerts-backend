@@ -30,7 +30,7 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 	c := colly.NewCollector()
 
 	var results []FightRecord
-	errOut := fmt.Errorf("unable to find any results")
+	var errOut error
 
 	c.OnError(func(r *colly.Response, err error) {
 		errOut = fmt.Errorf("failed with status code - %v - error - %v", r.StatusCode, err)
@@ -58,7 +58,9 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 
 	c.Visit(s.url)
 
-	// if len results > 0 return error
+	if len(results) == 0 && errOut == nil {
+		errOut = fmt.Errorf("unable to find any results")
+	}
 
 	return results, errOut
 }
