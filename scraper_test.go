@@ -86,8 +86,8 @@ func Test_parseDateTime(t *testing.T) {
 	}{
 		{
 			name:     "valid date",
-			args:     args{s: "2050-03-05T00:00:00-08:00"},
-			wantYear: 2050,
+			args:     args{s: "2022-03-05T00:00:00-08:00"},
+			wantYear: 2022,
 			wantErr:  false,
 		},
 		{
