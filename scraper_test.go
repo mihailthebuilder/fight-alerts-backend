@@ -1,6 +1,7 @@
 package main
 
 import (
+	"reflect"
 	"testing"
 	"time"
 )
@@ -70,6 +71,46 @@ func Test_parseCollyHtml(t *testing.T) {
 
 			if err == nil {
 				ValidateFightRecord(got, t)
+			}
+		})
+	}
+}
+
+func Test_parseDateTime(t *testing.T) {
+	type args struct {
+		s string
+	}
+
+	validTime := time.Now()
+
+	tests := []struct {
+		name    string
+		args    args
+		want    time.Time
+		wantErr bool
+	}{
+		{
+			name:    "valid date",
+			args:    args{s: validTime.String()},
+			want:    validTime,
+			wantErr: false,
+		},
+		{
+			name:    "invalid date",
+			args:    args{s: "invalid date"},
+			want:    time.Time{},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := parseDateTime(tt.args.s)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("parseDateTime() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("parseDateTime() = %v, want %v", got, tt.want)
 			}
 		})
 	}
