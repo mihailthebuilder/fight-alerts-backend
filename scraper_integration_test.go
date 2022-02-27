@@ -2,7 +2,6 @@ package main
 
 import (
 	"testing"
-	"time"
 )
 
 func Test_getDataFromUrl(t *testing.T) {
@@ -28,9 +27,7 @@ func Test_getDataFromUrl(t *testing.T) {
 
 		if gotResults {
 			for _, record := range results {
-				if len(record.Headline) == 0 || time.Now().After(record.DateTime) {
-					t.Errorf("getDataFromUrl(%v) record should not have nil or nil-equivalent values - %#v", test.input, record)
-				}
+				ValidateFightRecord(record, t)
 			}
 		}
 	}
