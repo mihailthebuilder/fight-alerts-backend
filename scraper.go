@@ -37,16 +37,23 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 	})
 
 	c.OnHTML("#upcoming_tab table tr[onclick]", func(e *colly.HTMLElement) {
-		html, err := e.DOM.Html()
+		record, err := parseCollyHtml(e)
 
 		// if we find an error in one of the records, we
 		// ignore that record and move on to the next
 		if err != nil {
+			// html, err := e.DOM.Html()
+
+			// if err != nil {
+			// 	fmt.Print(err)
+			// 	html = "unknown"
+			// }
+
 			fmt.Print(err)
-			html = "unknown"
+			return
 		}
 
-		parseCollyHtml(e, &results, &errOut, html)
+		results = append(results, record)
 	})
 
 	c.Visit(s.url)
@@ -54,19 +61,20 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 	return results, errOut
 }
 
-func parseCollyHtml(e ICollyHtmlElem, r *[]FightRecord, err *error, rawHtml string) {
-	dateTimeLayout := time.RFC3339
-	dateTimeString := e.ChildAttr("meta[content]", "content")
+func parseCollyHtml(e ICollyHtmlElem) (FightRecord, error) {
+	// dateTimeLayout := time.RFC3339
+	// dateTimeString := e.ChildAttr("meta[content]", "content")
 
-	dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
+	// dateTimeParsed, errTimeParse := time.Parse(dateTimeLayout, dateTimeString)
 
-	if errTimeParse != nil {
-		fmt.Printf("can't parse date from html - %v", rawHtml)
-		return
-	}
+	// if errTimeParse != nil {
+	// 	fmt.Printf("can't parse date from html - %v", rawHtml)
+	// 	return
+	// }
 
-	headline := e.ChildText("span[itemprop='name']")
+	// headline := e.ChildText("span[itemprop='name']")
 
-	*r = append(*r, FightRecord{DateTime: dateTimeParsed, Headline: headline})
-	*err = nil
+	// *r = append(*r, FightRecord{DateTime: dateTimeParsed, Headline: headline})
+	// *err = nil
+	return FightRecord{}, fmt.Errorf("HELOOS")
 }
