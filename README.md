@@ -13,10 +13,4 @@ make run
 ```
 
 # TODO
-~~Using dynamic folder paths in `Makefile`~~
-
-~~Use mockgen~~
-~~Convert `main_test.go` to table tests~~
-~~Consider using own mocks instead of mockgen in `main_test.go`~~
-
-Look into how to test `scraper.go`
+Figure out ways to do more testing in `scraper.go`
