@@ -30,3 +30,7 @@ Set up AWS RDS db to write the data to
 
 Figure out how to do the notificiation sender
 - maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
+
+# Technical debt
+
+Consider moving `scraper` to a separate package
