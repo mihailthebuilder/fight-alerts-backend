@@ -49,7 +49,7 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 			// 	html = "unknown"
 			// }
 
-			fmt.Print(err)
+			fmt.Println(err)
 			return
 		}
 
