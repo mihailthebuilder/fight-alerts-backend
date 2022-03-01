@@ -49,7 +49,7 @@ func Test_parseCollyHtml(t *testing.T) {
 		},
 		{
 			name:    "invalid headline",
-			args:    args{e: MockCollyElem{validDate: false, validHeadline: true}},
+			args:    args{e: MockCollyElem{validDate: true, validHeadline: false}},
 			wantErr: true,
 		},
 		{
