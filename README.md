@@ -13,4 +13,7 @@ make run
 ```
 
 # TODO
-Figure out ways to do more testing in `scraper.go`
+
+# Tech debt
+Improve test coverage in `scraper.go`
+- one way is to create a mock html page and run `getResultsFromUrl` against it
