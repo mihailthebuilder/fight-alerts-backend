@@ -16,9 +16,6 @@ make run
 ```
 
 # TODO
-Improve test coverage in `scraper.go`
-- one way is to create a mock html page and run `getResultsFromUrl` against it
-    - but see why it doesn't get triggered with `espn.co.uk` test in `scraper_integration_test.go`
 
 Set up AWS lambda with this functionality
 - write terraform
@@ -32,5 +29,9 @@ Figure out how to do the notificiation sender
 - maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
 
 # Technical debt
+
+Improve test coverage in `scraper.go`
+- one way is to create a mock html page and run `getResultsFromUrl` against it
+    - but see why it doesn't get triggered with `espn.co.uk` test in `scraper_integration_test.go`
 
 Consider moving `scraper` to a separate package
