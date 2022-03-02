@@ -18,8 +18,8 @@ make run
 # TODO
 
 Set up AWS lambda with this functionality
-- write terraform
-    - figure out why having an error with `terraform apply` on invalid bucket name
+- write terraform using [this guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway)
+    - ~~s3 bucket that holds the code~~
 - amend code to use lambda loggers & handlers
 
 Set up Jenkins deployment
