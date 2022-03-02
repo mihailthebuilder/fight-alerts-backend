@@ -42,14 +42,14 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 		// if we find an error in one of the records, we
 		// ignore that record and move on to the next
 		if err != nil {
-			// html, err := e.DOM.Html()
+			html, err := e.DOM.Html()
 
-			// if err != nil {
-			// 	fmt.Print(err)
-			// 	html = "unknown"
-			// }
+			if err != nil {
+				fmt.Print(err)
+				html = "unknown"
+			}
 
-			fmt.Println(err)
+			fmt.Println(err, html)
 			return
 		}
 
