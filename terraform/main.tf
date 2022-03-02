@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "fight_alerts_scraper_lambda_bucket" {
-  bucket = "fight_alerts_scraper_lambda_bucket-prod"
+  bucket = "fight-alerts-scraper-lambda-bucket-prod"
 
   tags = {
     Owner       = "Mihail_Marian"
