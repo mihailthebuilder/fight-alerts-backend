@@ -21,6 +21,8 @@ Set up AWS lambda with this functionality
 - write terraform
 - amend code to use lambda loggers & handlers
 
+Set up Jenkins deployment
+
 Set up AWS RDS db to write the data to
 - write terraform
 - amend code to use db (with tests)
@@ -35,3 +37,5 @@ Improve test coverage in `scraper.go`
     - but see why it doesn't get triggered with `espn.co.uk` test in `scraper_integration_test.go`
 
 Consider moving `scraper` to a separate package
+
+Organise terraform files in a similar way to ST backend
