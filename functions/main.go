@@ -2,13 +2,16 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
 const mmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"
 
 func main() {
 	scraper := Scraper{mmaUrl}
-	run(scraper)
+	lambdaHandler := handler{scraper: scraper}
+	lambda.Start(lambdaHandler.handleRequest)
 }
 
 func run(s IScraper) {
