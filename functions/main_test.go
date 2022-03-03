@@ -2,9 +2,6 @@ package main
 
 import (
 	"fmt"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 type MockScraper struct {
@@ -18,27 +15,27 @@ func (s MockScraper) getResultsFromUrl() ([]FightRecord, error) {
 	return []FightRecord{}, nil
 }
 
-func Test_run(t *testing.T) {
-	type args struct {
-		s IScraper
-	}
+// func Test_run(t *testing.T) {
+// 	type args struct {
+// 		s IScraper
+// 	}
 
-	tests := []struct {
-		name      string
-		args      args
-		wantPanic bool
-	}{
-		{name: "run function should not return panic", args: args{s: MockScraper{wantError: false}}},
-		{name: "run function should return panic", args: args{s: MockScraper{wantError: true}}, wantPanic: true},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if tt.wantPanic == true {
-				assert.Panics(t, func() { run(tt.args.s) }, "The code did not panic")
-				return
-			}
+// 	tests := []struct {
+// 		name      string
+// 		args      args
+// 		wantPanic bool
+// 	}{
+// 		{name: "run function should not return panic", args: args{s: MockScraper{wantError: false}}},
+// 		{name: "run function should return panic", args: args{s: MockScraper{wantError: true}}, wantPanic: true},
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			if tt.wantPanic == true {
+// 				assert.Panics(t, func() { run(tt.args.s) }, "The code did not panic")
+// 				return
+// 			}
 
-			run(tt.args.s)
-		})
-	}
-}
+// 			run(tt.args.s)
+// 		})
+// 	}
+// }
