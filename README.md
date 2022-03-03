@@ -17,10 +17,14 @@ make run
 
 # TODO
 
-Set up AWS lambda with this functionality
-- write terraform using [this guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway)
-    - ~~s3 bucket that holds the code~~
-- amend code to use lambda loggers & handlers
+Amend code to work with lambda - use [this](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18) as reference.
+
+~~Set up S3 bucket in terraform to store the code~~
+- used [this guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway)
+
+Write instructions to compile the code, archive it and send it to the S3 bucket
+
+Set up lambda in terraform
 
 Set up Jenkins deployment
 
