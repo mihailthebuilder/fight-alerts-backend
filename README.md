@@ -40,3 +40,5 @@ Improve test coverage in `scraper.go`
 Consider moving `scraper` to a separate package
 
 Organise terraform files in a similar way to ST backend
+
+Restrict access to S3 bucket
