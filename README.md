@@ -33,23 +33,16 @@ terraform apply
 # TODO
 
 ~~Amend code to work in a lambda~~
-- use [this](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18)
-
 ~~Set up S3 bucket in terraform to store the code~~
-- used [this guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway)
-
-Write instructions to...
+~~Write instructions to...~~
 - ~~compile the code~~
-- archive it
-- send it to the S3 bucket
-
-Set up lambda in terraform
-
-Check if you can test lambda. If not, set up CloudWatch
+- ~~archive it~~
+- ~~send it to the S3 bucket~~
+~~Set up lambda in terraform~~
+~~Set up CloudWatch~~
+~~Test lambda~~
 
 Move `scraper` and `handler` to a separate package
-
-Update logging to something that's recognised by a lambda
 
 Set up Jenkins deployment
 
@@ -68,6 +61,12 @@ Improve test coverage in `scraper.go`
 
 Organise terraform files in a similar way to ST backend
 
-Restrict access to S3 bucket
+Set up right access policies for AWS resources
 
 Check if you're compiling test files into binary. If so, remove them as we've done in submission tracker.
+
+# Resources
+
+[Official guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway) on how to use Terraform with lambda.
+
+[Guide]((https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18)) on how to use Go with AWS Lambda & Terraform.
