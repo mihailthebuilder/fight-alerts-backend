@@ -17,7 +17,8 @@ make run
 
 # TODO
 
-Amend code to work with lambda - use [this](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18) as reference.
+Amend code to work with lambda
+- use [this](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18)
 
 ~~Set up S3 bucket in terraform to store the code~~
 - used [this guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway)
