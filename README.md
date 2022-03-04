@@ -4,6 +4,8 @@ Backend service to track upcoming MMA fights, written in Go and deployed using A
 
 # Commands
 
+In the `functions` folder:
+
 ```
 # Run tests
 make test
@@ -15,9 +17,22 @@ make open-coverage
 make run
 ```
 
+In the `terraform` folder:
+
+```
+# Log in to AWS CLI
+../../../aws-adfs-cli/aws-adfs
+
+# Initialise terraform
+terraform init
+
+# Apply terraform
+terraform apply
+```
+
 # TODO
 
-Amend code to work with lambda
+Amend code to work in a lambda
 - use [this](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18)
 
 ~~Set up S3 bucket in terraform to store the code~~
@@ -28,6 +43,8 @@ Write instructions to compile the code, archive it and send it to the S3 bucket
 Set up lambda in terraform
 
 Move `scraper` and `handler` to a separate package
+
+Update logging to something that's recognised by a lambda
 
 Set up Jenkins deployment
 
