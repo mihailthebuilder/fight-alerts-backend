@@ -32,7 +32,7 @@ output "fight_alerts_scraper_lambda_function" {
 data "archive_file" "fight_alerts_scraper_lambda" {
   type        = "zip"
   source_file = "../functions/bin/scraper"
-  output_path = "scraper.zip"
+  output_path = "bin/scraper.zip"
 }
 
 resource "aws_s3_bucket_object" "fight_alerts_scraper_lambda" {
