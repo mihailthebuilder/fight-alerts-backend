@@ -27,6 +27,8 @@ Write instructions to compile the code, archive it and send it to the S3 bucket
 
 Set up lambda in terraform
 
+Move `scraper` and `handler` to a separate package
+
 Set up Jenkins deployment
 
 Set up AWS RDS db to write the data to
@@ -41,8 +43,6 @@ Figure out how to do the notificiation sender
 Improve test coverage in `scraper.go`
 - one way is to create a mock html page and run `getResultsFromUrl` against it
     - but see why it doesn't get triggered with `espn.co.uk` test in `scraper_integration_test.go`
-
-Consider moving `scraper` to a separate package
 
 Organise terraform files in a similar way to ST backend
 
