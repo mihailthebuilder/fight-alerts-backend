@@ -3,10 +3,7 @@ BASE_DIR_WINDOWS=$(shell cygpath -m $(BASE_DIR_LINUX))
 TEST_RESULTS_DIR=$(BASE_DIR_WINDOWS)/test_results
 
 build:
-	go build
-
-run: build
-	./fight-alerts-backend.exe
+	GOOS=linux go build -o ./bin/scraper
 
 test:
 #	mockgen --source=scraper.go --destination=./scraper_mocks.go --package=main

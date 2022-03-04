@@ -38,7 +38,10 @@ terraform apply
 ~~Set up S3 bucket in terraform to store the code~~
 - used [this guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway)
 
-Write instructions to compile the code, archive it and send it to the S3 bucket
+Write instructions to...
+- ~~compile the code~~
+- archive it
+- send it to the S3 bucket
 
 Set up lambda in terraform
 
