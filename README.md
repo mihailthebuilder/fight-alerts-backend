@@ -45,6 +45,8 @@ Write instructions to...
 
 Set up lambda in terraform
 
+Check if you can test lambda. If not, set up CloudWatch
+
 Move `scraper` and `handler` to a separate package
 
 Update logging to something that's recognised by a lambda
