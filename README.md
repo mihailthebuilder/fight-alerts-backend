@@ -67,3 +67,5 @@ Improve test coverage in `scraper.go`
 Organise terraform files in a similar way to ST backend
 
 Restrict access to S3 bucket
+
+Check if you're compiling test files into binary. If so, remove them as we've done in submission tracker.
