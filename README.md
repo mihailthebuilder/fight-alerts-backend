@@ -32,7 +32,7 @@ terraform apply
 
 # TODO
 
-Amend code to work in a lambda
+~~Amend code to work in a lambda~~
 - use [this](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18)
 
 ~~Set up S3 bucket in terraform to store the code~~
