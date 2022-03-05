@@ -33,13 +33,18 @@ terraform apply
 # TODO
 
 ~~Amend code to work in a lambda~~
+
 ~~Set up S3 bucket in terraform to store the code~~
+
 ~~Write instructions to...~~
 - ~~compile the code~~
 - ~~archive it~~
 - ~~send it to the S3 bucket~~
+
 ~~Set up lambda in terraform~~
+
 ~~Set up CloudWatch~~
+
 ~~Test lambda~~
 
 Move `scraper` and `handler` to a separate package
