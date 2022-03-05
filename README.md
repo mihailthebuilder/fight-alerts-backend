@@ -41,6 +41,8 @@ terraform apply
     - ~~function names~~
 
 Set up Jenkins deployment
+- this is a [simple official guide](https://www.jenkins.io/doc/pipeline/tour/getting-started/), but I can't install plugins because of some certification error
+    - some solutions presented to the error [here](https://stackoverflow.com/questions/24563694/jenkins-unable-to-find-valid-certification-path-to-requested-target-error-whil#:~:text=That%20error%20is%20a%20common,is%20a%20Self%2DSigned%20Certificate)
 
 Move `scraper` and `handler` to a separate package
 
