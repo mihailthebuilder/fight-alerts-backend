@@ -14,11 +14,7 @@ provider "aws" {
 resource "aws_s3_bucket" "fight_alerts_scraper_lambda" {
   bucket = "fight-alerts-scraper-lambda-bucket-prod"
 
-  tags = {
-    Owner       = "Mihail_Marian"
-    Contact     = "m.marian@elsevier.com"
-    Environment = "prod"
-  }
+  tags = var.resource_tags
 
   acl           = "private"
   force_destroy = true
@@ -52,12 +48,14 @@ resource "aws_lambda_function" "fight_alerts_scraper_lambda" {
   source_code_hash = data.archive_file.fight_alerts_scraper_lambda.output_base64sha256
 
   role = aws_iam_role.lambda_exec.arn
+  tags = var.resource_tags
 }
 
 resource "aws_cloudwatch_log_group" "fight_alerts_scraper_lambda" {
   name = "/aws/lambda/${aws_lambda_function.fight_alerts_scraper_lambda.function_name}"
 
   retention_in_days = 30
+  tags              = var.resource_tags
 }
 
 resource "aws_iam_role" "lambda_exec" {
@@ -75,6 +73,8 @@ resource "aws_iam_role" "lambda_exec" {
       }
     ]
   })
+
+  tags = var.resource_tags
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_policy" {

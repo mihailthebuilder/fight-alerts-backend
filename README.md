@@ -32,22 +32,13 @@ terraform apply
 
 # TODO
 
-~~Set up S3 bucket in terraform to store the code~~
-
-~~Write instructions to...~~
-- ~~compile the code~~
-- ~~archive it~~
-- ~~send it to the S3 bucket~~
-
-~~Set up lambda in terraform~~
-
-~~Set up CloudWatch~~
-
-~~Test lambda~~
+~~Set up lambda v1 in S3 bucket~~
 
 Reorganise `main.tf`...
 - ~~move out outputs to `outputs.tf`~~
-- create variables
+- create variables...
+    - resource tags
+    - function names
 
 Set up Jenkins deployment
 
