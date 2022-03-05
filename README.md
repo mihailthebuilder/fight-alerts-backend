@@ -32,7 +32,7 @@ terraform apply
 
 # TODO
 
-~~Set up lambda v1 in S3 bucket~~
+~~Set up lambda v1 in S3 bucket with cloudwatch~~
 
 ~~Reorganise `main.tf`...~~
 - ~~move out outputs to `outputs.tf`~~
