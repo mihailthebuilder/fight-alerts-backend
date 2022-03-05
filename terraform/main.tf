@@ -24,11 +24,6 @@ resource "aws_s3_bucket" "fight_alerts_scraper_lambda" {
   force_destroy = true
 }
 
-output "fight_alerts_scraper_lambda_function" {
-  description = "Name of the S3 bucket used to store function code."
-  value       = aws_s3_bucket.fight_alerts_scraper_lambda.id
-}
-
 data "archive_file" "fight_alerts_scraper_lambda" {
   type        = "zip"
   source_file = "../functions/bin/scraper"
