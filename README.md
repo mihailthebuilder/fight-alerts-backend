@@ -46,7 +46,7 @@ terraform apply
 ~~Test lambda~~
 
 Reorganise `main.tf`...
-- move out outputs to `outputs.tf`
+- ~~move out outputs to `outputs.tf`~~
 - create variables
 
 Set up Jenkins deployment
