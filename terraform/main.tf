@@ -7,12 +7,16 @@ terraform {
   }
 }
 
+locals {
+  module_prepend = "${var.product}-${var.module}-${var.environment}"
+}
+
 provider "aws" {
   region = "us-east-1"
 }
 
 resource "aws_s3_bucket" "fight_alerts_scraper_lambda" {
-  bucket = "fight-alerts-scraper-lambda-bucket-prod"
+  bucket = "${local.module_prepend}-bucket"
 
   tags = var.resource_tags
 
@@ -37,7 +41,7 @@ resource "aws_s3_bucket_object" "fight_alerts_scraper_lambda" {
 
 
 resource "aws_lambda_function" "fight_alerts_scraper_lambda" {
-  function_name = "fight-alerts-scraper-lambda-prod"
+  function_name = local.module_prepend
 
   s3_bucket = aws_s3_bucket.fight_alerts_scraper_lambda.id
   s3_key    = aws_s3_bucket_object.fight_alerts_scraper_lambda.key
@@ -59,7 +63,7 @@ resource "aws_cloudwatch_log_group" "fight_alerts_scraper_lambda" {
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = "serverless_lambda"
+  name = "${local.module_prepend}-iam-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

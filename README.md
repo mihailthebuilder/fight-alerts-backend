@@ -34,11 +34,11 @@ terraform apply
 
 ~~Set up lambda v1 in S3 bucket~~
 
-Reorganise `main.tf`...
+~~Reorganise `main.tf`...~~
 - ~~move out outputs to `outputs.tf`~~
-- create variables...
-    - resource tags
-    - function names
+- ~~create variables~~
+    - ~~resource tags~~
+    - ~~function names~~
 
 Set up Jenkins deployment
 
