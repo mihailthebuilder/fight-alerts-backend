@@ -41,8 +41,8 @@ terraform apply
     - ~~function names~~
 
 Set up Jenkins deployment
-- this is a [simple official guide](https://www.jenkins.io/doc/pipeline/tour/getting-started/), but I can't install plugins because of some certification error
-    - some solutions presented to the error [here](https://stackoverflow.com/questions/24563694/jenkins-unable-to-find-valid-certification-path-to-requested-target-error-whil#:~:text=That%20error%20is%20a%20common,is%20a%20Self%2DSigned%20Certificate)
+- ~~get Jenkins running locally using Docker server~~
+- set up pipeline
 
 Move `scraper` and `handler` to a separate package
 
@@ -73,3 +73,5 @@ Set up right access policies for AWS resources
 [Guide]((https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18)) on how to use Go with AWS Lambda & Terraform.
 
 You don't need `go build` to ignore test files; it [already does so](https://stackoverflow.com/a/65844817/7874516).
+
+I got Jenkins running locally using a [Docker server](https://www.jenkins.io/doc/book/installing/docker/). Tried setting up on Windows 10, but the security certs were [blocking the download of plugins](https://stackoverflow.com/questions/24563694/jenkins-unable-to-find-valid-certification-path-to-requested-target-error-whil#:~:text=That%20error%20is%20a%20common,is%20a%20Self-Signed%20Certificate).
