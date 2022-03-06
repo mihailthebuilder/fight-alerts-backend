@@ -42,7 +42,8 @@ terraform apply
 
 Set up Jenkins deployment
 - ~~get Jenkins running locally using Docker server~~
-- set up pipeline
+- make generic pipeline work from your local repo
+- customise pipeline
 
 Move `scraper` and `handler` to a separate package
 
