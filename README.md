@@ -42,7 +42,10 @@ terraform apply
 
 Set up Jenkins deployment
 - ~~get Jenkins running locally using Docker server~~
-- make generic pipeline work from your local repo
+- make generic pipeline work using the repo hosted on GitHub
+  - you can't use the local repo because the files aren't being copied into the container
+  - use [this guide](https://www.jenkins.io/doc/pipeline/tour/hello-world/#examples)
+  - I'm struggling to connect the Jenkins pipeline to the repo on GitHub. I have some access rights issues, [this](https://stackoverflow.com/questions/61105368/how-to-use-github-personal-access-token-in-jenkins/61105369#61105369) might offer an explanation
 - customise pipeline
 
 Move `scraper` and `handler` to a separate package
