@@ -45,6 +45,7 @@ Set up Jenkins deployment
 - make generic pipeline work using the repo hosted on GitHub using [this guide](https://www.jenkins.io/doc/pipeline/tour/hello-world/#examples)
   - ~~connect to the remote repo~~
   - get the pipeline to work
+    - the problem is that the certs aren't copied from the parent docker to the child docker. And when I try to remove the tls arguments (see `no-tls branch`), it looks like Docker can't set up an HTTPS connection.
 - customise pipeline
 
 Move `scraper` and `handler` to a separate package
