@@ -9,6 +9,7 @@ pipeline {
         stage("prepare environment") {
             steps {
                 sh """
+                    cd functions
                     make test-jenkins
                 """
             }
