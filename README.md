@@ -40,8 +40,8 @@ Set up Jenkins deployment
 - ~~get Jenkins running locally using Docker server~~
 - ~~make generic pipeline work using the repo hosted on GitHub using [this guide](https://www.jenkins.io/doc/pipeline/tour/hello-world/#examples)~~
 - customise pipeline for your project
-  - get Make & Go working
-    - currently trying with Go plugin install as opposed to using Go docker image. Having issues with the plugin, but if it works update the readme in the `jenkins-server-docker` repo
+  - ~~get Make & Go working~~
+  - update `Makefile` so it takes right value depending on unix
   - tests step
   - build step
   - terraform step
