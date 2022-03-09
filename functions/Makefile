@@ -1,13 +1,13 @@
 BASE_DIR_LINUX=$(shell pwd)
-BASE_DIR_WINDOWS=$(shell cygpath -m $(BASE_DIR_LINUX))
-TEST_RESULTS_DIR=$(BASE_DIR_WINDOWS)/test_results
+BASE_DIR=case $(uname -s) in CYGWIN*|MINGW*|MSYS*) $(shell cygpath -m $(BASE_DIR_LINUX));; esac;
+
+TEST_RESULTS_DIR=$(BASE_DIR)/test_results
 
 build:
 	GOOS=linux go build -o ./bin/scraper
 
 test-jenkins:
-	echo $(BASE_DIR_LINUX)
-	echo $(BASE_DIR_WINDOWS)
+	echo $(TEST_RESULTS_DIR)
 
 test:
 #	mockgen --source=scraper.go --destination=./scraper_mocks.go --package=main
