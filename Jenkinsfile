@@ -1,10 +1,15 @@
 pipeline {
-    agent { docker { image 'golang:1.17.5-alpine' } }
+    agent any
+
+    tools {
+        go 'Go 1.17.1'
+    }
+
     stages {
         stage("prepare environment") {
             steps {
                 sh """
-                    apt install build-essential -y --no-install-recommends
+                    make --version
                 """
             }
         }
