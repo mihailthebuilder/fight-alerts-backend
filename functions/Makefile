@@ -7,6 +7,8 @@ build:
 
 test:
 #	mockgen --source=scraper.go --destination=./scraper_mocks.go --package=main
+	echo $(BASE_DIR_LINUX)
+	echo $(BASE_DIR_WINDOWS)
 	go test -coverprofile=$(TEST_RESULTS_DIR)/coverage.out
 	go tool cover -html=$(TEST_RESULTS_DIR)/coverage.out -o $(TEST_RESULTS_DIR)/coverage.html
 
