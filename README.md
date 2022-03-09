@@ -39,7 +39,10 @@ terraform apply
 Set up Jenkins deployment
 - ~~get Jenkins running locally using Docker server~~
 - ~~make generic pipeline work using the repo hosted on GitHub using [this guide](https://www.jenkins.io/doc/pipeline/tour/hello-world/#examples)~~
-- customise pipeline
+- customise pipeline for your project
+  - tests step
+  - build step
+  - terraform step
 
 Move `scraper` and `handler` to a separate package
 
