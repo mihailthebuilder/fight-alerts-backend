@@ -9,7 +9,7 @@ pipeline {
         stage("prepare environment") {
             steps {
                 sh """
-                    make --version
+                    make test-jenkins
                 """
             }
         }
@@ -19,7 +19,6 @@ pipeline {
                 sh """
                     cd functions
                     ls
-                    make test-jenkins
                     make test
                 """
             }
