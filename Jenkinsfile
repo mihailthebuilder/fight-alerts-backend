@@ -19,6 +19,7 @@ pipeline {
                 sh """
                     cd functions
                     ls
+                    make test-jenkins
                     make test
                 """
             }
