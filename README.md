@@ -42,8 +42,7 @@ Set up Jenkins deployment
 - customise pipeline for your project
   - ~~get Make & Go working~~
   - ~~get `Makefile` to work on Unix~~
-  - figure out this error you're now seeing in `go test` `cgo: C compiler "gcc" not found: exec: "gcc": executable file not found in $PATH`
-  - tests step
+  - ~~tests step~~
   - build step
   - terraform step
 
