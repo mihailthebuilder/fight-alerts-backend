@@ -18,6 +18,7 @@ pipeline {
         stage('build') {
             steps {
                 sh """
+                    ls
                     make build
                     cd bin
                     ls
