@@ -10,8 +10,8 @@ In the `functions` folder:
 # Run tests
 make test
 
-# Check coverage results after running tests
-make open-coverage
+# Check coverage results after running tests (in Windows only)
+make open-coverage-win
 
 # Run script and print out results
 make run
