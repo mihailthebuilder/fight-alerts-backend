@@ -1,6 +1,5 @@
 BASE_DIR_LINUX=$(shell pwd)
-BASE_DIR=case $(uname -s) in CYGWIN*|MINGW*|MSYS*) $(shell cygpath -m $(BASE_DIR_LINUX));; esac;
-
+BASE_DIR=$(if $(uname -s) in CYGWIN*|MINGW*|MSYS*,$(shell cygpath -m $(BASE_DIR_LINUX)),$(BASE_DIR_LINUX))
 TEST_RESULTS_DIR=$(BASE_DIR)/test_results
 
 build:
