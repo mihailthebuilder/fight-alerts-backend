@@ -41,7 +41,8 @@ Set up Jenkins deployment
 - ~~make generic pipeline work using the repo hosted on GitHub using [this guide](https://www.jenkins.io/doc/pipeline/tour/hello-world/#examples)~~
 - customise pipeline for your project
   - ~~get Make & Go working~~
-  - update `Makefile` so it takes right value depending on unix
+  - ~~get `Makefile` to work on Unix~~
+  - figure out this error you're now seeing in `go test` `cgo: C compiler "gcc" not found: exec: "gcc": executable file not found in $PATH`
   - tests step
   - build step
   - terraform step
