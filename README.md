@@ -43,7 +43,7 @@ Set up Jenkins deployment
   - ~~get Make & Go working~~
   - ~~get `Makefile` to work on Unix~~
   - ~~tests step~~
-  - build step
+  - ~~build step~~
   - terraform step
 
 Move `scraper` and `handler` to a separate package
