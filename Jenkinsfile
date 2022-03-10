@@ -6,20 +6,10 @@ pipeline {
     }
 
     stages {
-        stage("prepare environment") {
-            steps {
-                sh """
-                    cd functions
-                    make test-jenkins
-                """
-            }
-        }
-
         stage("test") {
             steps {
                 sh """
                     cd functions
-                    ls
                     make test
                 """
             }
