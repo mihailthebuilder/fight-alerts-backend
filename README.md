@@ -44,7 +44,8 @@ Set up Jenkins deployment
   - ~~build step~~
   - terraform step
     - ~~get aws cli working~~ 
-    - run terraform afterwards
+    - get terraform installed on your Jenkins server
+    - run terraform
     - if it works, update READMEs in jenkins & this repo
 
 Move `scraper` and `handler` to a separate package
