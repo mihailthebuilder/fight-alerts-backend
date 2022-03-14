@@ -34,8 +34,6 @@ terraform apply
 
 ~~Set up lambda v1 in S3 bucket with cloudwatch~~
 
-~~Reorganise `main.tf`...~~
-
 Set up Jenkins deployment
 - ~~get Jenkins running locally using Docker server~~
 - ~~make generic pipeline work using the repo hosted on GitHub using [this guide](https://www.jenkins.io/doc/pipeline/tour/hello-world/#examples)~~
@@ -45,12 +43,9 @@ Set up Jenkins deployment
   - ~~tests step~~
   - ~~build step~~
   - terraform step
-    - in Jenkins git repo
-      - set up volume that copies `aws-adfs-cli` all the way to the jenkins server container, without having the code in that repo
-      - Dockerfile runs the install script in `aws-adfs-cli`
-      - open container and log in
+    - ~~get aws cli working~~ 
     - run terraform afterwards
-      - if it works, update READMEs in jenkins & this repo
+    - if it works, update READMEs in jenkins & this repo
 
 Move `scraper` and `handler` to a separate package
 
