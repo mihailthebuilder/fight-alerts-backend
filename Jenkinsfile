@@ -23,5 +23,15 @@ pipeline {
                 """
             }
         }
+
+        stage("deploy") {
+            steps {
+                sh """
+                    cd terraform
+                    terraform init
+                    terraform apply
+                """
+            }
+        }
     }
 }
