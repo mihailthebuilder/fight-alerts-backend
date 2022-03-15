@@ -28,7 +28,9 @@ pipeline {
         stage("deploy") {
             steps {
                 sh """
+                    terraform -v
                     cd terraform
+                    ls
                     terraform init
                     terraform apply
                 """
