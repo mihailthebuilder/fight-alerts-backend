@@ -12,8 +12,7 @@ locals {
 }
 
 provider "aws" {
-  region                  = "us-east-1"
-  shared_credentials_file = "/root/.aws/credentials"
+  region = "us-east-1"
 }
 
 resource "aws_s3_bucket" "fight_alerts_scraper_lambda" {

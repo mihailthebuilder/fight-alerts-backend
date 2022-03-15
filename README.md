@@ -46,6 +46,7 @@ Set up Jenkins deployment
     - ~~get aws cli working~~ 
     - ~~get terraform installed on your Jenkins server~~
     - get `terraform apply` running
+      - there's a problem with loading the credentials.
     - if it works, update READMEs in jenkins & this repo
 
 Move `scraper` and `handler` to a separate package
