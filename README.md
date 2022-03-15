@@ -46,7 +46,7 @@ Set up Jenkins deployment
     - ~~get aws cli working~~ 
     - ~~get terraform installed on your Jenkins server~~
     - get `terraform apply` running
-      - there's a problem with loading the credentials.
+      - there's a problem with loading the credentials. I tried with [shared config files](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#shared_credentials_files) in environment var and terraform, but it doesn't work.
     - if it works, update READMEs in jenkins & this repo
 
 Move `scraper` and `handler` to a separate package
