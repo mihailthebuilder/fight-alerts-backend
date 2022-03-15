@@ -3,6 +3,7 @@ pipeline {
 
     tools {
         go 'Go 1.17.8'
+        terraform 'Terraform 1.1.7'
     }
 
     stages {
