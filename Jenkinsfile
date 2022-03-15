@@ -28,6 +28,7 @@ pipeline {
         stage("deploy") {
             steps {
                 sh """
+                    printenv AWS_SHARED_CREDENTIALS_FILE
                     cd terraform
                     terraform init
                     terraform apply
