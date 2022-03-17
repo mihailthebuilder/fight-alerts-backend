@@ -63,7 +63,7 @@ resource "aws_cloudwatch_log_group" "fight_alerts_scraper_lambda" {
   tags              = var.resource_tags
 }
 
-resource "aws_iam_role" "lambda_exec" {
+resource "aws_iam_role" "fight_alerts_scraper_iam_policy" {
   name = "${local.module_prepend}-iam-role"
 
   assume_role_policy = jsonencode({
