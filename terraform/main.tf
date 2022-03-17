@@ -52,7 +52,7 @@ resource "aws_lambda_function" "fight_alerts_scraper_lambda" {
 
   source_code_hash = data.archive_file.fight_alerts_scraper_lambda.output_base64sha256
 
-  role = aws_iam_role.lambda_exec.arn
+  role = aws_iam_role.fight_alerts_scraper_iam_policy.arn
   tags = var.resource_tags
 }
 
@@ -83,6 +83,6 @@ resource "aws_iam_role" "fight_alerts_scraper_iam_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_policy" {
-  role       = aws_iam_role.lambda_exec.name
+  role       = aws_iam_role.lambdafight_alerts_scraper_iam_policy_exec.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
