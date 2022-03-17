@@ -77,7 +77,7 @@ Set up right access policies for AWS resources
 
 [Official guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway) on how to use Terraform with lambda.
 
-[Guide]((https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18)) on how to use Go with AWS Lambda & Terraform.
+[Guide](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18) on how to use Go with AWS Lambda & Terraform.
 
 You don't need `go build` to ignore test files; it [already does so](https://stackoverflow.com/a/65844817/7874516).
 
