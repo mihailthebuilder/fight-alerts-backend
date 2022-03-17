@@ -83,6 +83,6 @@ resource "aws_iam_role" "fight_alerts_scraper_iam_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_policy" {
-  role       = aws_iam_role.lambda_fight_alerts_scraper_iam_policy_exec.name
+  role       = aws_iam_role.lambda_fight_alerts_scraper_iam_policy.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
