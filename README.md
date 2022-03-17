@@ -45,8 +45,10 @@ Set up Jenkins deployment
   - terraform step
     - ~~get aws cli working~~ 
     - ~~get terraform installed on your Jenkins server~~
-    - get `terraform apply` running
-      - there's a problem with loading the credentials. I tried with [shared config files](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#shared_credentials_files) in environment var and terraform, but it doesn't work.
+    - get `terraform apply` working
+      - ~~`terraform` logging into AWS~~
+      - ~~`terraform` auto-approving the plan~~
+      - fix `EntityAlreadyExists` error you're getting in Jenkins job #23
     - if it works, update READMEs in jenkins & this repo
 
 Move `scraper` and `handler` to a separate package
