@@ -29,7 +29,7 @@ pipeline {
             steps {
                 sh """
                     cd terraform
-                    terraform init
+                    terraform init -force-copy
                     terraform apply -auto-approve
                 """
             }
