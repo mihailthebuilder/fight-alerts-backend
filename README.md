@@ -36,9 +36,11 @@ terraform apply -auto-approve
 
 ~~Set up Jenkins deployment~~
 
-Move `scraper` and `handler` to a separate package
-
 Set up Cucumber for service tests
+
+Write service test for lambda
+
+Move `scraper` and `handler` to a separate package
 
 Set up AWS RDS db to write the data to
 - write terraform
