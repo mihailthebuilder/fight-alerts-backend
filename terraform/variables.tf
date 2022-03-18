@@ -26,3 +26,8 @@ variable "module" {
   type    = string
   default = "lambda-function"
 }
+
+variable "region" {
+  type    = string
+  default = "us-east-1"
+}

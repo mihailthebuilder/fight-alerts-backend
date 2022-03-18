@@ -1,9 +1,16 @@
+
 terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 3.37"
     }
+  }
+
+  backend "s3" {
+    bucket = "fight-alerts-backend-terraform"
+    key    = "backend"
+    region = "us-east-1"
   }
 }
 
@@ -12,7 +19,7 @@ locals {
 }
 
 provider "aws" {
-  region  = "us-east-1"
+  region  = var.region
   profile = "default"
 }
 
