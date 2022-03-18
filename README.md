@@ -24,10 +24,10 @@ In the `terraform` folder:
 ../../../aws-adfs-cli/aws-adfs
 
 # Initialise terraform
-terraform init
+terraform init -force-copy
 
 # Apply terraform
-terraform apply
+terraform apply -auto-approve
 ```
 
 # TODO
