@@ -49,6 +49,8 @@ Set up Jenkins deployment
       - ~~`terraform` logging into AWS~~
       - ~~`terraform` auto-approving the plan~~
       - fix `EntityAlreadyExists` error you're getting in Jenkins job #23
+        - manually remove the AWS resources specified in the terraform
+        - figure out a way to store the [Terraform backend](https://www.terraform.io/language/settings/backends) [in S3](https://www.terraform.io/language/settings/backends/s3)
     - if it works, update READMEs in jenkins & this repo
 
 Move `scraper` and `handler` to a separate package
