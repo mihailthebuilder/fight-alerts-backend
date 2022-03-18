@@ -34,24 +34,7 @@ terraform apply
 
 ~~Set up lambda v1 in S3 bucket with cloudwatch~~
 
-Set up Jenkins deployment
-- ~~get Jenkins running locally using Docker server~~
-- ~~make generic pipeline work using the repo hosted on GitHub using [this guide](https://www.jenkins.io/doc/pipeline/tour/hello-world/#examples)~~
-- customise pipeline for your project
-  - ~~get Make & Go working~~
-  - ~~get `Makefile` to work on Unix~~
-  - ~~tests step~~
-  - ~~build step~~
-  - terraform step
-    - ~~get aws cli working~~ 
-    - ~~get terraform installed on your Jenkins server~~
-    - get `terraform apply` working
-      - ~~`terraform` logging into AWS~~
-      - ~~`terraform` auto-approving the plan~~
-      - fix `EntityAlreadyExists` error you're getting in Jenkins job #23
-        - manually remove the AWS resources specified in the terraform
-        - figure out a way to store the [Terraform backend](https://www.terraform.io/language/settings/backends) [in S3](https://www.terraform.io/language/settings/backends/s3)
-    - if it works, update READMEs in jenkins & this repo
+~~Set up Jenkins deployment~~
 
 Move `scraper` and `handler` to a separate package
 
@@ -84,3 +67,5 @@ Set up right access policies for AWS resources
 You don't need `go build` to ignore test files; it [already does so](https://stackoverflow.com/a/65844817/7874516).
 
 I got Jenkins running locally using a [Docker server](https://www.jenkins.io/doc/book/installing/docker/). Tried setting up on Windows 10, but the security certs were [blocking the download of plugins](https://stackoverflow.com/questions/24563694/jenkins-unable-to-find-valid-certification-path-to-requested-target-error-whil#:~:text=That%20error%20is%20a%20common,is%20a%20Self-Signed%20Certificate).
+
+The terraform backend is stored in an S3 bucket so the local Jenkins server can access it. I then use the `-force-copy` option with `terraform init` in order to avoid Terraform asking me how to manage the new state in the Jenkins server vs the existing state in the S3 bucket. See [Terraform docs](https://www.terraform.io/cli/commands/init#backend-initialization) for more.
