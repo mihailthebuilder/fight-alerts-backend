@@ -6,7 +6,7 @@ Backend service to track upcoming MMA fights, written in Go and deployed using A
 
 [Go](https://go.dev/)
 
-[Make](https://www.gnu.org/software/make/#:~:text=GNU%20Make%20is%20a%20tool,compute%20it%20from%20other%20files.)
+[Make](https://www.gnu.org/software/make/)
 
 [Terraform](https://www.terraform.io/)
 
