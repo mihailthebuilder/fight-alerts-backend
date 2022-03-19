@@ -2,6 +2,18 @@
 
 Backend service to track upcoming MMA fights, written in Go and deployed using AWS serverless architecture.
 
+# Pre-requisites
+
+[Go](https://go.dev/)
+
+[Make](https://www.gnu.org/software/make/#:~:text=GNU%20Make%20is%20a%20tool,compute%20it%20from%20other%20files.)
+
+[Terraform](https://www.terraform.io/)
+
+[Jenkins](https://www.jenkins.io/)
+
+[AWS CLI](https://aws.amazon.com/cli/)
+
 # Commands
 
 In the `functions` folder:
