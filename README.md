@@ -27,10 +27,6 @@ make open-coverage-win
 
 # Run script and print out results
 make run
-
-# Run service test
-cd service_tests
-go test
 ```
 
 In the `terraform` folder:
@@ -56,6 +52,11 @@ Write service test for lambda using Cucumber
 - ~~write a `.feature` file~~
 - ~~make the `.feature` file work with godog~~
 - ~~write working `service_test.go`~~
+
+Look into Cucumber/unit test interaction...
+- how to split message belonging to either
+- how to run each individually
+- check whether the coverage relates to unit tests or both
 
 Move `scraper` and `handler` to a separate package
 

@@ -6,8 +6,6 @@ import (
 	"github.com/cucumber/godog"
 )
 
-const mmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"
-
 func sherdogIsAvailableForAccess() error {
 	resp, err := http.Get(mmaUrl)
 
