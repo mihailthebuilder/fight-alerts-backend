@@ -10,16 +10,12 @@ import (
 )
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
-	ctx.Step(`^Sherdog is available for access$`, sherdogIsAvailable)
-	ctx.Step(`^lambda is invoked$`, lambdaIsInvoked)
-	ctx.Step(`^all the fight data is logged$`, fightDataIsLogged)
+	ctx.Step(`^Sherdog is available for access$`, _steps.sherdogIsAvailable)
+	ctx.Step(`^lambda is invoked$`, _steps.lambdaIsInvoked)
+	ctx.Step(`^all the fight data is logged$`, _steps.fightDataIsLogged)
 }
 
 var _steps = steps{}
-
-type steps struct {
-	containers Containers
-}
 
 func (s *steps) startContainers() {
 	err := s.containers.Start()

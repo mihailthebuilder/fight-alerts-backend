@@ -6,6 +6,7 @@ import (
 	"io"
 	"time"
 
+	"github.com/docker/go-connections/nat"
 	testcontainers "github.com/testcontainers/testcontainers-go"
 )
 
@@ -64,4 +65,17 @@ func (c *Containers) startLambdaContainer() error {
 	c.lambdaContainer.Start(context)
 
 	return nil
+}
+
+func (c *Containers) GetLocalHostLambdaPort() (int, error) {
+	return c.GetLocalhostPort(c.lambdaContainer, 9001)
+}
+
+func (c *Containers) GetLocalhostPort(container testcontainers.Container, port int) (int, error) {
+	context := context.Background()
+	mappedPort, err := container.MappedPort(context, nat.Port(fmt.Sprintf("%d/tcp", port)))
+	if err != nil {
+		return 0, err
+	}
+	return mappedPort.Int(), nil
 }

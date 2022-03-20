@@ -54,7 +54,9 @@ Write service test for lambda using Cucumber
 - ~~write working `service_test.go`~~
 - ~~write `given` feature step~~
 - ~~set up container for lambda~~
-- ~~write `when` feature step~~
+- write `when` feature step
+  - ~~the test is to check whether port exists~~
+  - add network to make port available
 - write `then` feature step
 
 Look into Cucumber/unit test interaction...

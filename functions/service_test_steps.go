@@ -6,7 +6,11 @@ import (
 	"github.com/cucumber/godog"
 )
 
-func sherdogIsAvailable() error {
+type steps struct {
+	containers Containers
+}
+
+func (s *steps) sherdogIsAvailable() error {
 	resp, err := http.Get(mmaUrl)
 
 	if err != nil {
@@ -20,10 +24,11 @@ func sherdogIsAvailable() error {
 	return nil
 }
 
-func lambdaIsInvoked() error {
-	return godog.ErrPending
+func (s *steps) lambdaIsInvoked() error {
+	_, err := s.containers.GetLocalHostLambdaPort()
+	return err
 }
 
-func fightDataIsLogged() error {
+func (s *steps) fightDataIsLogged() error {
 	return godog.ErrPending
 }
