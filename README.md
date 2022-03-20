@@ -27,6 +27,9 @@ make open-coverage-win
 
 # Run script and print out results
 make run
+
+# Run service test
+godog service_tests/features/scraper.feature
 ```
 
 In the `terraform` folder:
@@ -50,7 +53,7 @@ terraform apply -auto-approve
 
 Write service test for lambda using Cucumber
 - ~~write a `.feature` file~~
-- make the `.feature` file work with godog
+- ~~make the `.feature` file work with godog~~
 
 Move `scraper` and `handler` to a separate package
 
