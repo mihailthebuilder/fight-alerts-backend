@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/docker/go-connections/nat"
 	testcontainers "github.com/testcontainers/testcontainers-go"
@@ -19,6 +20,10 @@ func (c *Containers) GetLambdaLog() (io.ReadCloser, error) {
 
 func (c *Containers) Start() error {
 	err := c.startLambdaContainer()
+
+	fmt.Println("Sleeping for 5 seconds while containers start")
+	time.Sleep(5 * time.Second)
+
 	return err
 }
 
