@@ -7,6 +7,12 @@ import (
 	"github.com/cucumber/godog"
 )
 
+func InitializeScenario(ctx *godog.ScenarioContext) {
+	ctx.Step(`^Sherdog is available for access$`, sherdogIsAvailableForAccess)
+	ctx.Step(`^the service is invoked$`, theServiceIsInvoked)
+	ctx.Step(`^all the fight data is logged$`, allTheFightDataIsLogged)
+}
+
 func TestMain(m *testing.M) {
 	opts := godog.Options{
 		Format: "pretty",
@@ -16,8 +22,8 @@ func TestMain(m *testing.M) {
 	status := godog.TestSuite{
 		Name: "godogs",
 		// TestSuiteInitializer: InitializeTestSuite,
-		// ScenarioInitializer:  InitializeScenario,
-		Options: &opts,
+		ScenarioInitializer: InitializeScenario,
+		Options:             &opts,
 	}.Run()
 
 	// Optional: Run `testing` package's logic besides godog.
@@ -26,4 +32,16 @@ func TestMain(m *testing.M) {
 	}
 
 	os.Exit(status)
+}
+
+func sherdogIsAvailableForAccess() error {
+	return godog.ErrPending
+}
+
+func theServiceIsInvoked() error {
+	return godog.ErrPending
+}
+
+func allTheFightDataIsLogged() error {
+	return godog.ErrPending
 }
