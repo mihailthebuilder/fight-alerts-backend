@@ -56,6 +56,7 @@ Write service test for lambda using Cucumber
 - ~~set up container for lambda~~
 - ~~write `when` feature step~~
 - write `then` feature step with fight data being returned, NOT logged
+- make the lambda comply with the `then` step
 
 Look into Cucumber/unit test interaction...
 - how to split message belonging to either
