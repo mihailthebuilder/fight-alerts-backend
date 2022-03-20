@@ -57,7 +57,7 @@ func (c *Containers) startLambdaContainer() error {
 	if err != nil {
 		return err
 	}
-	err = c.lambdaContainer.CopyFileToContainer(context, "./bin/main", "/var/task/handler", 365)
+	err = c.lambdaContainer.CopyFileToContainer(context, "bin/scraper", "/var/task/handler", 365)
 	if err != nil {
 		return err
 	}

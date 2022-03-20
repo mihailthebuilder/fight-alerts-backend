@@ -52,7 +52,10 @@ Write service test for lambda using Cucumber
 - ~~write a `.feature` file~~
 - ~~make the `.feature` file work with godog~~
 - ~~write working `service_test.go`~~
-- set up container for lambda
+- ~~write `given` feature step~~
+- ~~set up container for lambda~~
+- ~~write `when` feature step~~
+- write `then` feature step
 
 Look into Cucumber/unit test interaction...
 - how to split message belonging to either
