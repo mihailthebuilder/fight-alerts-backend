@@ -33,15 +33,3 @@ func TestMain(m *testing.M) {
 
 	os.Exit(status)
 }
-
-func sherdogIsAvailableForAccess() error {
-	return godog.ErrPending
-}
-
-func theServiceIsInvoked() error {
-	return godog.ErrPending
-}
-
-func allTheFightDataIsLogged() error {
-	return godog.ErrPending
-}
