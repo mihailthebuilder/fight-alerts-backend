@@ -6,7 +6,7 @@ import (
 	"github.com/cucumber/godog"
 )
 
-func sherdogIsAvailableForAccess() error {
+func sherdogIsAvailable() error {
 	resp, err := http.Get(mmaUrl)
 
 	if err != nil {
@@ -20,10 +20,10 @@ func sherdogIsAvailableForAccess() error {
 	return nil
 }
 
-func theServiceIsInvoked() error {
+func lambdaIsInvoked() error {
 	return godog.ErrPending
 }
 
-func allTheFightDataIsLogged() error {
+func fightDataIsLogged() error {
 	return godog.ErrPending
 }
