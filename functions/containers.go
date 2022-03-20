@@ -26,11 +26,7 @@ func (c *Containers) Stop() error {
 	context := context.Background()
 
 	err := c.lambdaContainer.Terminate(context)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 func (c *Containers) startLambdaContainer() error {
