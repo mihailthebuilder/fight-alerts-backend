@@ -11,7 +11,8 @@ import (
 )
 
 type Containers struct {
-	lambdaContainer testcontainers.Container
+	lambdaContainer           testcontainers.Container
+	wasLambdaContainerInvoked bool
 }
 
 func (c *Containers) GetLambdaLog() (io.ReadCloser, error) {
@@ -56,6 +57,8 @@ func (c *Containers) startLambdaContainer() error {
 		return err
 	}
 	c.lambdaContainer.Start(context)
+
+	c.wasLambdaContainerInvoked = true
 
 	return nil
 }

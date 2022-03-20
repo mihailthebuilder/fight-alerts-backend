@@ -25,8 +25,12 @@ func (s *steps) sherdogIsAvailable() error {
 }
 
 func (s *steps) lambdaIsInvoked() error {
-	_, err := s.containers.GetLocalHostLambdaPort()
-	return err
+
+	if !s.containers.wasLambdaContainerInvoked {
+		panic("Lambda container was NOT invoked")
+	}
+
+	return nil
 }
 
 func (s *steps) fightDataIsLogged() error {
