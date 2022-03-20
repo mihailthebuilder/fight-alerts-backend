@@ -48,9 +48,9 @@ terraform apply -auto-approve
 
 ~~Set up Jenkins deployment~~
 
-Set up Cucumber for service tests
-
-Write service test for lambda
+Write service test for lambda using Cucumber
+- ~~write a `.feature` file~~
+- make the `.feature` file work with godog
 
 Move `scraper` and `handler` to a separate package
 
