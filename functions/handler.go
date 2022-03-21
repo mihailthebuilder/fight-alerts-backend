@@ -1,21 +1,21 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type handler struct {
 	scraper IScraper
 }
 
-func (h handler) handleRequest() {
-	fmt.Println("Started")
-
+func (h handler) handleRequest() ([]FightRecord, error) {
 	data, err := h.scraper.getResultsFromUrl()
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("%#v", data)
+	fmt.Printf("Scraped data:\n%#v\n", data)
 
-	fmt.Println("\nEnded")
+	return data, nil
 }
