@@ -11,8 +11,7 @@ import (
 )
 
 type Containers struct {
-	lambdaContainer           testcontainers.Container
-	wasLambdaContainerInvoked bool
+	lambdaContainer testcontainers.Container
 }
 
 func (c *Containers) GetLambdaLog() (io.ReadCloser, error) {
@@ -41,6 +40,11 @@ func (c *Containers) startLambdaContainer() error {
 		ExposedPorts: []string{"9001/tcp"},
 		Name:         "lambda",
 		Hostname:     "lambda",
+		Env: map[string]string{
+			"DOCKER_LAMBDA_STAY_OPEN": "1",
+			"AWS_ACCESS_KEY_ID":       "x",
+			"AWS_SECRET_ACCESS_KEY":   "x",
+		},
 	}
 	context := context.Background()
 
@@ -57,8 +61,6 @@ func (c *Containers) startLambdaContainer() error {
 		return err
 	}
 	c.lambdaContainer.Start(context)
-
-	c.wasLambdaContainerInvoked = true
 
 	return nil
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/cucumber/godog"
@@ -26,9 +27,12 @@ func (s *steps) sherdogIsAvailable() error {
 
 func (s *steps) lambdaIsInvoked() error {
 
-	if !s.containers.wasLambdaContainerInvoked {
-		panic("Lambda container was NOT invoked")
+	localLambdaInvocationPort, err := s.containers.GetLocalHostLambdaPort()
+	if err != nil {
+		return err
 	}
+
+	fmt.Printf("\nLambda active on port %v\n", localLambdaInvocationPort)
 
 	return nil
 }
