@@ -48,16 +48,9 @@ terraform apply -auto-approve
 
 ~~Set up Jenkins deployment~~
 
-Write service test for lambda using Cucumber
-- ~~write a `.feature` file~~
-- ~~make the `.feature` file work with godog~~
-- ~~write working `service_test.go`~~
-- ~~write `given` feature step~~
-- ~~set up container for lambda~~
-- ~~write `when` feature step~~
-- ~~write `then` feature step~~
-- make the lambda comply with the `then` step
-  - figure out why breaking. for some reason when you remove the println in handlerequest it stops logging
+~~Write service test for lambda using Cucumber~~
+
+Get Jenkins to pass the test
 
 Look into Cucumber/unit test interaction...
 - don't count test files in coverage results
