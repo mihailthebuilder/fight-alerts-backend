@@ -16,11 +16,11 @@ func (s *steps) sherdogIsAvailable() error {
 	resp, err := http.Get(mmaUrl)
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	if resp.StatusCode != 200 {
-		panic(resp.StatusCode)
+		return fmt.Errorf("request didn't work - %#v", resp)
 	}
 
 	return nil
