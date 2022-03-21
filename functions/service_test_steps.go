@@ -1,11 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"net/http"
-
-	"github.com/cucumber/godog"
 )
 
 type steps struct {
@@ -42,7 +41,19 @@ func (s *steps) lambdaIsInvoked(ctx context.Context) (context.Context, error) {
 
 func (s *steps) fightDataIsReturned(ctx context.Context) error {
 	port := ctx.Value(lambdaPortKey("lambdaPort"))
-	fmt.Printf("\n\nPORT IS %v\n\n", port)
+	url := fmt.Sprintf("http://localhost:%d/2015-03-31/functions/myfunction/invocations", port)
 
-	return godog.ErrPending
+	response, err := http.Post(url, "application/json", bytes.NewBuffer([]byte{}))
+	if err != nil {
+		return err
+	}
+
+	if response.StatusCode != 200 {
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(response.Body)
+		body := buf.String()
+		return fmt.Errorf("invoking Lambda: %d %s", response.StatusCode, body)
+	}
+
+	return nil
 }
