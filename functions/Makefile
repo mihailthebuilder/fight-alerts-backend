@@ -3,7 +3,7 @@ BASE_DIR_LINUX:=$(shell pwd)
 build:
 	GOOS=linux go build -o ./bin/scraper
 
-test:
+test: build
 	go test -coverprofile=./test_results/coverage.out
 	go tool cover -html=./test_results/coverage.out -o ./test_results/coverage.html
 
