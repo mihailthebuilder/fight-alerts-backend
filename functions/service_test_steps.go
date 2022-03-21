@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -48,12 +49,19 @@ func (s *steps) fightDataIsReturned(ctx context.Context) error {
 		return err
 	}
 
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(response.Body)
+	body := buf.String()
+
 	if response.StatusCode != 200 {
-		buf := new(bytes.Buffer)
-		buf.ReadFrom(response.Body)
-		body := buf.String()
 		return fmt.Errorf("invoking Lambda: %d %s", response.StatusCode, body)
 	}
+
+	var records []FightRecord
+	json.Unmarshal([]byte(body), &records)
+
+	fmt.Println("RECORDS ___-_____")
+	fmt.Println(records)
 
 	return nil
 }
