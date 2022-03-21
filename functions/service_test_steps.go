@@ -60,8 +60,9 @@ func (s *steps) fightDataIsReturned(ctx context.Context) error {
 	var records []FightRecord
 	json.Unmarshal([]byte(body), &records)
 
-	fmt.Println("RECORDS ___-_____")
-	fmt.Println(records)
+	if len(records) < 3 {
+		return fmt.Errorf("can't scrape fight records %#v", records)
+	}
 
 	return nil
 }
