@@ -60,6 +60,7 @@ Write service test for lambda using Cucumber
   - figure out why breaking. for some reason when you remove the println in handlerequest it stops logging
 
 Look into Cucumber/unit test interaction...
+- don't count test files in coverage results
 - how to split message belonging to either
 - how to run each individually
 - check whether the coverage relates to unit tests or both
