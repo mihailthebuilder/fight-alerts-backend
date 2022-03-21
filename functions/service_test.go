@@ -12,7 +12,7 @@ import (
 func InitializeScenario(ctx *godog.ScenarioContext) {
 	ctx.Step(`^Sherdog is available for access$`, _steps.sherdogIsAvailable)
 	ctx.Step(`^lambda is invoked$`, _steps.lambdaIsInvoked)
-	ctx.Step(`^all the fight data is logged$`, _steps.fightDataIsLogged)
+	ctx.Step(`^all the fight data is returned$`, _steps.fightDataIsReturned)
 }
 
 var _steps = steps{}

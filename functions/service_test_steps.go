@@ -37,6 +37,6 @@ func (s *steps) lambdaIsInvoked() error {
 	return nil
 }
 
-func (s *steps) fightDataIsLogged() error {
+func (s *steps) fightDataIsReturned() error {
 	return godog.ErrPending
 }
