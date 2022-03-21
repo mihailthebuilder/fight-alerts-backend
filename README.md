@@ -55,8 +55,9 @@ Write service test for lambda using Cucumber
 - ~~write `given` feature step~~
 - ~~set up container for lambda~~
 - ~~write `when` feature step~~
-- write `then` feature step with fight data being returned, NOT logged
+- ~~write `then` feature step~~
 - make the lambda comply with the `then` step
+  - figure out why breaking. for some reason when you remove the println in handlerequest it stops logging
 
 Look into Cucumber/unit test interaction...
 - how to split message belonging to either
