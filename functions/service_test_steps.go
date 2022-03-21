@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -25,18 +26,23 @@ func (s *steps) sherdogIsAvailable() error {
 	return nil
 }
 
-func (s *steps) lambdaIsInvoked() error {
+type lambdaPortKey string
 
-	localLambdaInvocationPort, err := s.containers.GetLocalHostLambdaPort()
+func (s *steps) lambdaIsInvoked(ctx context.Context) (context.Context, error) {
+
+	port, err := s.containers.GetLocalHostLambdaPort()
+
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	fmt.Printf("\nLambda active on port %v\n", localLambdaInvocationPort)
-
-	return nil
+	ctx = context.WithValue(ctx, lambdaPortKey("lambdaPort"), port)
+	return ctx, nil
 }
 
-func (s *steps) fightDataIsReturned() error {
+func (s *steps) fightDataIsReturned(ctx context.Context) error {
+	port := ctx.Value(lambdaPortKey("lambdaPort"))
+	fmt.Printf("\n\nPORT IS %v\n\n", port)
+
 	return godog.ErrPending
 }
