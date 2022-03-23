@@ -50,7 +50,11 @@ terraform apply -auto-approve
 
 ~~Write service test for lambda using Cucumber~~
 
-Get Jenkins to pass the test
+Get Jenkins to pass the service test
+- I get a `dial tcp 127.0.0.1:49154: connect: connection refused` error
+- exposing the port in the `dind` container doesn't work
+- exposing the port in the `blueocean` container with `--privileged` status to be accessed externally doesn't work either
+- I'm wondering if it's got something to do with the actual implementation from `localhost` to `127.0.0.1`
 
 Look into Cucumber/unit test interaction...
 - don't count test files in coverage results
