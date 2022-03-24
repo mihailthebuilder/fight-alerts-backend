@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh """
                     cd functions
-                    make test
+                    JENKINS="true" make test
                 """
             }
         }
