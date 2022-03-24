@@ -42,7 +42,7 @@ func (s *steps) lambdaIsInvoked(ctx context.Context) (context.Context, error) {
 
 func (s *steps) fightDataIsReturned(ctx context.Context) error {
 	port := ctx.Value(lambdaPortKey("lambdaPort"))
-	url := fmt.Sprintf("http://localhost:%d/2015-03-31/functions/myfunction/invocations", port)
+	url := fmt.Sprintf("http://docker:%d/2015-03-31/functions/myfunction/invocations", port)
 
 	response, err := http.Post(url, "application/json", bytes.NewBuffer([]byte{}))
 	if err != nil {
