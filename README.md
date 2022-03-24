@@ -52,8 +52,6 @@ terraform apply -auto-approve
 
 ~~Get Jenkins to pass the service test~~
 
-Set up env var that will decide whether service test uses `docker` or `localhost`
-
 Look into Cucumber/unit test interaction...
 - don't count test files in coverage results
 - how to split message belonging to either
