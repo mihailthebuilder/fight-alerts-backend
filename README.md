@@ -53,9 +53,7 @@ terraform apply -auto-approve
 ~~Get Jenkins to pass the service test~~
 
 Look into Cucumber/unit test interaction...
-- don't count test files in coverage results
-- how to split message belonging to either
-- how to run each individually
+- ~~don't count test files in coverage results~~
 - check whether the coverage relates to unit tests or both
 
 Move `scraper` and `handler` to a separate package
@@ -75,6 +73,10 @@ Improve test coverage in `scraper.go`
     - but see why it doesn't get triggered with `espn.co.uk` test in `scraper_integration_test.go`
 
 Set up right access policies for AWS resources
+
+Split service vs unit test logging clearer
+
+Enable running unit & service tests separately
 
 # Log
 
