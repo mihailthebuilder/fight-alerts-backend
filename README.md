@@ -52,9 +52,12 @@ terraform apply -auto-approve
 - ~~don't count test files in coverage results~~
 - ~~figure out if there's a way to get coverage results on service test~~
 
-Move `scraper` and `handler` to a separate package
-
-Move service test to separate folder so you can run the test separate from unit test
+Better file org
+- move `mmaUrl` to separate package for reuse across other packages
+- move `scraper` to separate package
+- consider moving `resources.MmaUrl` to `scraper` package
+- move `handler` to separate package
+- move service test to separate folder so you can run the test separate from unit test
 
 Set up AWS RDS db to write the data to
 - write terraform

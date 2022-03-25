@@ -1,4 +1,4 @@
-package main
+package scraper
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 )
 
 type Scraper struct {
-	url string
+	Url string
 }
 
 type FightRecord struct {
@@ -56,7 +56,7 @@ func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
 		results = append(results, record)
 	})
 
-	c.Visit(s.url)
+	c.Visit(s.Url)
 
 	if len(results) == 0 && errOut == nil {
 		errOut = fmt.Errorf("unable to find any results")
