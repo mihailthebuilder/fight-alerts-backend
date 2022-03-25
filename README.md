@@ -44,20 +44,17 @@ terraform apply -auto-approve
 
 # TODO
 
-~~Set up lambda v1 in S3 bucket with cloudwatch~~
-
-~~Set up Jenkins deployment~~
-
 ~~Write service test for lambda using Cucumber~~
 
 ~~Get Jenkins to pass the service test~~
 
-Look into Cucumber/unit test interaction...
+~~Look into Cucumber/unit test interaction...~~
 - ~~don't count test files in coverage results~~
 - ~~figure out if there's a way to get coverage results on service test~~
-- enable running unit & service tests separately
 
 Move `scraper` and `handler` to a separate package
+
+Move service test to separate folder so you can run the test separate from unit test
 
 Set up AWS RDS db to write the data to
 - write terraform
