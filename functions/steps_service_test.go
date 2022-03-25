@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fight-alerts-backend/resources"
 	"fmt"
 	"net/http"
 	"os"
@@ -14,7 +15,7 @@ type steps struct {
 }
 
 func (s *steps) sherdogIsAvailable() error {
-	resp, err := http.Get(mmaUrl)
+	resp, err := http.Get(resources.MmaUrl)
 
 	if err != nil {
 		return err

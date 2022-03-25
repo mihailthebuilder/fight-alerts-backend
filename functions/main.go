@@ -1,13 +1,13 @@
 package main
 
 import (
+	"fight-alerts-backend/resources"
+
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-const mmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"
-
 func main() {
-	scraper := Scraper{mmaUrl}
+	scraper := Scraper{resources.MmaUrl}
 	lambdaHandler := handler{scraper: scraper}
 	lambda.Start(lambdaHandler.handleRequest)
 }
