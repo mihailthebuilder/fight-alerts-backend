@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"fight-alerts-backend/scraper"
@@ -33,15 +33,15 @@ func Test_handleRequest(t *testing.T) {
 		{name: "run function should return panic", args: args{s: MockScraper{wantError: true}}, wantPanic: true},
 	}
 	for _, tt := range tests {
-		lambdaHandler := handler{scraper: tt.args.s}
+		lambdaHandler := Handler{Scraper: tt.args.s}
 
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.wantPanic == true {
-				assert.Panics(t, func() { lambdaHandler.handleRequest() }, "The code did not panic")
+				assert.Panics(t, func() { lambdaHandler.HandleRequest() }, "The code did not panic")
 				return
 			}
 
-			lambdaHandler.handleRequest()
+			lambdaHandler.HandleRequest()
 		})
 	}
 }

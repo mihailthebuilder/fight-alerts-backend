@@ -29,13 +29,13 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 
 # TODO
 
-Better file org
+~~Better file org~~
 - ~~move `mmaUrl` to separate package for reuse across other packages~~
 - ~~move `scraper` to separate package~~
 - ~~get all tests to still run~~
 - ~~consider moving `resources.MmaUrl` to `scraper` package~~
 - ~~move service test to separate folder so you can run the test separate from unit test~~
-- move `handler` to separate package
+- ~~move `handler` to separate package~~
 
 Set up AWS RDS db to write the data to
 - write terraform
@@ -58,6 +58,8 @@ Split service vs unit test logging clearer
 Figure out how to aggregate coverage results for unit tests
 
 Consider building the url into the Scraper as opposed to having it declared directly
+
+Test [main.go](functions/main.go)
 
 # Log
 

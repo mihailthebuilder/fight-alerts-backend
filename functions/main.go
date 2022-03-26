@@ -1,6 +1,7 @@
 package main
 
 import (
+	handler "fight-alerts-backend/lambda_handler"
 	"fight-alerts-backend/scraper"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -8,6 +9,6 @@ import (
 
 func main() {
 	scraper := scraper.Scraper{Url: scraper.MmaUrl}
-	lambdaHandler := handler{scraper: scraper}
-	lambda.Start(lambdaHandler.handleRequest)
+	lambdaHandler := handler.Handler{Scraper: scraper}
+	lambda.Start(lambdaHandler.HandleRequest)
 }
