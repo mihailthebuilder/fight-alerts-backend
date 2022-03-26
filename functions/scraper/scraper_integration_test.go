@@ -1,7 +1,6 @@
 package scraper
 
 import (
-	"fight-alerts-backend/resources"
 	"testing"
 )
 
@@ -10,7 +9,7 @@ func Test_getDataFromUrl(t *testing.T) {
 		input       string
 		wantResults bool
 		wantError   bool
-	}{{resources.MmaUrl, true, false}, {"ffefw.fdfsfs", false, true}, {"https://espn.co.uk", false, true}}
+	}{{MmaUrl, true, false}, {"ffefw.fdfsfs", false, true}, {"https://espn.co.uk", false, true}}
 
 	for _, test := range tests {
 		var scraper IScraper = Scraper{test.input}

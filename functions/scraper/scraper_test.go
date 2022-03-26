@@ -32,9 +32,10 @@ func ValidateFightRecord(record FightRecord, t *testing.T) {
 		t.Errorf("record should have headline - %#v", record)
 	}
 
-	todayStart := time.Now().Truncate(time.Hour)
+	currentDayStart := time.Now().UTC().Truncate(time.Hour * 24)
+	fightDayStart := record.DateTime.UTC().Truncate(time.Hour * 24)
 
-	if record.DateTime.Before(todayStart) {
+	if fightDayStart.Before(currentDayStart) {
 		t.Errorf("fight date should be in the future - %#v", record)
 	}
 }

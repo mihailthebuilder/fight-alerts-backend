@@ -7,6 +7,8 @@ import (
 	"github.com/gocolly/colly"
 )
 
+const MmaUrl = "https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"
+
 type Scraper struct {
 	Url string
 }
