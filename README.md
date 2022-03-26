@@ -56,9 +56,9 @@ Better file org
 - ~~move `mmaUrl` to separate package for reuse across other packages~~
 - ~~move `scraper` to separate package~~
 - ~~get all tests to still run~~
-- consider moving `resources.MmaUrl` to `scraper` package
-- move `handler` to separate package
+- ~~consider moving `resources.MmaUrl` to `scraper` package~~
 - move service test to separate folder so you can run the test separate from unit test
+- move `handler` to separate package
 
 Set up AWS RDS db to write the data to
 - write terraform
