@@ -57,7 +57,7 @@ Better file org
 - ~~move `scraper` to separate package~~
 - ~~get all tests to still run~~
 - ~~consider moving `resources.MmaUrl` to `scraper` package~~
-- move service test to separate folder so you can run the test separate from unit test
+- ~~move service test to separate folder so you can run the test separate from unit test~~
 - move `handler` to separate package
 
 Set up AWS RDS db to write the data to
@@ -77,6 +77,10 @@ Improve test coverage in `scraper.go`
 Set up right access policies for AWS resources
 
 Split service vs unit test logging clearer
+
+Figure out how to aggregate coverage results for unit tests
+
+Consider building the url into the Scraper as opposed to having it declared directly
 
 # Log
 
