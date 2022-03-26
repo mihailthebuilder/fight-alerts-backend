@@ -4,7 +4,7 @@ build:
 	GOOS=linux go build -o ./bin/scraper
 
 test: build
-	go test -coverprofile=./test_results/coverage.out
+	go test ./ ./scraper ./resources -coverprofile=./test_results/coverage.out
 	go tool cover -html=./test_results/coverage.out -o ./test_results/coverage.html
 
 open-coverage-win:

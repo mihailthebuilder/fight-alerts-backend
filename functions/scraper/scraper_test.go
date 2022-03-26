@@ -28,8 +28,14 @@ func (e MockCollyElem) ChildText(selector string) string {
 }
 
 func ValidateFightRecord(record FightRecord, t *testing.T) {
-	if len([]rune(record.Headline)) == 0 || time.Now().After(record.DateTime) {
-		t.Errorf("record should not have nil or nil-equivalent values - %#v", record)
+	if len([]rune(record.Headline)) == 0 {
+		t.Errorf("record should have headline - %#v", record)
+	}
+
+	todayStart := time.Now().Truncate(time.Hour)
+
+	if record.DateTime.Before(todayStart) {
+		t.Errorf("fight date should be in the future - %#v", record)
 	}
 }
 
