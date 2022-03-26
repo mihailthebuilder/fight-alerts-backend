@@ -11,5 +11,7 @@ int-test: build
 	cp ./bin/scraper ./service_tests
 	cd service_tests && go test
 
+test: unit-test int-test
+
 open-coverage-win:
 	start chrome "$(shell cygpath -m $(BASE_DIR_LINUX))/test_results/coverage.html"
