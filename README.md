@@ -2,55 +2,32 @@
 
 Backend service to track upcoming MMA fights, written in Go and deployed using AWS serverless architecture.
 
-# Pre-requisites
+# Features completed
 
-[Go](https://go.dev/)
+Service that scrapes a site for upcoming fights
 
-[Make](https://www.gnu.org/software/make/)
+AWS lambda that runs the service
 
-[Terraform](https://www.terraform.io/)
+Terraform deployment instructions
 
-[Jenkins](https://www.jenkins.io/)
+Jenkins test & deployment pipeline, with local Jenkins server hosted in a separate repository
 
-[AWS CLI](https://aws.amazon.com/cli/)
+Unit tests & Cucumber service tests
 
-# Commands
+# Development
 
-In the `functions` folder:
+Pre-requisites:
+- [Go](https://go.dev/)
+- [Make](https://www.gnu.org/software/make/)
+- [Terraform](https://www.terraform.io/)
+- [Jenkins](https://www.jenkins.io/)
+- [AWS CLI](https://aws.amazon.com/cli/)
 
-```
-# Run tests
-make test
+[makefile](./functions/makefile) has all the instructions for developing locally.
 
-# Check coverage results after running tests (in Windows only)
-make open-coverage-win
-
-# Run script and print out results
-make run
-```
-
-In the `terraform` folder:
-
-```
-# Log in to AWS CLI
-../../../aws-adfs-cli/aws-adfs
-
-# Initialise terraform
-terraform init -force-copy
-
-# Apply terraform
-terraform apply -auto-approve
-```
+Deployment is handled by local Jenkins server according to instructions in [Jenkinsfile](./Jenkinsfile).
 
 # TODO
-
-~~Write service test for lambda using Cucumber~~
-
-~~Get Jenkins to pass the service test~~
-
-~~Look into Cucumber/unit test interaction...~~
-- ~~don't count test files in coverage results~~
-- ~~figure out if there's a way to get coverage results on service test~~
 
 Better file org
 - ~~move `mmaUrl` to separate package for reuse across other packages~~
