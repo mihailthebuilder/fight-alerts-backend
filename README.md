@@ -53,7 +53,7 @@ terraform apply -auto-approve
 - ~~figure out if there's a way to get coverage results on service test~~
 
 Better file org
-- move `mmaUrl` to separate package for reuse across other packages
+- ~~move `mmaUrl` to separate package for reuse across other packages~~
 - move `scraper` to separate package
 - consider moving `resources.MmaUrl` to `scraper` package
 - move `handler` to separate package

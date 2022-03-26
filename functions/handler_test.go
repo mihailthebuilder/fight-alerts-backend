@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fight-alerts-backend/scraper"
 	"fmt"
 	"testing"
 
@@ -11,16 +12,16 @@ type MockScraper struct {
 	wantError bool
 }
 
-func (s MockScraper) getResultsFromUrl() ([]FightRecord, error) {
+func (s MockScraper) GetResultsFromUrl() ([]scraper.FightRecord, error) {
 	if s.wantError == true {
 		return nil, fmt.Errorf("Panic example")
 	}
-	return []FightRecord{}, nil
+	return []scraper.FightRecord{}, nil
 }
 
 func Test_handleRequest(t *testing.T) {
 	type args struct {
-		s IScraper
+		s scraper.IScraper
 	}
 
 	tests := []struct {

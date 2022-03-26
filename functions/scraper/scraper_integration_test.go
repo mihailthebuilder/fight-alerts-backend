@@ -15,7 +15,7 @@ func Test_getDataFromUrl(t *testing.T) {
 	for _, test := range tests {
 		var scraper IScraper = Scraper{test.input}
 
-		results, err := scraper.getResultsFromUrl()
+		results, err := scraper.GetResultsFromUrl()
 		gotResults, gotError := len(results) > 0, err != nil
 
 		if gotError != test.wantError {

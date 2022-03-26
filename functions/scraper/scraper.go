@@ -17,7 +17,7 @@ type FightRecord struct {
 }
 
 type IScraper interface {
-	getResultsFromUrl() ([]FightRecord, error)
+	GetResultsFromUrl() ([]FightRecord, error)
 }
 
 type ICollyHtmlElem interface {
@@ -25,7 +25,7 @@ type ICollyHtmlElem interface {
 	ChildText(selector string) string
 }
 
-func (s Scraper) getResultsFromUrl() ([]FightRecord, error) {
+func (s Scraper) GetResultsFromUrl() ([]FightRecord, error) {
 	// Instantiate default collector
 	c := colly.NewCollector()
 

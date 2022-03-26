@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	scraper := scraper.Scraper{resources.MmaUrl}
+	scraper := scraper.Scraper{Url: resources.MmaUrl}
 	lambdaHandler := handler{scraper: scraper}
 	lambda.Start(lambdaHandler.handleRequest)
 }

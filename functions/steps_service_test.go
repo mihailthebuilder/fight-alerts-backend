@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fight-alerts-backend/resources"
+	"fight-alerts-backend/scraper"
 	"fmt"
 	"net/http"
 	"os"
@@ -65,7 +66,7 @@ func (s *steps) fightDataIsReturned(ctx context.Context) error {
 		return fmt.Errorf("invoking Lambda: %d %s", response.StatusCode, body)
 	}
 
-	var records []FightRecord
+	var records []scraper.FightRecord
 	json.Unmarshal([]byte(body), &records)
 
 	if len(records) < 3 {
