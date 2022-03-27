@@ -30,9 +30,10 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 # TODO
 
 Set up AWS RDS db to write the data to
+- write Cucumber test
+- write unit test
+- amend code to use db
 - write terraform
-- amend code to use db (with tests)
-- add unit & service tests
 
 Figure out how to do the notificiation sender
 - maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
