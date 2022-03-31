@@ -1,49 +1,26 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
 	"os"
 	"testing"
 
 	"github.com/cucumber/godog"
 )
 
-func InitializeScenario(ctx *godog.ScenarioContext) {
-	ctx.Step(`^Sherdog is available for access$`, _steps.sherdogIsAvailable)
-	ctx.Step(`^lambda is invoked$`, _steps.lambdaIsInvoked)
-	ctx.Step(`^all the fight data is returned$`, _steps.fightDataIsReturned)
-}
-
 var _steps = steps{}
-
-func (s *steps) startContainers() {
-	err := s.containers.Start()
-	if err != nil {
-		panic(err)
-	}
-}
-
-func (s *steps) stopContainers() {
-	fmt.Println("Lambda log:")
-	readCloser, err := s.containers.GetLambdaLog()
-	if err != nil {
-		fmt.Printf("unable to get logs from containers: %v\n", err)
-	}
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(readCloser)
-	fmt.Println(buf.String())
-
-	fmt.Println("Stopping containers")
-	err = s.containers.Stop()
-	if err != nil {
-		panic(err)
-	}
-}
 
 func InitializeTestSuite(ctx *godog.TestSuiteContext) {
 	ctx.BeforeSuite(_steps.startContainers)
+	ctx.BeforeSuite(_steps.setUpAuroraClient)
+	ctx.BeforeSuite(_steps.createAuroraTables)
 	ctx.AfterSuite(_steps.stopContainers)
+	ctx.AfterSuite(_steps.AuroraClient.closeDatabaseConnexion)
+}
+
+func InitializeScenario(ctx *godog.ScenarioContext) {
+	ctx.Step(`^Sherdog is available for access$`, _steps.sherdogIsAvailable)
+	ctx.Step(`^lambda is invoked$`, _steps.lambdaIsInvoked)
+	ctx.Step(`^scraped fight data is available in the database$`, _steps.scrapedDataIsInDb)
 }
 
 func TestMain(m *testing.M) {
@@ -54,8 +31,8 @@ func TestMain(m *testing.M) {
 
 	status := godog.TestSuite{
 		Name:                 "godogs",
-		TestSuiteInitializer: InitializeTestSuite,
 		ScenarioInitializer:  InitializeScenario,
+		TestSuiteInitializer: InitializeTestSuite,
 		Options:              &opts,
 	}.Run()
 

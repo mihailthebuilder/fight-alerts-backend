@@ -6,12 +6,35 @@ import (
 	"io"
 	"time"
 
+	"github.com/docker/docker/api/types/container"
 	"github.com/docker/go-connections/nat"
 	testcontainers "github.com/testcontainers/testcontainers-go"
 )
 
+func portStringBuilder(port int) string {
+	return fmt.Sprintf("%d/tcp", port)
+}
+
+var LambdaPort = 9001
+var AuroraPort = 5432
+var MyNetwork = "myNetwork"
+
+type DbConxDetails struct {
+	Password string
+	User     string
+	Database string
+}
+
+var PostgresConxDetails = DbConxDetails{
+	Password: "password",
+	User:     "MMFightAlerts",
+	Database: "MMFightAlertsDB",
+}
+
 type Containers struct {
+	network         testcontainers.Network
 	lambdaContainer testcontainers.Container
+	auroraContainer testcontainers.Container
 }
 
 func (c *Containers) GetLambdaLog() (io.ReadCloser, error) {
@@ -19,25 +42,56 @@ func (c *Containers) GetLambdaLog() (io.ReadCloser, error) {
 }
 
 func (c *Containers) Start() error {
-	err := c.startLambdaContainer()
+	var err error
+
+	err = c.createNetwork()
+	if err != nil {
+		return err
+	}
+
+	err = c.startLambdaContainer()
+	if err != nil {
+		return err
+	}
+
+	err = c.startAuroraContainer()
+	if err != nil {
+		return err
+	}
 
 	fmt.Println("Sleeping for 5 seconds while containers start")
 	time.Sleep(5 * time.Second)
 
-	return err
+	return nil
 }
 
 func (c *Containers) Stop() error {
 	context := context.Background()
 
-	err := c.lambdaContainer.Terminate(context)
-	return err
+	var err error
+
+	err = c.lambdaContainer.Terminate(context)
+	if err != nil {
+		return err
+	}
+
+	err = c.auroraContainer.Terminate(context)
+	if err != nil {
+		return err
+	}
+
+	err = c.network.Remove(context)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (c *Containers) startLambdaContainer() error {
 	req := testcontainers.ContainerRequest{
 		Image:        "lambci/lambda:go1.x",
-		ExposedPorts: []string{"9001/tcp"},
+		ExposedPorts: []string{portStringBuilder(LambdaPort)},
 		Name:         "lambda",
 		Hostname:     "lambda",
 		Env: map[string]string{
@@ -45,6 +99,8 @@ func (c *Containers) startLambdaContainer() error {
 			"AWS_ACCESS_KEY_ID":       "x",
 			"AWS_SECRET_ACCESS_KEY":   "x",
 		},
+		Networks:    []string{MyNetwork},
+		NetworkMode: container.NetworkMode(MyNetwork),
 	}
 	context := context.Background()
 
@@ -65,15 +121,59 @@ func (c *Containers) startLambdaContainer() error {
 	return nil
 }
 
-func (c *Containers) GetLocalHostLambdaPort() (int, error) {
-	return c.GetLocalhostPort(c.lambdaContainer, 9001)
-}
-
 func (c *Containers) GetLocalhostPort(container testcontainers.Container, port int) (int, error) {
 	context := context.Background()
-	mappedPort, err := container.MappedPort(context, nat.Port(fmt.Sprintf("%d/tcp", port)))
+	mappedPort, err := container.MappedPort(context, nat.Port(portStringBuilder(port)))
 	if err != nil {
 		return 0, err
 	}
 	return mappedPort.Int(), nil
+}
+
+func (c *Containers) startAuroraContainer() error {
+	req := testcontainers.ContainerRequest{
+		Image:        "postgres:13",
+		ExposedPorts: []string{portStringBuilder(AuroraPort)},
+		Name:         "postgres",
+		Hostname:     "postgres",
+		Env: map[string]string{
+			"POSTGRES_PASSWORD": PostgresConxDetails.Password,
+			"POSTGRES_USER":     PostgresConxDetails.User,
+			"POSTGRES_DB":       PostgresConxDetails.Database,
+		},
+		Networks:    []string{MyNetwork},
+		NetworkMode: container.NetworkMode(MyNetwork),
+	}
+
+	var err error
+
+	context := context.Background()
+
+	c.auroraContainer, err = testcontainers.GenericContainer(context, testcontainers.GenericContainerRequest{
+		ContainerRequest: req,
+		Started:          false,
+	})
+	if err != nil {
+		return err
+	}
+
+	err = c.auroraContainer.Start(context)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Containers) createNetwork() error {
+	context := context.Background()
+	var err error
+	req := testcontainers.GenericNetworkRequest{
+		NetworkRequest: testcontainers.NetworkRequest{Driver: "bridge", Name: MyNetwork, Attachable: true},
+	}
+	c.network, err = testcontainers.GenericNetwork(context, req)
+	if err != nil {
+		return err
+	}
+	return nil
 }

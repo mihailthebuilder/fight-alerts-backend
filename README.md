@@ -22,6 +22,7 @@ Pre-requisites:
 - [Terraform](https://www.terraform.io/)
 - [Jenkins](https://www.jenkins.io/)
 - [AWS CLI](https://aws.amazon.com/cli/)
+- [Postgres](https://www.postgresql.org/) with `username` user, `password` password and `test` table
 
 [makefile](./functions/makefile) has all the instructions for developing locally.
 
@@ -29,11 +30,17 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 
 # TODO
 
-Set up AWS RDS db to write the data to
-- write Cucumber test
-- write unit test
-- amend code to use db
-- write terraform
+Set up AWS Aurora Postgres db to write the data to
+- ~~write Cucumber test~~
+- write code the TDD way
+  - ~~get `TestInsertFightRecords` passing~~
+  - get `service_test` passing
+- write terraform & deploy
+- tidy up...
+  - export common code from `datastore_test` and `service_test`/`aurora_client`
+  - service test
+    - replace `GetHostName()` with setting the localhost name in the `context`
+    - get Colly to connect to site in first service test
 
 Figure out how to do the notificiation sender
 - maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
