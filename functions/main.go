@@ -12,7 +12,7 @@ import (
 func main() {
 	host := os.Getenv("RDS_HOST")
 	password := os.Getenv("RDS_PASSWORD")
-	d := &datastore.Datastore{Host: host, Password: password, User: "Chickenshit", Dbname: "AFHAF", Port: 1111}
+	d := &datastore.Datastore{Host: host, Password: password, User: "FightAlertsUser", Dbname: "FightAlertsDb", Port: 5432}
 
 	s := scraper.Scraper{Url: scraper.MmaUrl}
 
