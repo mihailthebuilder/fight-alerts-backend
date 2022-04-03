@@ -11,10 +11,8 @@ var _steps = steps{}
 
 func InitializeTestSuite(ctx *godog.TestSuiteContext) {
 	ctx.BeforeSuite(_steps.startContainers)
-	ctx.BeforeSuite(_steps.setUpAuroraClient)
-	ctx.BeforeSuite(_steps.createAuroraTables)
+	ctx.BeforeSuite(_steps.setUpDatastore)
 	ctx.AfterSuite(_steps.stopContainers)
-	ctx.AfterSuite(_steps.AuroraClient.closeDatabaseConnexion)
 }
 
 func InitializeScenario(ctx *godog.ScenarioContext) {

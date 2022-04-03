@@ -11,7 +11,9 @@ type MockScraper struct {
 }
 
 type MockDatastore struct {
-	returnError bool
+	insertFightRecordsReturn error
+	connectReturn            error
+	closeConnectionReturn    error
 }
 
 func (s MockScraper) GetResultsFromUrl() ([]scraper.FightRecord, error) {
@@ -22,10 +24,15 @@ func (s MockScraper) GetResultsFromUrl() ([]scraper.FightRecord, error) {
 }
 
 func (d MockDatastore) InsertFightRecords(records []scraper.FightRecord) error {
-	if d.returnError == true {
-		return fmt.Errorf("fake error")
-	}
-	return nil
+	return d.insertFightRecordsReturn
+}
+
+func (d MockDatastore) Connect() error {
+	return d.connectReturn
+}
+
+func (d MockDatastore) CloseConnection() error {
+	return d.closeConnectionReturn
 }
 
 func TestHandler_HandleRequest(t *testing.T) {
@@ -35,18 +42,46 @@ func TestHandler_HandleRequest(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "handler should return error due to scraper error",
-			h:       Handler{Scraper: MockScraper{returnError: true}, Datastore: MockDatastore{returnError: false}},
+			name: "handler should return error due to scraper error",
+			h: Handler{
+				Scraper:   MockScraper{returnError: true},
+				Datastore: MockDatastore{},
+			},
 			wantErr: true,
 		},
 		{
-			name:    "handler should return error due to datastore error",
-			h:       Handler{Scraper: MockScraper{returnError: false}, Datastore: MockDatastore{returnError: true}},
+			name: "handler should return error due to datastore connection error",
+			h: Handler{
+				Scraper: MockScraper{returnError: false},
+				Datastore: MockDatastore{
+					connectReturn: fmt.Errorf("Datastore.Connect() fake error"),
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "handler should return error due to datastore insertion error",
+			h: Handler{
+				Scraper: MockScraper{returnError: false},
+				Datastore: MockDatastore{
+					insertFightRecordsReturn: fmt.Errorf("Datastore.InsertFightRecords() fake error"),
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "handler should return error due to datastore close error",
+			h: Handler{
+				Scraper: MockScraper{returnError: false},
+				Datastore: MockDatastore{
+					closeConnectionReturn: fmt.Errorf("Datastore.Close() fake error"),
+				},
+			},
 			wantErr: true,
 		},
 		{
 			name:    "handler should not return error",
-			h:       Handler{Scraper: MockScraper{returnError: false}, Datastore: MockDatastore{returnError: false}},
+			h:       Handler{Scraper: MockScraper{returnError: false}, Datastore: MockDatastore{}},
 			wantErr: false,
 		},
 	}

@@ -3,14 +3,17 @@ package main
 import (
 	"bytes"
 	"context"
+	"fight-alerts-backend/datastore"
 	"fight-alerts-backend/scraper"
 	"fmt"
 	"net/http"
+
+	utils "fight-alerts-backend/test_utils"
 )
 
 type steps struct {
-	containers   Containers
-	AuroraClient AuroraClient
+	containers Containers
+	datastore  *datastore.Datastore
 }
 
 func (s *steps) sherdogIsAvailable() error {
@@ -54,7 +57,12 @@ func (s *steps) lambdaIsInvoked(ctx context.Context) error {
 }
 
 func (s *steps) scrapedDataIsInDb(ctx context.Context) error {
-	items := s.AuroraClient.getAllItems()
+
+	items, err := utils.GetAllFightRecordsFromEventTable(s.datastore.Db)
+	if err != nil {
+		return err
+	}
+
 	if len(items) == 0 {
 		return fmt.Errorf("no items in datastore: %v", items)
 	}

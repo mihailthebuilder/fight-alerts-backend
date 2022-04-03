@@ -9,16 +9,20 @@ import (
 )
 
 type Datastore struct {
-	db *sql.DB
+	Db                           *sql.DB
+	Host, Dbname, User, Password string
+	Port                         int
 }
 
 type IDatastore interface {
+	Connect() error
+	CloseConnection() error
 	InsertFightRecords([]scraper.FightRecord) error
 }
 
-func (d Datastore) InsertFightRecords(records []scraper.FightRecord) error {
+func (d *Datastore) InsertFightRecords(records []scraper.FightRecord) error {
 
-	tx, err := d.db.Begin()
+	tx, err := d.Db.Begin()
 	if err != nil {
 		return fmt.Errorf("db error - begin insert: %v", err)
 	}
@@ -51,4 +55,28 @@ func (d Datastore) InsertFightRecords(records []scraper.FightRecord) error {
 	}
 
 	return nil
+}
+
+func (d *Datastore) Connect() error {
+
+	s := d.createDbConnectionString()
+	d.Db, _ = sql.Open("postgres", s)
+
+	err := d.Db.Ping()
+	if err != nil {
+		return fmt.Errorf("pinging Postgres repository connexion at %s: %v", s, err)
+	}
+
+	return nil
+}
+
+func (d *Datastore) CloseConnection() error {
+	return d.Db.Close()
+}
+
+func (d *Datastore) createDbConnectionString() string {
+	return fmt.Sprintf(
+		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		d.Host, d.Port, d.User, d.Password, d.Dbname,
+	)
 }

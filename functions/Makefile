@@ -9,7 +9,7 @@ unit-test:
 
 int-test: build
 	cp ./bin/scraper ./service_tests
-	cd service_tests && go test
+	RDS_HOST=postgres RDS_PASSWORD=password cd service_tests && go test
 
 test: unit-test int-test
 

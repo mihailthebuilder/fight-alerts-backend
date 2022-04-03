@@ -35,9 +35,10 @@ Set up AWS Aurora Postgres db to write the data to
 - write code the TDD way
   - ~~get `TestInsertFightRecords` passing~~
   - get `service_test` passing
+    - it looks like the lambda handler doesn't even connect to the db; I can put any details in there and it's not gonna throw an error
 - write terraform & deploy
 - tidy up...
-  - export common code from `datastore_test` and `service_test`/`aurora_client`
+  - ~~export common code from `datastore_test` and `service_test`/`aurora_client`~~
   - service test
     - replace `GetHostName()` with setting the localhost name in the `context`
     - get Colly to connect to site in first service test
@@ -49,7 +50,7 @@ Figure out how to do the notificiation sender
 
 Improve test coverage in `scraper.go`
 - one way is to create a mock html page and run `getResultsFromUrl` against it
-    - but see why it doesn't get triggered with `espn.co.uk` test in `scraper_integration_test.go`
+    - but see why it doesn't get triggered with `espn.co.uk` test in `scraper_test.go`
 
 Set up right access policies for AWS resources
 

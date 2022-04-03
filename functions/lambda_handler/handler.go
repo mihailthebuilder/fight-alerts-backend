@@ -20,7 +20,17 @@ func (h Handler) HandleRequest() error {
 
 	fmt.Printf("Scraped data:\n%#v\n", records)
 
+	err = h.Datastore.Connect()
+	if err != nil {
+		return err
+	}
+
 	err = h.Datastore.InsertFightRecords(records)
+	if err != nil {
+		return err
+	}
+
+	err = h.Datastore.CloseConnection()
 	if err != nil {
 		return err
 	}

@@ -1,8 +1,8 @@
 package datastore
 
 import (
-	"database/sql"
 	"fight-alerts-backend/scraper"
+	utils "fight-alerts-backend/test_utils"
 	"reflect"
 	"testing"
 	"time"
@@ -11,26 +11,17 @@ import (
 )
 
 func TestInsertFightRecords(t *testing.T) {
-	db, err := sql.Open("postgres", "postgres://username:password@localhost/test?sslmode=disable")
+	d := Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"}
 
+	err := d.Connect()
 	if err != nil {
 		t.Errorf("db error - connection: %v", err)
 	}
 
-	defer db.Close()
-
-	_, err = db.Exec(`
-		create table event (
-			event_id serial,
-			headline varchar(100),
-			datetime timestamptz
-		);
-	`)
+	err = utils.CreateEventTable(d.Db)
 	if err != nil {
 		t.Errorf("db error - unable to create table: %v", err)
 	}
-
-	d := Datastore{db: db}
 
 	tz, err := time.LoadLocation("Europe/London")
 	if err != nil {
@@ -46,7 +37,7 @@ func TestInsertFightRecords(t *testing.T) {
 		t.Errorf("db error - InsertFightRecords throws error: %v", err)
 	}
 
-	rows, err := d.db.Query(`select * from Event`)
+	rows, err := d.Db.Query(`select * from event`)
 	if err != nil {
 		t.Errorf("db error - select * from event: %v", err)
 	}
@@ -66,12 +57,71 @@ func TestInsertFightRecords(t *testing.T) {
 		recordsReturnedFromDb = append(recordsReturnedFromDb, scraper.FightRecord{DateTime: date, Headline: headline})
 	}
 
-	_, err = db.Exec(`drop table Event;`)
+	_, err = d.Db.Exec(`drop table Event;`)
 	if err != nil {
 		t.Errorf("db error - unable drop table: %v", err)
 	}
 
 	if !reflect.DeepEqual(recordsInsertedInDb, recordsReturnedFromDb) {
 		t.Errorf("records inserted and returned are different. expected: %v . got: %v", recordsInsertedInDb, recordsReturnedFromDb)
+	}
+
+	err = d.CloseConnection()
+	if err != nil {
+		t.Errorf("unable to close db")
+	}
+}
+
+func TestDatastore_Connect(t *testing.T) {
+	tests := []struct {
+		name    string
+		d       Datastore
+		wantErr bool
+	}{
+		{
+			name:    "valid db connection",
+			d:       Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"},
+			wantErr: false,
+		},
+		{
+			name:    "invalid db connection",
+			d:       Datastore{Host: "localhost", Port: 5432, User: "hello", Password: "password", Dbname: "world"},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := tt.d.Connect(); (err != nil) != tt.wantErr {
+				t.Errorf("Datastore.Connect() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if !tt.wantErr {
+				tt.d.CloseConnection()
+			}
+		})
+	}
+}
+
+func TestDatastore_CloseConnection(t *testing.T) {
+	d := Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"}
+
+	err := d.Connect()
+	if err != nil {
+		t.Errorf("Datastore.CloseConnection() unable to connect")
+	}
+
+	err = d.CloseConnection()
+	if err != nil {
+		t.Errorf("Datastore.CloseConnection() error: %v", err)
+	}
+}
+
+func TestDatastore_createDbConnectionString(t *testing.T) {
+	d := Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"}
+	got := d.createDbConnectionString()
+
+	expected := "host=localhost port=5432 user=username password=password dbname=test sslmode=disable"
+	if got != expected {
+		t.Errorf("Datastore.createDbConnectionString() = %v, want = %v", got, expected)
 	}
 }

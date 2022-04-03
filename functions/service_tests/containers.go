@@ -27,8 +27,8 @@ type DbConxDetails struct {
 
 var PostgresConxDetails = DbConxDetails{
 	Password: "password",
-	User:     "MMFightAlerts",
-	Database: "MMFightAlertsDB",
+	User:     "FightAlertsUser",
+	Database: "FightAlertsDb",
 }
 
 type Containers struct {
