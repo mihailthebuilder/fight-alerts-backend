@@ -35,6 +35,7 @@ Set up AWS Aurora Postgres db to write the data to
 - write code the TDD way
   - ~~get `TestInsertFightRecords` passing~~
   - ~~get `service_test` passing~~
+  - check Jenkins pipeline still works
 - write terraform & deploy
 - tidy up...
   - ~~export common code from `datastore_test` and `service_test`/`aurora_client`~~
