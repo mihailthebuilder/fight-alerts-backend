@@ -37,9 +37,9 @@ func (d MockDatastore) CloseConnection() error {
 
 func TestHandler_HandleRequest(t *testing.T) {
 	tests := []struct {
-		name    string
-		h       Handler
-		wantErr bool
+		name      string
+		h         Handler
+		wantPanic bool
 	}{
 		{
 			name: "handler should return error due to scraper error",
@@ -47,7 +47,7 @@ func TestHandler_HandleRequest(t *testing.T) {
 				Scraper:   MockScraper{returnError: true},
 				Datastore: MockDatastore{},
 			},
-			wantErr: true,
+			wantPanic: true,
 		},
 		{
 			name: "handler should return error due to datastore connection error",
@@ -57,7 +57,7 @@ func TestHandler_HandleRequest(t *testing.T) {
 					connectReturn: fmt.Errorf("Datastore.Connect() fake error"),
 				},
 			},
-			wantErr: true,
+			wantPanic: true,
 		},
 		{
 			name: "handler should return error due to datastore insertion error",
@@ -67,7 +67,7 @@ func TestHandler_HandleRequest(t *testing.T) {
 					insertFightRecordsReturn: fmt.Errorf("Datastore.InsertFightRecords() fake error"),
 				},
 			},
-			wantErr: true,
+			wantPanic: true,
 		},
 		{
 			name: "handler should return error due to datastore close error",
@@ -77,18 +77,24 @@ func TestHandler_HandleRequest(t *testing.T) {
 					closeConnectionReturn: fmt.Errorf("Datastore.Close() fake error"),
 				},
 			},
-			wantErr: true,
+			wantPanic: true,
 		},
 		{
-			name:    "handler should not return error",
-			h:       Handler{Scraper: MockScraper{returnError: false}, Datastore: MockDatastore{}},
-			wantErr: false,
+			name:      "handler should not return error",
+			h:         Handler{Scraper: MockScraper{returnError: false}, Datastore: MockDatastore{}},
+			wantPanic: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := tt.h.HandleRequest(); (err != nil) != tt.wantErr {
-				t.Errorf("Handler.HandleRequest() error = %v, wantErr %v", err, tt.wantErr)
+			// Turn off panic
+			defer func() { recover() }()
+
+			tt.h.HandleRequest()
+
+			// Never reaches here if `HandleRequest` panics
+			if tt.wantPanic {
+				t.Errorf("Handler.HandleRequest() should have panicked")
 			}
 		})
 	}

@@ -23,12 +23,14 @@ type DbConxDetails struct {
 	Password string
 	User     string
 	Database string
+	Host     string
 }
 
 var PostgresConxDetails = DbConxDetails{
 	Password: "password",
 	User:     "FightAlertsUser",
 	Database: "FightAlertsDb",
+	Host:     "postgres",
 }
 
 type Containers struct {
@@ -98,6 +100,8 @@ func (c *Containers) startLambdaContainer() error {
 			"DOCKER_LAMBDA_STAY_OPEN": "1",
 			"AWS_ACCESS_KEY_ID":       "x",
 			"AWS_SECRET_ACCESS_KEY":   "x",
+			"RDS_HOST":                PostgresConxDetails.Host,
+			"RDS_PASSWORD":            PostgresConxDetails.Password,
 		},
 		Networks:    []string{MyNetwork},
 		NetworkMode: container.NetworkMode(MyNetwork),
@@ -135,7 +139,7 @@ func (c *Containers) startAuroraContainer() error {
 		Image:        "postgres:13",
 		ExposedPorts: []string{portStringBuilder(AuroraPort)},
 		Name:         "postgres",
-		Hostname:     "postgres",
+		Hostname:     PostgresConxDetails.Host,
 		Env: map[string]string{
 			"POSTGRES_PASSWORD": PostgresConxDetails.Password,
 			"POSTGRES_USER":     PostgresConxDetails.User,

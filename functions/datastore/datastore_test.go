@@ -11,7 +11,7 @@ import (
 )
 
 func TestInsertFightRecords(t *testing.T) {
-	d := Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"}
+	d := &Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"}
 
 	err := d.Connect()
 	if err != nil {
@@ -75,17 +75,17 @@ func TestInsertFightRecords(t *testing.T) {
 func TestDatastore_Connect(t *testing.T) {
 	tests := []struct {
 		name    string
-		d       Datastore
+		d       *Datastore
 		wantErr bool
 	}{
 		{
 			name:    "valid db connection",
-			d:       Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"},
+			d:       &Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"},
 			wantErr: false,
 		},
 		{
 			name:    "invalid db connection",
-			d:       Datastore{Host: "localhost", Port: 5432, User: "hello", Password: "password", Dbname: "world"},
+			d:       &Datastore{Host: "localhost", Port: 5432, User: "hello", Password: "password", Dbname: "world"},
 			wantErr: true,
 		},
 	}
@@ -103,7 +103,7 @@ func TestDatastore_Connect(t *testing.T) {
 }
 
 func TestDatastore_CloseConnection(t *testing.T) {
-	d := Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"}
+	d := &Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"}
 
 	err := d.Connect()
 	if err != nil {
@@ -117,7 +117,7 @@ func TestDatastore_CloseConnection(t *testing.T) {
 }
 
 func TestDatastore_createDbConnectionString(t *testing.T) {
-	d := Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"}
+	d := &Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"}
 	got := d.createDbConnectionString()
 
 	expected := "host=localhost port=5432 user=username password=password dbname=test sslmode=disable"

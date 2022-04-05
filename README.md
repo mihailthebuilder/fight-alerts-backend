@@ -34,8 +34,7 @@ Set up AWS Aurora Postgres db to write the data to
 - ~~write Cucumber test~~
 - write code the TDD way
   - ~~get `TestInsertFightRecords` passing~~
-  - get `service_test` passing
-    - it looks like the lambda handler doesn't even connect to the db; I can put any details in there and it's not gonna throw an error
+  - ~~get `service_test` passing~~
 - write terraform & deploy
 - tidy up...
   - ~~export common code from `datastore_test` and `service_test`/`aurora_client`~~
