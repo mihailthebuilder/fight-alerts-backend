@@ -41,7 +41,7 @@ func (s *steps) setUpDatastore() {
 	}
 
 	s.datastore = &datastore.Datastore{
-		Host:     GetHostName(),
+		Host:     PostgresConxDetails.Host,
 		Port:     auroraPort,
 		User:     PostgresConxDetails.User,
 		Password: PostgresConxDetails.Password,
