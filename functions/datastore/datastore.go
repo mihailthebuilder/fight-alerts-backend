@@ -27,26 +27,23 @@ func (d *Datastore) InsertFightRecords(records []scraper.FightRecord) error {
 		return fmt.Errorf("db error - begin insert: %v", err)
 	}
 
-	q, err := tx.Prepare(pq.CopyIn("event", "headline", "datetime"))
+	s, err := tx.Prepare(pq.CopyIn("event", "headline", "datetime"))
 	if err != nil {
 		return fmt.Errorf("db error - prepare transactions: %v", err)
 	}
 
+	defer tx.Rollback()
+
 	for _, record := range records {
-		_, err = q.Exec(record.Headline, record.DateTime)
+		_, err = s.Exec(record.Headline, record.DateTime)
 		if err != nil {
-			return fmt.Errorf("db error - prepare transactions exec: %v", err)
+			return fmt.Errorf("db error - transaction statement exec: %v", err)
 		}
 	}
 
-	_, err = q.Exec()
+	err = s.Close()
 	if err != nil {
-		return fmt.Errorf("db error - transactions exec: %v", err)
-	}
-
-	err = q.Close()
-	if err != nil {
-		return fmt.Errorf("db error - closing transactions: %v", err)
+		return fmt.Errorf("db error - closing transaction statement: %v", err)
 	}
 
 	err = tx.Commit()
