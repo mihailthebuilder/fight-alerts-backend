@@ -31,25 +31,7 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 
 # TODO
 
-Set up AWS Aurora Postgres db to write the data to
-- ~~write Cucumber test~~
-- write db code the TDD way
-  - ~~get `TestInsertFightRecords` passing~~
-  - ~~get `service_test` passing~~
-  - ~~get Jenkins pipeline working~~
-  - write terraform & deploy
-    - ~~create db cluster~~
-    - ~~enable access to db from local machine~~
-    - ~~enable internet access to lambda while inside VPC~~
-    - ~~create event table in db~~
-    - ~~connect lambda to db~~
-    - move to SSM...
-      - ~~main - nothing~~
-      - ~~db~~
-        - ~~ingress IPs~~
-        - ~~db username~~
-        - ~~db password~~
-      - lambda
+~~Set up AWS Aurora Postgres db to write the data to~~
 - tidy up...
   - ~~export common code from `datastore_test` and `service_test`/`aurora_client`~~
   - service test
@@ -83,15 +65,13 @@ Test [main.go](functions/main.go)
 
 ## Terraform/AWS
 
-Figure out how to make 2nd public subnet association work. Right now have to manually do it. See [this] for why.
-
 Do I have right IAM policies set up for my resources?
 
 Does the `aws_rds_cluster_instance` resource need `publicly_accessible` set to true in order for me to access the db from my local machine?
 
 Do I need to have ingress for all addresses in the lambda?
 
-Turn the lambda_networking modules in lambda into loop
+Turn the `lambda_networking` module in lambda into loop
 
 The lambda security groups take a really long time to destroy. How can I solve that?
 - maybe create the security group outside of terraform, take its id into the app
@@ -121,3 +101,4 @@ It takes a long time to destroy all resources because of the ENI interfaces atta
 - https://www.reddit.com/r/aws/comments/dytfmy/unable_to_delete_network_interface_likely_due_to/
 
 I used [this guide](https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/) to get scraping Lambda to connect to the internet while inside a VPC. I also created 2 public & private subnets as per [this guide](https://jasonwatmore.com/post/2021/05/30/aws-create-a-vpc-with-public-and-private-subnets-and-a-nat-gateway).
+- When I initially set up the route tables, I needed to manually make the 2nd public subnet association. But I didn't need to do it afterwards.
