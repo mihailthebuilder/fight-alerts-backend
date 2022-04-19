@@ -1,14 +1,10 @@
 variable "resource_tags" {
-  type = object({
-    Owner       = string
-    Contact     = string
-    Environment = string
-  })
-
   default = {
+    Name        = "fight_alerts_resource"
     Owner       = "Mihail_Marian"
     Contact     = "m.marian@elsevier.com"
     Environment = "prod"
+    Product     = "Fight_Alerts"
   }
 }
 
@@ -30,4 +26,21 @@ variable "module" {
 variable "region" {
   type    = string
   default = "us-east-1"
+}
+
+variable "subnet_ids" {
+  default = [
+    {
+      "public" : "subnet-002681aa4abc15084",
+      "private" : "subnet-01f5ac87e00c67cc7"
+    },
+    {
+      "public" : "subnet-05c938c64ff3b334f",
+      "private" : "subnet-0da22e85ac7387dfc"
+    },
+  ]
+}
+
+variable "vpc_id" {
+  default = "vpc-086415cfebaa3d6d9"
 }

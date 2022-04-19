@@ -34,6 +34,8 @@ func (s Scraper) GetResultsFromUrl() ([]FightRecord, error) {
 	var results []FightRecord
 	var errOut error
 
+	c.SetRequestTimeout(300 * time.Second)
+
 	c.OnError(func(r *colly.Response, err error) {
 		errOut = fmt.Errorf("failed with status code - %v - error - %v", r.StatusCode, err)
 	})

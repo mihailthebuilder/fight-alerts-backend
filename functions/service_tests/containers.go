@@ -101,6 +101,7 @@ func (c *Containers) startLambdaContainer() error {
 			"AWS_ACCESS_KEY_ID":       "x",
 			"AWS_SECRET_ACCESS_KEY":   "x",
 			"RDS_HOST":                PostgresConxDetails.Host,
+			"RDS_USERNAME":            PostgresConxDetails.User,
 			"RDS_PASSWORD":            PostgresConxDetails.Password,
 		},
 		Networks:    []string{MyNetwork},

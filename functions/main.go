@@ -12,7 +12,8 @@ import (
 func main() {
 	host := os.Getenv("RDS_HOST")
 	password := os.Getenv("RDS_PASSWORD")
-	d := &datastore.Datastore{Host: host, Password: password, User: "FightAlertsUser", Dbname: "FightAlertsDb", Port: 5432}
+	username := os.Getenv("RDS_USERNAME")
+	d := &datastore.Datastore{Host: host, Password: password, User: username, Dbname: "FightAlertsDb", Port: 5432}
 
 	s := scraper.Scraper{Url: scraper.MmaUrl}
 

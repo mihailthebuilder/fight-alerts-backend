@@ -14,6 +14,8 @@ Jenkins test & deployment pipeline, with local Jenkins server hosted in a separa
 
 Unit tests & Cucumber service tests
 
+AWS Aurora Postgres instance to host the scraped data
+
 # Development
 
 Pre-requisites:
@@ -22,7 +24,6 @@ Pre-requisites:
 - [Terraform](https://www.terraform.io/)
 - [Jenkins](https://www.jenkins.io/)
 - [AWS CLI](https://aws.amazon.com/cli/)
-- [Postgres](https://www.postgresql.org/) with `username` user, `password` password and `test` table
 
 [makefile](./functions/makefile) has all the instructions for developing locally.
 
@@ -32,37 +33,68 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 
 Set up AWS Aurora Postgres db to write the data to
 - ~~write Cucumber test~~
-- write code the TDD way
+- write db code the TDD way
   - ~~get `TestInsertFightRecords` passing~~
   - ~~get `service_test` passing~~
-  - check Jenkins pipeline still works
-- write terraform & deploy
+  - ~~get Jenkins pipeline working~~
+  - write terraform & deploy
+    - ~~create db cluster~~
+    - ~~enable access to db from local machine~~
+    - ~~enable internet access to lambda while inside VPC~~
+    - ~~create event table in db~~
+    - ~~connect lambda to db~~
+    - move to SSM...
+      - ~~main - nothing~~
+      - ~~db~~
+        - ~~ingress IPs~~
+        - ~~db username~~
+        - ~~db password~~
+      - lambda
 - tidy up...
   - ~~export common code from `datastore_test` and `service_test`/`aurora_client`~~
   - service test
     - replace `GetHostName()` with setting the localhost name in the `context`
     - get Colly to connect to site in first service test
+- separate service test code from prod code
+- lambda should check what data is in the db before writing the events
 
 Figure out how to do the notificiation sender
 - maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
 
 # Technical debt
 
+## Source code
+
+Consider building the url into the Scraper as opposed to having it declared directly
+
+Separate Go source code from the rest (e.g. `bin` and `test_results` folder)
+
+## Testing
+
 Improve test coverage in `scraper.go`
 - one way is to create a mock html page and run `getResultsFromUrl` against it
     - but see why it doesn't get triggered with `espn.co.uk` test in `scraper_test.go`
-
-Set up right access policies for AWS resources
 
 Split service vs unit test logging clearer
 
 Figure out how to aggregate coverage results for unit tests
 
-Consider building the url into the Scraper as opposed to having it declared directly
-
 Test [main.go](functions/main.go)
 
-Separate Go source code from the rest (e.g. `bin` and `test_results` folder)
+## Terraform/AWS
+
+Figure out how to make 2nd public subnet association work. Right now have to manually do it. See [this] for why.
+
+Do I have right IAM policies set up for my resources?
+
+Does the `aws_rds_cluster_instance` resource need `publicly_accessible` set to true in order for me to access the db from my local machine?
+
+Do I need to have ingress for all addresses in the lambda?
+
+Turn the lambda_networking modules in lambda into loop
+
+The lambda security groups take a really long time to destroy. How can I solve that?
+- maybe create the security group outside of terraform, take its id into the app
 
 # Log
 
@@ -80,3 +112,12 @@ You can't get coverage results from service test because...
 a. You're using the `bin/scraper` binary instead of the source code
 b. The binary is placed in a lambda that runs it
 c. The lambda is ran inside a container
+
+You [can't modify](https://serverfault.com/questions/816820/aws-can-not-change-db-subnet-group-for-aws-rds) DB subnet groups for RDS, so you'll need to `terraform destroy` every time you make changes there.
+
+It takes a long time to destroy all resources because of the ENI interfaces attached to the lambda's security group. You can't delete these interfaces manually. They usually get deleted automatically after 15-30 minutes. See a few mentions:
+- https://stackoverflow.com/questions/41299662/aws-lambda-created-eni-not-deleting-while-deletion-of-stack
+- https://stackoverflow.com/questions/58276376/deleting-orphaned-aws-eni-sg-currently-in-use-and-has-a-dependent-object
+- https://www.reddit.com/r/aws/comments/dytfmy/unable_to_delete_network_interface_likely_due_to/
+
+I used [this guide](https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/) to get scraping Lambda to connect to the internet while inside a VPC. I also created 2 public & private subnets as per [this guide](https://jasonwatmore.com/post/2021/05/30/aws-create-a-vpc-with-public-and-private-subnets-and-a-nat-gateway).
