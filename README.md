@@ -37,7 +37,7 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
   - service test
     - replace `GetHostName()` with setting the localhost name in the `context`
     - get Colly to connect to site in first service test
-- separate service test code from prod code
+- ~~separate service test code from prod code~~
 - lambda should check what data is in the db before writing the events
 
 Figure out how to do the notificiation sender
