@@ -2,8 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fight-alerts-backend/datastore"
-	utils "fight-alerts-backend/test_utils"
 	"fmt"
 	"os"
 )
@@ -40,20 +38,14 @@ func (s *steps) setUpDatastore() {
 		panic(err)
 	}
 
-	s.datastore = &datastore.Datastore{
-		Host:     GetHostName(),
-		Port:     auroraPort,
-		User:     PostgresConxDetails.User,
-		Password: PostgresConxDetails.Password,
-		Dbname:   PostgresConxDetails.Database,
-	}
+	s.datastore = AuroraClient{host: GetHostName(), port: auroraPort}
 
-	err = s.datastore.Connect()
+	err = s.datastore.connectToDatabase()
 	if err != nil {
 		panic(err)
 	}
 
-	err = utils.CreateEventTable(s.datastore.Db)
+	err = s.datastore.createEventTable()
 	if err != nil {
 		panic(err)
 	}
