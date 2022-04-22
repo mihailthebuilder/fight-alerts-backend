@@ -38,7 +38,12 @@ func (s *steps) setUpDatastore() {
 		panic(err)
 	}
 
-	s.datastore = AuroraClient{host: GetHostName(), port: auroraPort}
+	hostName := "localhost"
+	if os.Getenv("JENKINS") == "true" {
+		hostName = "docker"
+	}
+
+	s.datastore = AuroraClient{host: hostName, port: auroraPort}
 
 	err = s.datastore.connectToDatabase()
 	if err != nil {
@@ -49,11 +54,4 @@ func (s *steps) setUpDatastore() {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func GetHostName() string {
-	if os.Getenv("JENKINS") == "true" {
-		return "docker"
-	}
-	return "localhost"
 }

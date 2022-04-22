@@ -36,7 +36,7 @@ func (s *steps) lambdaIsInvoked(ctx context.Context) error {
 		return err
 	}
 
-	url := fmt.Sprintf("http://%s:%d/2015-03-31/functions/myfunction/invocations", GetHostName(), port)
+	url := fmt.Sprintf("http://%s:%d/2015-03-31/functions/myfunction/invocations", s.datastore.host, port)
 
 	response, err := http.Post(url, "application/json", bytes.NewBuffer([]byte{}))
 	if err != nil {

@@ -35,8 +35,8 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 - tidy up...
   - ~~export common code from `datastore_test` and `service_test`/`aurora_client`~~
   - service test
-    - replace `GetHostName()` with setting the localhost name in the `context`
-    - get Colly to connect to site in first service test
+    - ~~replace `GetHostName()` with setting the localhost name in the `context`~~
+    - ~~get Colly to connect to site in first service test~~
 - ~~separate service test code from prod code~~
 - lambda should check what data is in the db before writing the events
 
@@ -102,3 +102,5 @@ It takes a long time to destroy all resources because of the ENI interfaces atta
 
 I used [this guide](https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/) to get scraping Lambda to connect to the internet while inside a VPC. I also created 2 public & private subnets as per [this guide](https://jasonwatmore.com/post/2021/05/30/aws-create-a-vpc-with-public-and-private-subnets-and-a-nat-gateway).
 - When I initially set up the route tables, I needed to manually make the 2nd public subnet association. But I didn't need to do it afterwards.
+
+You'll need to disable your firewall in order to run the service test. Otherwise the scraper lambda won't be able to connect to the internet and it'll return an empty slice.
