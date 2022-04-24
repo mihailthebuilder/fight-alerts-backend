@@ -36,6 +36,7 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 ~~Deploy with Jenkins~~
 Test lambda in prod
 - wait for security to get updated
+- look into why you have to wait in the first place
 
 Figure out how to do the notificiation sender
 - maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
