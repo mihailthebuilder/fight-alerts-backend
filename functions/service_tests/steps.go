@@ -2,9 +2,9 @@ package main
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type steps struct {
@@ -12,24 +12,15 @@ type steps struct {
 	datastore  AuroraClient
 }
 
-func (s *steps) sherdogIsAvailable() error {
-	mmaUrl := "https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2"
+var originalFightRecords = []FightRecord{{Headline: "one", DateTime: time.Now()}, {Headline: "two", DateTime: time.Now()}}
 
-	resp, err := http.Get(mmaUrl)
+func (s *steps) fightRecordsExistInDb() error {
 
-	if err != nil {
-		return err
-	}
-
-	if resp.StatusCode != 200 {
-		return fmt.Errorf("request didn't work - %#v", resp)
-	}
-
-	return nil
+	err := s.datastore.insertFightRecordsToEventTable(originalFightRecords)
+	return err
 }
 
-func (s *steps) lambdaIsInvoked(ctx context.Context) error {
-
+func (s *steps) lambdaIsInvoked() error {
 	port, err := s.containers.GetLocalhostPort(s.containers.lambdaContainer, LambdaPort)
 
 	if err != nil {
@@ -54,16 +45,35 @@ func (s *steps) lambdaIsInvoked(ctx context.Context) error {
 	return nil
 }
 
-func (s *steps) scrapedDataIsInDb(ctx context.Context) error {
+func (s *steps) originalFightRecordsAreDeleted() error {
 
-	rows, err := s.datastore.getAllRowsFromEventTable()
+	recordsInDb, err := s.datastore.getAllFightRecordsFromEventTable()
 
 	if err != nil {
 		return err
 	}
 
-	if len(rows) == 0 {
-		return fmt.Errorf("no items in datastore: %v", rows)
+	for _, old := range originalFightRecords {
+		for _, new := range recordsInDb {
+			if old.Headline == new.Headline {
+				return fmt.Errorf("original fight record %v wasn't deleted from the database", old)
+			}
+		}
+	}
+
+	return nil
+}
+
+func (s *steps) newFightRecordsAreInserted() error {
+
+	records, err := s.datastore.getAllFightRecordsFromEventTable()
+
+	if err != nil {
+		return err
+	}
+
+	if len(records) == 0 {
+		return fmt.Errorf("no fight records were inserted into the database")
 	}
 
 	return nil

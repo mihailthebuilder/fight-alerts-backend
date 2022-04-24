@@ -18,6 +18,7 @@ type IDatastore interface {
 	Connect() error
 	CloseConnection() error
 	InsertFightRecords([]scraper.FightRecord) error
+	DeleteAllRecords() error
 }
 
 func (d *Datastore) InsertFightRecords(records []scraper.FightRecord) error {
@@ -69,6 +70,16 @@ func (d *Datastore) Connect() error {
 
 func (d *Datastore) CloseConnection() error {
 	return d.Db.Close()
+}
+
+func (d *Datastore) DeleteAllRecords() error {
+	_, err := d.Db.Exec(`DELETE FROM "event"`)
+
+	if err != nil {
+		return fmt.Errorf("unable to delete all records: %v", err)
+	}
+
+	return nil
 }
 
 func (d *Datastore) createDbConnectionString() string {

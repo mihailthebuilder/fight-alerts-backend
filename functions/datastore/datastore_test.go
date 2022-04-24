@@ -18,8 +18,6 @@ func (mmr MockedMethodsReturn) anyErrors() bool {
 	return mmr.dbBegin != nil || mmr.txPrepare != nil || mmr.sExec != nil || mmr.txCommit != nil
 }
 
-var ErrFake = fmt.Errorf("fake error")
-
 func TestDatastore_InsertFightRecords(t *testing.T) {
 
 	tests := []struct {
@@ -28,10 +26,10 @@ func TestDatastore_InsertFightRecords(t *testing.T) {
 		wantErr bool
 	}{
 		{name: "happy path", mmr: MockedMethodsReturn{}, wantErr: false},
-		{name: "db.Begin error", mmr: MockedMethodsReturn{dbBegin: ErrFake}, wantErr: true},
-		{name: "tx.Prepare error", mmr: MockedMethodsReturn{txPrepare: ErrFake}, wantErr: true},
-		{name: "s.Exec error", mmr: MockedMethodsReturn{sExec: ErrFake}, wantErr: true},
-		{name: "tx.Commit error", mmr: MockedMethodsReturn{txCommit: ErrFake}, wantErr: true},
+		{name: "db.Begin error", mmr: MockedMethodsReturn{dbBegin: fmt.Errorf("fake error")}, wantErr: true},
+		{name: "tx.Prepare error", mmr: MockedMethodsReturn{txPrepare: fmt.Errorf("fake error")}, wantErr: true},
+		{name: "s.Exec error", mmr: MockedMethodsReturn{sExec: fmt.Errorf("fake error")}, wantErr: true},
+		{name: "tx.Commit error", mmr: MockedMethodsReturn{txCommit: fmt.Errorf("fake error")}, wantErr: true},
 	}
 
 	for _, tt := range tests {
@@ -46,6 +44,7 @@ func TestDatastore_InsertFightRecords(t *testing.T) {
 			if err != nil {
 				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 			}
+			defer db.Close()
 
 			setInsertMockExpectations(mock, tt.mmr, records)
 
@@ -60,6 +59,43 @@ func TestDatastore_InsertFightRecords(t *testing.T) {
 			}
 		})
 	}
+}
+
+func setInsertMockExpectations(mock sqlmock.Sqlmock, mmr MockedMethodsReturn, records []scraper.FightRecord) {
+
+	mock.ExpectBegin().WillReturnError(mmr.dbBegin)
+
+	queryInRegex := regexp.QuoteMeta(`COPY "event" ("headline", "datetime") FROM STDIN`)
+
+	mock.ExpectPrepare(queryInRegex).WillReturnError(mmr.txPrepare)
+
+	for _, record := range records {
+		if mmr.sExec != nil {
+			mock.ExpectExec(queryInRegex).WithArgs(record.Headline, record.DateTime).WillReturnError(mmr.sExec)
+		} else {
+			mock.ExpectExec(queryInRegex).WithArgs(record.Headline, record.DateTime).WillReturnResult(sqlmock.NewResult(1, 1))
+		}
+	}
+
+	mock.ExpectCommit().WillReturnError(mmr.txCommit)
+
+	if mmr.anyErrors() {
+		mock.ExpectRollback()
+	}
+}
+
+func createMockFightRecords() ([]scraper.FightRecord, error) {
+
+	tz, err := time.LoadLocation("Europe/London")
+	if err != nil {
+		return nil, fmt.Errorf("unable to load Europe/London timezone %v", err)
+	}
+
+	timeNow := time.Now().Round(time.Second).In(tz)
+	timeTomorrow := timeNow.AddDate(0, 0, 1).Round(time.Second).In(tz)
+	records := []scraper.FightRecord{{Headline: "today", DateTime: timeNow}, {Headline: "tomorrow", DateTime: timeTomorrow}}
+
+	return records, nil
 }
 
 func TestDatastore_Connect_ShouldReturnError(t *testing.T) {
@@ -97,6 +133,8 @@ func TestDatastore_CloseConnection(t *testing.T) {
 			if err != nil {
 				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 			}
+			defer db.Close()
+
 			mock.ExpectClose().WillReturnError(tt.datastoreCloseReturn)
 
 			d := &Datastore{Db: db}
@@ -122,39 +160,40 @@ func TestDatastore_createDbConnectionString(t *testing.T) {
 	}
 }
 
-func createMockFightRecords() ([]scraper.FightRecord, error) {
-
-	tz, err := time.LoadLocation("Europe/London")
-	if err != nil {
-		return nil, fmt.Errorf("unable to load Europe/London timezone %v", err)
+func TestDatastore_DeleteAllRecords(t *testing.T) {
+	tests := []struct {
+		name               string
+		deleteMethodReturn error
+		wantErr            bool
+	}{
+		{name: "happy path", wantErr: false},
+		{name: "delete method should return error", deleteMethodReturn: fmt.Errorf("fake error"), wantErr: true},
 	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db, mock, err := sqlmock.New()
+			if err != nil {
+				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+			}
+			defer db.Close()
 
-	timeNow := time.Now().Round(time.Second).In(tz)
-	timeTomorrow := timeNow.AddDate(0, 0, 1).Round(time.Second).In(tz)
-	records := []scraper.FightRecord{{Headline: "today", DateTime: timeNow}, {Headline: "tomorrow", DateTime: timeTomorrow}}
+			q := `DELETE FROM "event"`
 
-	return records, nil
-}
+			if tt.deleteMethodReturn != nil {
+				mock.ExpectExec(q).WillReturnError(tt.deleteMethodReturn)
+			} else {
+				mock.ExpectExec(q).WillReturnResult(sqlmock.NewResult(1, 1))
+			}
 
-func setInsertMockExpectations(mock sqlmock.Sqlmock, mmr MockedMethodsReturn, records []scraper.FightRecord) {
+			d := &Datastore{Db: db}
 
-	mock.ExpectBegin().WillReturnError(mmr.dbBegin)
+			if err := d.DeleteAllRecords(); (err != nil) != tt.wantErr {
+				t.Errorf("Datastore.DeleteAllRecords() error = %v, wantErr %v", err, tt.wantErr)
+			}
 
-	queryInRegex := regexp.QuoteMeta(`COPY "event" ("headline", "datetime") FROM STDIN`)
-
-	mock.ExpectPrepare(queryInRegex).WillReturnError(mmr.txPrepare)
-
-	for _, record := range records {
-		if mmr.sExec != nil {
-			mock.ExpectExec(queryInRegex).WithArgs(record.Headline, record.DateTime).WillReturnError(mmr.sExec)
-		} else {
-			mock.ExpectExec(queryInRegex).WithArgs(record.Headline, record.DateTime).WillReturnResult(sqlmock.NewResult(1, 1))
-		}
-	}
-
-	mock.ExpectCommit().WillReturnError(mmr.txCommit)
-
-	if mmr.anyErrors() {
-		mock.ExpectRollback()
+			if err := mock.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
 	}
 }

@@ -11,9 +11,7 @@ type MockScraper struct {
 }
 
 type MockDatastore struct {
-	insertFightRecordsReturn error
-	connectReturn            error
-	closeConnectionReturn    error
+	insertFightRecordsReturn, connectReturn, closeConnectionReturn, deleteAllRecordsReturn error
 }
 
 func (s MockScraper) GetResultsFromUrl() ([]scraper.FightRecord, error) {
@@ -35,6 +33,10 @@ func (d MockDatastore) CloseConnection() error {
 	return d.closeConnectionReturn
 }
 
+func (d MockDatastore) DeleteAllRecords() error {
+	return d.deleteAllRecordsReturn
+}
+
 func TestHandler_HandleRequest(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -52,7 +54,7 @@ func TestHandler_HandleRequest(t *testing.T) {
 		{
 			name: "handler should return error due to datastore connection error",
 			h: Handler{
-				Scraper: MockScraper{returnError: false},
+				Scraper: MockScraper{},
 				Datastore: MockDatastore{
 					connectReturn: fmt.Errorf("Datastore.Connect() fake error"),
 				},
@@ -62,7 +64,7 @@ func TestHandler_HandleRequest(t *testing.T) {
 		{
 			name: "handler should return error due to datastore insertion error",
 			h: Handler{
-				Scraper: MockScraper{returnError: false},
+				Scraper: MockScraper{},
 				Datastore: MockDatastore{
 					insertFightRecordsReturn: fmt.Errorf("Datastore.InsertFightRecords() fake error"),
 				},
@@ -72,7 +74,7 @@ func TestHandler_HandleRequest(t *testing.T) {
 		{
 			name: "handler should return error due to datastore close error",
 			h: Handler{
-				Scraper: MockScraper{returnError: false},
+				Scraper: MockScraper{},
 				Datastore: MockDatastore{
 					closeConnectionReturn: fmt.Errorf("Datastore.Close() fake error"),
 				},
@@ -80,8 +82,18 @@ func TestHandler_HandleRequest(t *testing.T) {
 			wantPanic: true,
 		},
 		{
+			name: "handler should return error due to datastore delete all records error",
+			h: Handler{
+				Scraper: MockScraper{},
+				Datastore: MockDatastore{
+					deleteAllRecordsReturn: fmt.Errorf("Datastore.DeleteAllRecords() fake error"),
+				},
+			},
+			wantPanic: true,
+		},
+		{
 			name:      "handler should not return error",
-			h:         Handler{Scraper: MockScraper{returnError: false}, Datastore: MockDatastore{}},
+			h:         Handler{Scraper: MockScraper{}, Datastore: MockDatastore{}},
 			wantPanic: false,
 		},
 	}

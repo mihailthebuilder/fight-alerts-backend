@@ -26,6 +26,11 @@ func (h Handler) HandleRequest() {
 		log.Panic(err)
 	}
 
+	err = h.Datastore.DeleteAllRecords()
+	if err != nil {
+		log.Panic(err)
+	}
+
 	err = h.Datastore.InsertFightRecords(records)
 	if err != nil {
 		log.Panic(err)

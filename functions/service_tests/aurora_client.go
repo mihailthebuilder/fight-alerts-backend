@@ -5,13 +5,18 @@ import (
 	"fmt"
 	"time"
 
-	_ "github.com/lib/pq"
+	"github.com/lib/pq"
 )
 
 type AuroraClient struct {
 	host string
 	port int
 	db   *sql.DB
+}
+
+type FightRecord struct {
+	DateTime time.Time
+	Headline string
 }
 
 func (a *AuroraClient) connectToDatabase() error {
@@ -42,13 +47,13 @@ func (a *AuroraClient) createEventTable() error {
 	return err
 }
 
-func (a *AuroraClient) getAllRowsFromEventTable() ([]interface{}, error) {
+func (a *AuroraClient) getAllFightRecordsFromEventTable() ([]FightRecord, error) {
 	rowCursor, err := a.db.Query(`select * from event`)
 	if err != nil {
 		return nil, fmt.Errorf("db error - select * from event: %v", err)
 	}
 
-	var rows []interface{}
+	var records []FightRecord
 
 	for rowCursor.Next() {
 		var (
@@ -60,11 +65,42 @@ func (a *AuroraClient) getAllRowsFromEventTable() ([]interface{}, error) {
 		if err := rowCursor.Scan(&id, &headline, &date); err != nil {
 			return nil, fmt.Errorf("db error - scanning through rows returned from query: %v", err)
 		}
-		rows = append(rows, struct {
-			date     time.Time
-			headline string
-		}{date, headline})
+		records = append(records, FightRecord{date, headline})
 	}
 
-	return rows, nil
+	return records, nil
+}
+
+func (a *AuroraClient) insertFightRecordsToEventTable(records []FightRecord) error {
+
+	tx, err := a.db.Begin()
+	if err != nil {
+		return fmt.Errorf("db error - begin insert: %v", err)
+	}
+
+	s, err := tx.Prepare(pq.CopyIn("event", "headline", "datetime"))
+	if err != nil {
+		return fmt.Errorf("db error - prepare transactions: %v", err)
+	}
+
+	defer tx.Rollback()
+
+	for _, record := range records {
+		_, err = s.Exec(record.Headline, record.DateTime)
+		if err != nil {
+			return fmt.Errorf("db error - transaction statement exec: %v", err)
+		}
+	}
+
+	err = s.Close()
+	if err != nil {
+		return fmt.Errorf("db error - closing transaction statement: %v", err)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return fmt.Errorf("db error - commiting transactions: %v", err)
+	}
+
+	return nil
 }

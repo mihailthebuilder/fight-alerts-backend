@@ -32,13 +32,10 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 # TODO
 
 ~~Set up AWS Aurora Postgres db to write the data to~~
-- tidy up...
-  - ~~export common code from `datastore_test` and `service_test`/`aurora_client`~~
-  - service test
-    - ~~replace `GetHostName()` with setting the localhost name in the `context`~~
-    - ~~get Colly to connect to site in first service test~~
-- ~~separate service test code from prod code~~
-- lambda should check what data is in the db before writing the events
+~~Lambda should replace data in db with new scraped records~~
+~~Deploy with Jenkins~~
+Test lambda in prod
+- wait for security to get updated
 
 Figure out how to do the notificiation sender
 - maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
@@ -78,20 +75,20 @@ The lambda security groups take a really long time to destroy. How can I solve t
 
 # Log
 
-[Official guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway) on how to use Terraform with lambda.
+## Tests
 
-[Guide](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18) on how to use Go with AWS Lambda & Terraform.
+I'm consciously allowing the Sherdog website to be a dependency in my unit and service tests. It enables a much tighter feedback loop and it hasn't caused any issues so far other than with the firewall (see below). 
+
+You'll need to disable your firewall in order to run the service test. Otherwise the scraper lambda won't be able to connect to the internet and it'll return an empty slice.
 
 You don't need `go build` to ignore test files; it [already does so](https://stackoverflow.com/a/65844817/7874516).
-
-I got Jenkins running locally using a [Docker server](https://www.jenkins.io/doc/book/installing/docker/). Tried setting up on Windows 10, but the security certs were [blocking the download of plugins](https://stackoverflow.com/questions/24563694/jenkins-unable-to-find-valid-certification-path-to-requested-target-error-whil#:~:text=That%20error%20is%20a%20common,is%20a%20Self-Signed%20Certificate).
-
-The terraform backend is stored in an S3 bucket so the local Jenkins server can access it. I then use the `-force-copy` option with `terraform init` in order to avoid Terraform asking me how to manage the new state in the Jenkins server vs the existing state in the S3 bucket. See [Terraform docs](https://www.terraform.io/cli/commands/init#backend-initialization) for more.
 
 You can't get coverage results from service test because...
 a. You're using the `bin/scraper` binary instead of the source code
 b. The binary is placed in a lambda that runs it
 c. The lambda is ran inside a container
+
+## AWS
 
 You [can't modify](https://serverfault.com/questions/816820/aws-can-not-change-db-subnet-group-for-aws-rds) DB subnet groups for RDS, so you'll need to `terraform destroy` every time you make changes there.
 
@@ -103,4 +100,14 @@ It takes a long time to destroy all resources because of the ENI interfaces atta
 I used [this guide](https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/) to get scraping Lambda to connect to the internet while inside a VPC. I also created 2 public & private subnets as per [this guide](https://jasonwatmore.com/post/2021/05/30/aws-create-a-vpc-with-public-and-private-subnets-and-a-nat-gateway).
 - When I initially set up the route tables, I needed to manually make the 2nd public subnet association. But I didn't need to do it afterwards.
 
-You'll need to disable your firewall in order to run the service test. Otherwise the scraper lambda won't be able to connect to the internet and it'll return an empty slice.
+The terraform backend is stored in an S3 bucket so the local Jenkins server can access it. I then use the `-force-copy` option with `terraform init` in order to avoid Terraform asking me how to manage the new state in the Jenkins server vs the existing state in the S3 bucket. See [Terraform docs](https://www.terraform.io/cli/commands/init#backend-initialization) for more.
+
+## Terraform
+
+[Official guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway) on how to use Terraform with lambda.
+
+[Guide](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18) on how to use Go with AWS Lambda & Terraform.
+
+## Other
+
+I got Jenkins running locally using a [Docker server](https://www.jenkins.io/doc/book/installing/docker/). Tried setting up on Windows 10, but the security certs were [blocking the download of plugins](https://stackoverflow.com/questions/24563694/jenkins-unable-to-find-valid-certification-path-to-requested-target-error-whil#:~:text=That%20error%20is%20a%20common,is%20a%20Self-Signed%20Certificate).

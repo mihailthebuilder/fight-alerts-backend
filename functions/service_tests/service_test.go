@@ -16,9 +16,10 @@ func InitializeTestSuite(ctx *godog.TestSuiteContext) {
 }
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
-	ctx.Step(`^Sherdog is available for access$`, _steps.sherdogIsAvailable)
+	ctx.Step(`^fight records exist in the database$`, _steps.fightRecordsExistInDb)
 	ctx.Step(`^lambda is invoked$`, _steps.lambdaIsInvoked)
-	ctx.Step(`^scraped fight data is available in the database$`, _steps.scrapedDataIsInDb)
+	ctx.Step(`^the original fight records are deleted$`, _steps.originalFightRecordsAreDeleted)
+	ctx.Step(`^newly-scraped fight records are inserted into the database$`, _steps.newFightRecordsAreInserted)
 }
 
 func TestMain(m *testing.M) {
