@@ -34,10 +34,7 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 ~~Set up AWS Aurora Postgres db to write the data to~~
 ~~Lambda should replace data in db with new scraped records~~
 ~~Deploy with Jenkins~~
-Test lambda in prod
-- wait for security to get updated
-- look into why you have to wait in the first place
-
+~~Test lambda in prod~~
 Figure out how to do the notificiation sender
 - maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
 
@@ -101,13 +98,15 @@ It takes a long time to destroy all resources because of the ENI interfaces atta
 I used [this guide](https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/) to get scraping Lambda to connect to the internet while inside a VPC. I also created 2 public & private subnets as per [this guide](https://jasonwatmore.com/post/2021/05/30/aws-create-a-vpc-with-public-and-private-subnets-and-a-nat-gateway).
 - When I initially set up the route tables, I needed to manually make the 2nd public subnet association. But I didn't need to do it afterwards.
 
-The terraform backend is stored in an S3 bucket so the local Jenkins server can access it. I then use the `-force-copy` option with `terraform init` in order to avoid Terraform asking me how to manage the new state in the Jenkins server vs the existing state in the S3 bucket. See [Terraform docs](https://www.terraform.io/cli/commands/init#backend-initialization) for more.
+When you update the lambda, it takes a while until it regains internet connectivity.
 
 ## Terraform
 
 [Official guide](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway) on how to use Terraform with lambda.
 
 [Guide](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18) on how to use Go with AWS Lambda & Terraform.
+
+The terraform backend is stored in an S3 bucket so the local Jenkins server can access it. I then use the `-force-copy` option with `terraform init` in order to avoid Terraform asking me how to manage the new state in the Jenkins server vs the existing state in the S3 bucket. See [Terraform docs](https://www.terraform.io/cli/commands/init#backend-initialization) for more.
 
 ## Other
 
