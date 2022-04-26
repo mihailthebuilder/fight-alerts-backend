@@ -60,8 +60,6 @@ Test [main.go](functions/main.go)
 
 ## Terraform/AWS
 
-Do I have right IAM policies set up for my resources?
-
 Do I need to have ingress for all addresses in the lambda?
 
 Turn the `lambda_networking` module in lambda into loop
@@ -77,9 +75,9 @@ You'll need to disable your firewall in order to run the service test. Otherwise
 You don't need `go build` to ignore test files; it [already does so](https://stackoverflow.com/a/65844817/7874516).
 
 You can't get coverage results from service test because...
-a. You're using the `bin/scraper` binary instead of the source code
-b. The binary is placed in a lambda that runs it
-c. The lambda is ran inside a container
+1. You're using the `bin/scraper` binary instead of the source code
+2. The binary is placed in a lambda that runs it
+3. The lambda is ran inside a container
 
 ## AWS
 
