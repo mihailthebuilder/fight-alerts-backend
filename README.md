@@ -99,7 +99,7 @@ The lambda security groups take a really long time to destroy. You could look in
 
 The terraform backend is stored in an S3 bucket so the local Jenkins server can access it. I then use the `-force-copy` option with `terraform init` in order to avoid Terraform asking me how to manage the new state in the Jenkins server vs the existing state in the S3 bucket. See [Terraform docs](https://www.terraform.io/cli/commands/init#backend-initialization) for more.
 
-You'll get timeout errors when you're creating/updating `aws_route_table_association` resources. You can't customize the length of timeout however.
+You'll get timeout errors when you're creating/updating `aws_route_table_association` resources; it'll work if you just run the terraform script again. You can't customize the length of timeout.
 
 ## Other
 
