@@ -58,10 +58,6 @@ Figure out how to aggregate coverage results for unit tests
 
 Test [main.go](functions/main.go)
 
-## Terraform/AWS
-
-Turn the `lambda_networking` module in lambda into loop
-
 # Log
 
 ## Tests
@@ -102,6 +98,8 @@ The lambda security groups take a really long time to destroy. You could look in
 [Guide](https://levelup.gitconnected.com/setup-your-go-lambda-and-deploy-with-terraform-9105bda2bd18) on how to use Go with AWS Lambda & Terraform.
 
 The terraform backend is stored in an S3 bucket so the local Jenkins server can access it. I then use the `-force-copy` option with `terraform init` in order to avoid Terraform asking me how to manage the new state in the Jenkins server vs the existing state in the S3 bucket. See [Terraform docs](https://www.terraform.io/cli/commands/init#backend-initialization) for more.
+
+You'll get timeout errors when you're creating/updating `aws_route_table_association` resources. You can't customize the length of timeout however.
 
 ## Other
 
