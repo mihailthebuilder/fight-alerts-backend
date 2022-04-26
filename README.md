@@ -66,9 +66,6 @@ Do I need to have ingress for all addresses in the lambda?
 
 Turn the `lambda_networking` module in lambda into loop
 
-The lambda security groups take a really long time to destroy. How can I solve that?
-- maybe create the security group outside of terraform, take its id into the app
-
 # Log
 
 ## Tests
@@ -99,6 +96,8 @@ I used [this guide](https://aws.amazon.com/premiumsupport/knowledge-center/inter
 When you update the lambda, it takes a fwe hours until it regains internet connectivity.
 
 The RDS is currently publicly accessible. You can't switch it to private because you'd need to establish a VPN connection into the VPC - [source](https://stackoverflow.com/a/69320090/7874516).
+
+The lambda security groups take a really long time to destroy. You could look into creating it outside of terraform, then take its id into the app; but you won't be updating them anyway so there's no value for now.
 
 ## Terraform
 
