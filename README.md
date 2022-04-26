@@ -60,8 +60,6 @@ Test [main.go](functions/main.go)
 
 ## Terraform/AWS
 
-Do I need to have ingress for all addresses in the lambda?
-
 Turn the `lambda_networking` module in lambda into loop
 
 # Log
