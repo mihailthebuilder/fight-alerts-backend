@@ -31,12 +31,12 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 
 # TODO
 
-~~Set up AWS Aurora Postgres db to write the data to~~
-~~Lambda should replace data in db with new scraped records~~
-~~Deploy with Jenkins~~
-~~Test lambda in prod~~
-Figure out how to do the notificiation sender
-- maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
+- ~~Set up AWS Aurora Postgres db to write the data to~~
+- ~~Lambda should replace data in db with new scraped records~~
+- ~~Deploy with Jenkins~~
+- ~~Test lambda in prod~~
+- Figure out how to do the notificiation sender
+  - maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
 
 # Technical debt
 
@@ -61,8 +61,6 @@ Test [main.go](functions/main.go)
 ## Terraform/AWS
 
 Do I have right IAM policies set up for my resources?
-
-Does the `aws_rds_cluster_instance` resource need `publicly_accessible` set to true in order for me to access the db from my local machine?
 
 Do I need to have ingress for all addresses in the lambda?
 
@@ -98,7 +96,9 @@ It takes a long time to destroy all resources because of the ENI interfaces atta
 I used [this guide](https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/) to get scraping Lambda to connect to the internet while inside a VPC. I also created 2 public & private subnets as per [this guide](https://jasonwatmore.com/post/2021/05/30/aws-create-a-vpc-with-public-and-private-subnets-and-a-nat-gateway).
 - When I initially set up the route tables, I needed to manually make the 2nd public subnet association. But I didn't need to do it afterwards.
 
-When you update the lambda, it takes a while until it regains internet connectivity.
+When you update the lambda, it takes a fwe hours until it regains internet connectivity.
+
+The RDS is currently publicly accessible. You can't switch it to private because you'd need to establish a VPN connection into the VPC - [source](https://stackoverflow.com/a/69320090/7874516).
 
 ## Terraform
 
