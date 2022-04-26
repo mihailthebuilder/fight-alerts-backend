@@ -115,18 +115,9 @@ resource "aws_route_table" "public" {
   }
 }
 
-module "lambda_networking_0" {
-  public_subnet_id  = var.subnet_ids[0].public
-  private_subnet_id = var.subnet_ids[0].private
-
-  source                = "./lambda_networking"
-  vpc_id                = var.vpc_id
-  public_route_table_id = aws_route_table.public.id
-}
-
-module "lambda_networking_1" {
-  public_subnet_id  = var.subnet_ids[1].public
-  private_subnet_id = var.subnet_ids[1].private
+module "lambda_networking" {
+  count      = 2
+  subnet_ids = var.subnet_ids[count.index]
 
   source                = "./lambda_networking"
   vpc_id                = var.vpc_id

@@ -1,11 +1,11 @@
 resource "aws_nat_gateway" "nat_gateway" {
-  subnet_id     = var.public_subnet_id
+  subnet_id     = var.subnet_ids.public
   allocation_id = aws_eip.nat.allocation_id
 }
 
 
 resource "aws_route_table_association" "public" {
-  subnet_id      = var.public_subnet_id
+  subnet_id      = var.subnet_ids.public
   route_table_id = var.public_route_table_id
 }
 
@@ -19,7 +19,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private" {
-  subnet_id      = var.private_subnet_id
+  subnet_id      = var.subnet_ids.private
   route_table_id = aws_route_table.private.id
 }
 
