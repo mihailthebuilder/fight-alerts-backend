@@ -6,7 +6,7 @@ Backend service to track upcoming MMA fights, written in Go and deployed using A
 
 Service that scrapes a site for upcoming fights
 
-AWS lambda that runs the service
+AWS Lambda that runs the service
 
 Terraform deployment instructions
 
@@ -31,18 +31,16 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 
 # TODO
 
-- ~~Set up AWS Aurora Postgres db to write the data to~~
 - ~~Lambda should replace data in db with new scraped records~~
-- ~~Deploy with Jenkins~~
-- ~~Test lambda in prod~~
-- Figure out how to do the notificiation sender
-  - maybe a lambda that continuosly checks the db and if it's close to event, it gets triggered
+- ~~Figure out how to do the notificiation sender~~
+- Implement notification service as per [proposal](#proposal-for-notification-service)
 
 # Technical debt
 
 ## Source code
 
-Consider building the url into the Scraper as opposed to having it declared directly
+When the scraper service is triggered, we're currently deleting existing records and inserting new ones. But if we use that table when triggering the notification service, we can get a situation where the service can't find the content it's supposed to publish because the scraper service is midway through the delete-and-insert process.
+- The likelihood of that happening is extremely low in the current state. The table updates should complete very quickly as the table only has about 15 rows.
 
 Separate Go source code from the rest (e.g. `bin` and `test_results` folder)
 
