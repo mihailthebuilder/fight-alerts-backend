@@ -60,6 +60,12 @@ Test [main.go](functions/main.go)
 
 # Log
 
+## Proposal for notification service
+
+The scraper lambda creates a cloudwatch event rule that will trigger a notification lambda. The event will be scheduled for the day when the next fight event happens. [See this](https://stackoverflow.com/a/41655661/7874516).
+
+The notification lambda just sends a message to SNS. The SNS, in turn, is configured to send an SMS message to the phone number in question.
+
 ## Tests
 
 I'm consciously allowing the Sherdog website to be a dependency in my unit and service tests. It enables a much tighter feedback loop and it hasn't caused any issues so far other than with the firewall (see below). 
