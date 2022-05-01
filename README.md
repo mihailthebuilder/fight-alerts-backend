@@ -34,6 +34,7 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 - ~~Lambda should replace data in db with new scraped records~~
 - ~~Figure out how to do the notificiation sender~~
 - Implement notification service as per [proposal](#proposal-for-notification-service)
+- Look into [flyway](https://flywaydb.org/) for your db
 
 # Technical debt
 
