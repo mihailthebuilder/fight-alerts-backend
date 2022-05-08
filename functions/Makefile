@@ -4,7 +4,7 @@ build:
 	GOOS=linux go build -o ./bin/scraper
 
 unit-test:
-	go test ./ ./scraper ./lambda_handler ./datastore -coverprofile=./test_results/coverage.out
+	go test ./ ./scraper ./lambda_handler ./datastore ./scheduler -coverprofile=./test_results/coverage.out
 	go tool cover -html=./test_results/coverage.out -o ./test_results/coverage.html
 
 int-test: build

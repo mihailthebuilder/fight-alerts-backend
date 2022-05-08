@@ -15,13 +15,35 @@ type Datastore struct {
 }
 
 type IDatastore interface {
-	Connect() error
-	CloseConnection() error
-	InsertFightRecords([]scraper.FightRecord) error
-	DeleteAllRecords() error
+	ReplaceWithNewRecords([]scraper.FightRecord) error
 }
 
-func (d *Datastore) InsertFightRecords(records []scraper.FightRecord) error {
+func (d Datastore) ReplaceWithNewRecords(records []scraper.FightRecord) error {
+
+	err := d.TestConnection()
+	if err != nil {
+		return err
+	}
+
+	err = d.DeleteAllRecords()
+	if err != nil {
+		return err
+	}
+
+	err = d.InsertFightRecords(records)
+	if err != nil {
+		return err
+	}
+
+	err = d.CloseConnection()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (d Datastore) InsertFightRecords(records []scraper.FightRecord) error {
 
 	tx, err := d.Db.Begin()
 	if err != nil {
@@ -55,24 +77,21 @@ func (d *Datastore) InsertFightRecords(records []scraper.FightRecord) error {
 	return nil
 }
 
-func (d *Datastore) Connect() error {
-
-	s := d.createDbConnectionString()
-	d.Db, _ = sql.Open("postgres", s)
+func (d Datastore) TestConnection() error {
 
 	err := d.Db.Ping()
 	if err != nil {
-		return fmt.Errorf("pinging Postgres repository connexion at %s: %v", s, err)
+		return fmt.Errorf("pinging Postgres repository connection: %v", err)
 	}
 
 	return nil
 }
 
-func (d *Datastore) CloseConnection() error {
+func (d Datastore) CloseConnection() error {
 	return d.Db.Close()
 }
 
-func (d *Datastore) DeleteAllRecords() error {
+func (d Datastore) DeleteAllRecords() error {
 	_, err := d.Db.Exec(`DELETE FROM "event"`)
 
 	if err != nil {
@@ -80,11 +99,4 @@ func (d *Datastore) DeleteAllRecords() error {
 	}
 
 	return nil
-}
-
-func (d *Datastore) createDbConnectionString() string {
-	return fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		d.Host, d.Port, d.User, d.Password, d.Dbname,
-	)
 }

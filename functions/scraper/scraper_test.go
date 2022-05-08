@@ -118,7 +118,7 @@ func Test_parseDateTime(t *testing.T) {
 	}
 }
 
-func Test_getDataFromUrl(t *testing.T) {
+func Test_GetResultsFromUrl(t *testing.T) {
 	var tests = []struct {
 		input       string
 		wantResults bool

@@ -34,6 +34,17 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 - ~~Lambda should replace data in db with new scraped records~~
 - ~~Figure out how to do the notificiation sender~~
 - Implement notification service as per [proposal](#proposal-for-notification-service)
+  - scraper service to insert message in cloudwatch events
+    - ~~Update `.feature` file to reflect there's a message inserted into cloudwatch event~~
+    - implement the feature in TDD
+      - You need to start by deleting all the rules in place for that target. [This API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.ListTargetsByRule) lists all rules for given resources, and [This](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.DeleteRule) deletes the resource.
+      - Once you've deleted the previous rule, you need to use [this API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.PutRule) to create the new rule.
+        - it's simpler to start off with this, then do the deletion
+        - I've built the feature, but am getting a lambda permission error as it can't access the resource. need to fix
+        - now having problems with terraform, need to delete...
+    - implement the feature in the service test. Leave this for last as you're not sure how it will work.
+  - notification service to send SMS
+    - add notification service in the `.feature` file 
 - Create architecture diagram
 - Set up cloudwatch event trigger to run the scraper every day
 - Look into [flyway](https://flywaydb.org/) for your db
@@ -49,13 +60,17 @@ Separate Go source code from the rest (e.g. `bin` and `test_results` folder)
 
 ## Testing
 
+Use testify mocks in the `datastore` and `scraper` packages. It'll enable you to solve the 2 issues below.
+
+Differentiate between different panics in the assertions and check whether the methods were called. It's pretty easy to spot when we miss out panic/method calls though because the coverage results will show a gap.
+
 Improve test coverage in `scraper.go`
 - one way is to create a mock html page and run `getResultsFromUrl` against it
     - but see why it doesn't get triggered with `espn.co.uk` test in `scraper_test.go`
 
 Split service vs unit test logging clearer
 
-Figure out how to aggregate coverage results for unit tests
+Aggregate coverage results for unit tests
 
 Test [main.go](functions/main.go)
 

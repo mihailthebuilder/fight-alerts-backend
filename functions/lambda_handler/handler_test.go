@@ -4,109 +4,64 @@ import (
 	"fight-alerts-backend/scraper"
 	"fmt"
 	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
 )
-
-type MockScraper struct {
-	returnError bool
-}
-
-type MockDatastore struct {
-	insertFightRecordsReturn, connectReturn, closeConnectionReturn, deleteAllRecordsReturn error
-}
-
-func (s MockScraper) GetResultsFromUrl() ([]scraper.FightRecord, error) {
-	if s.returnError == true {
-		return nil, fmt.Errorf("fake error")
-	}
-	return []scraper.FightRecord{}, nil
-}
-
-func (d MockDatastore) InsertFightRecords(records []scraper.FightRecord) error {
-	return d.insertFightRecordsReturn
-}
-
-func (d MockDatastore) Connect() error {
-	return d.connectReturn
-}
-
-func (d MockDatastore) CloseConnection() error {
-	return d.closeConnectionReturn
-}
-
-func (d MockDatastore) DeleteAllRecords() error {
-	return d.deleteAllRecordsReturn
-}
 
 func TestHandler_HandleRequest(t *testing.T) {
 	tests := []struct {
-		name      string
-		h         Handler
-		wantPanic bool
+		name           string
+		scraperError   error
+		datastoreError error
+		schedulerError error
+		wantErr        bool
 	}{
 		{
-			name: "handler should return error due to scraper error",
-			h: Handler{
-				Scraper:   MockScraper{returnError: true},
-				Datastore: MockDatastore{},
-			},
-			wantPanic: true,
+			name:    "happy path",
+			wantErr: false,
 		},
 		{
-			name: "handler should return error due to datastore connection error",
-			h: Handler{
-				Scraper: MockScraper{},
-				Datastore: MockDatastore{
-					connectReturn: fmt.Errorf("Datastore.Connect() fake error"),
-				},
-			},
-			wantPanic: true,
+			name:         "scraper error",
+			scraperError: fmt.Errorf("fake err"),
+			wantErr:      true,
 		},
 		{
-			name: "handler should return error due to datastore insertion error",
-			h: Handler{
-				Scraper: MockScraper{},
-				Datastore: MockDatastore{
-					insertFightRecordsReturn: fmt.Errorf("Datastore.InsertFightRecords() fake error"),
-				},
-			},
-			wantPanic: true,
+			name:           "scraper error",
+			datastoreError: fmt.Errorf("fake err"),
+			wantErr:        true,
 		},
 		{
-			name: "handler should return error due to datastore close error",
-			h: Handler{
-				Scraper: MockScraper{},
-				Datastore: MockDatastore{
-					closeConnectionReturn: fmt.Errorf("Datastore.Close() fake error"),
-				},
-			},
-			wantPanic: true,
-		},
-		{
-			name: "handler should return error due to datastore delete all records error",
-			h: Handler{
-				Scraper: MockScraper{},
-				Datastore: MockDatastore{
-					deleteAllRecordsReturn: fmt.Errorf("Datastore.DeleteAllRecords() fake error"),
-				},
-			},
-			wantPanic: true,
-		},
-		{
-			name:      "handler should not return error",
-			h:         Handler{Scraper: MockScraper{}, Datastore: MockDatastore{}},
-			wantPanic: false,
+			name:           "scraper error",
+			schedulerError: fmt.Errorf("fake err"),
+			wantErr:        true,
 		},
 	}
 	for _, tt := range tests {
+
+		firstRecord := scraper.FightRecord{Headline: "first", DateTime: time.Now()}
+		secondRecord := scraper.FightRecord{Headline: "second", DateTime: time.Now()}
+		records := []scraper.FightRecord{firstRecord, secondRecord}
+
+		s := MockScraper{}
+		s.On("GetResultsFromUrl").Return(records, tt.scraperError)
+
+		n := MockNotificationScheduler{}
+		n.On("UpdateTrigger", firstRecord.DateTime).Return(tt.schedulerError)
+
+		d := MockDatastore{}
+		d.On("ReplaceWithNewRecords", records).Return(tt.datastoreError)
+
+		h := Handler{Scraper: s, Datastore: d, NotificationScheduler: n}
+
 		t.Run(tt.name, func(t *testing.T) {
-			// Turn off panic
-			defer func() { recover() }()
-
-			tt.h.HandleRequest()
-
-			// Never reaches here if `HandleRequest` panics
-			if tt.wantPanic {
-				t.Errorf("Handler.HandleRequest() should have panicked")
+			if tt.wantErr {
+				assert.Panics(t, h.HandleRequest, "The code did not panic")
+			} else {
+				h.HandleRequest()
+				s.AssertExpectations(t)
+				n.AssertExpectations(t)
+				d.AssertExpectations(t)
 			}
 		})
 	}

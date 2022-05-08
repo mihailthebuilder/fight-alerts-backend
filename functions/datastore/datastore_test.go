@@ -3,33 +3,94 @@ package datastore
 import (
 	"fight-alerts-backend/scraper"
 	"fmt"
-	"regexp"
 	"testing"
-	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 )
 
-type MockedMethodsReturn struct {
-	dbBegin, txPrepare, sExec, txCommit error
-}
+func TestDatastore_ReplaceWithNewRecords(t *testing.T) {
+	tests := []struct {
+		name         string
+		connectError error
+		deleteError  error
+		insertError  error
+		closeError   error
+		wantErr      bool
+	}{
+		{
+			name:    "happy path",
+			wantErr: false,
+		},
+		{
+			name:         "connect error",
+			connectError: fmt.Errorf("fake err"),
+			wantErr:      true,
+		},
+		{
+			name:        "delete error",
+			deleteError: fmt.Errorf("fake err"),
+			wantErr:     true,
+		},
+		{
+			name:        "insert error",
+			insertError: fmt.Errorf("fake err"),
+			wantErr:     true,
+		},
+		{
+			name:       "close error",
+			closeError: fmt.Errorf("fake err"),
+			wantErr:    true,
+		},
+	}
 
-func (mmr MockedMethodsReturn) anyErrors() bool {
-	return mmr.dbBegin != nil || mmr.txPrepare != nil || mmr.sExec != nil || mmr.txCommit != nil
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db, mock, err := sqlmock.New(sqlmock.MonitorPingsOption(true))
+			if err != nil {
+				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+			}
+
+			mock.ExpectPing().WillReturnError(tt.connectError)
+
+			q := `DELETE FROM "event"`
+			if tt.deleteError != nil {
+				mock.ExpectExec(q).WillReturnError(tt.deleteError)
+			} else {
+				mock.ExpectExec(q).WillReturnResult(sqlmock.NewResult(1, 1))
+			}
+
+			records := []scraper.FightRecord{}
+
+			mmr := MockedInsertMethodsReturn{dbBegin: tt.insertError}
+			setInsertMockExpectations(mock, mmr, records)
+
+			mock.ExpectClose().WillReturnError(tt.closeError)
+
+			d := Datastore{Db: db}
+
+			if err := d.ReplaceWithNewRecords(records); (err != nil) != tt.wantErr {
+				t.Errorf("Datastore.ReplaceWithNewRecords() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if err := mock.ExpectationsWereMet(); err != nil && !tt.wantErr {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
+	}
 }
 
 func TestDatastore_InsertFightRecords(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		mmr     MockedMethodsReturn
+		mmr     MockedInsertMethodsReturn
 		wantErr bool
 	}{
-		{name: "happy path", mmr: MockedMethodsReturn{}, wantErr: false},
-		{name: "db.Begin error", mmr: MockedMethodsReturn{dbBegin: fmt.Errorf("fake error")}, wantErr: true},
-		{name: "tx.Prepare error", mmr: MockedMethodsReturn{txPrepare: fmt.Errorf("fake error")}, wantErr: true},
-		{name: "s.Exec error", mmr: MockedMethodsReturn{sExec: fmt.Errorf("fake error")}, wantErr: true},
-		{name: "tx.Commit error", mmr: MockedMethodsReturn{txCommit: fmt.Errorf("fake error")}, wantErr: true},
+		{name: "happy path", mmr: MockedInsertMethodsReturn{}, wantErr: false},
+		{name: "db.Begin error", mmr: MockedInsertMethodsReturn{dbBegin: fmt.Errorf("fake error")}, wantErr: true},
+		{name: "tx.Prepare error", mmr: MockedInsertMethodsReturn{txPrepare: fmt.Errorf("fake error")}, wantErr: true},
+		{name: "s.Exec error", mmr: MockedInsertMethodsReturn{sExec: fmt.Errorf("fake error")}, wantErr: true},
+		{name: "tx.Commit error", mmr: MockedInsertMethodsReturn{txCommit: fmt.Errorf("fake error")}, wantErr: true},
 	}
 
 	for _, tt := range tests {
@@ -58,53 +119,6 @@ func TestDatastore_InsertFightRecords(t *testing.T) {
 				t.Errorf("there were unfulfilled expectations: %s", err)
 			}
 		})
-	}
-}
-
-func setInsertMockExpectations(mock sqlmock.Sqlmock, mmr MockedMethodsReturn, records []scraper.FightRecord) {
-
-	mock.ExpectBegin().WillReturnError(mmr.dbBegin)
-
-	queryInRegex := regexp.QuoteMeta(`COPY "event" ("headline", "datetime") FROM STDIN`)
-
-	mock.ExpectPrepare(queryInRegex).WillReturnError(mmr.txPrepare)
-
-	for _, record := range records {
-		if mmr.sExec != nil {
-			mock.ExpectExec(queryInRegex).WithArgs(record.Headline, record.DateTime).WillReturnError(mmr.sExec)
-		} else {
-			mock.ExpectExec(queryInRegex).WithArgs(record.Headline, record.DateTime).WillReturnResult(sqlmock.NewResult(1, 1))
-		}
-	}
-
-	mock.ExpectCommit().WillReturnError(mmr.txCommit)
-
-	if mmr.anyErrors() {
-		mock.ExpectRollback()
-	}
-}
-
-func createMockFightRecords() ([]scraper.FightRecord, error) {
-
-	tz, err := time.LoadLocation("Europe/London")
-	if err != nil {
-		return nil, fmt.Errorf("unable to load Europe/London timezone %v", err)
-	}
-
-	timeNow := time.Now().Round(time.Second).In(tz)
-	timeTomorrow := timeNow.AddDate(0, 0, 1).Round(time.Second).In(tz)
-	records := []scraper.FightRecord{{Headline: "today", DateTime: timeNow}, {Headline: "tomorrow", DateTime: timeTomorrow}}
-
-	return records, nil
-}
-
-func TestDatastore_Connect_ShouldReturnError(t *testing.T) {
-
-	d := &Datastore{}
-	err := d.Connect()
-
-	if err == nil {
-		t.Errorf("Datastore.Connect() should return error. Datastore = %v", d)
 	}
 }
 
@@ -147,16 +161,6 @@ func TestDatastore_CloseConnection(t *testing.T) {
 				t.Errorf("there were unfulfilled expectations: %s", err)
 			}
 		})
-	}
-}
-
-func TestDatastore_createDbConnectionString(t *testing.T) {
-	d := &Datastore{Host: "localhost", Port: 5432, User: "username", Password: "password", Dbname: "test"}
-	got := d.createDbConnectionString()
-
-	expected := "host=localhost port=5432 user=username password=password dbname=test sslmode=disable"
-	if got != expected {
-		t.Errorf("Datastore.createDbConnectionString() = %v, want = %v", got, expected)
 	}
 }
 

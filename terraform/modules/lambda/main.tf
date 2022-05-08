@@ -39,7 +39,7 @@ resource "aws_lambda_function" "fight_alerts_scraper_lambda" {
 
   source_code_hash = data.archive_file.fight_alerts_scraper_lambda.output_base64sha256
 
-  role = aws_iam_role.fight_alerts_scraper_iam_policy.arn
+  role = aws_iam_role.fight_alerts_scraper_iam_role.arn
   vpc_config {
     subnet_ids         = [var.subnet_ids[0].public, var.subnet_ids[0].private, var.subnet_ids[1].public, var.subnet_ids[1].private]
     security_group_ids = [aws_security_group.lambda_function_security_group.id]
@@ -60,7 +60,7 @@ resource "aws_cloudwatch_log_group" "fight_alerts_scraper_lambda" {
   retention_in_days = 30
 }
 
-resource "aws_iam_role" "fight_alerts_scraper_iam_policy" {
+resource "aws_iam_role" "fight_alerts_scraper_iam_role" {
   name = "${local.module_prepend}-iam-role"
 
   assume_role_policy = jsonencode({
@@ -77,9 +77,35 @@ resource "aws_iam_role" "fight_alerts_scraper_iam_policy" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_policy" {
-  role       = aws_iam_role.fight_alerts_scraper_iam_policy.name
+resource "aws_iam_role_policy_attachment" "execution_policy_attachment" {
+  role       = aws_iam_role.fight_alerts_scraper_iam_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "other_policy_attachment" {
+  role       = aws_iam_role.fight_alerts_scraper_iam_role.name
+  policy_arn = aws_iam_policy.other_policy.arn
+}
+
+resource "aws_iam_policy" "other_policy" {
+  name   = "${local.module_prepend}-other-policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.other_policy_document.json
+}
+
+data "aws_iam_policy_document" "other_policy_document" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "events:PutRule",
+      "events:PutTargets",
+      "events:RemoveTargets",
+      "events:DeleteRule",
+      "events:ListRules",
+      "events:ListTargetsByRule"
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_security_group" "lambda_function_security_group" {
