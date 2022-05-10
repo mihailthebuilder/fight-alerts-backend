@@ -31,7 +31,7 @@ func (s *steps) stopContainers() {
 }
 
 func (s *steps) setUpDatastore() {
-	fmt.Println("Setting up datastore")
+	fmt.Println("Setting up datastore client...")
 
 	auroraPort, err := s.containers.GetLocalhostPort(s.containers.auroraContainer, AuroraPort)
 	if err != nil {
@@ -51,6 +51,26 @@ func (s *steps) setUpDatastore() {
 	}
 
 	err = s.datastore.createEventTable()
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (s *steps) setUpEventBridgeClient() {
+	fmt.Println("Setting up eventbridge client...")
+
+	ebPort, err := s.containers.GetLocalhostPort(s.containers.eventBridgeContainer, MockEventBridgeConxDetails.Port)
+	if err != nil {
+		panic(err)
+	}
+
+	hostName := "localhost"
+	if os.Getenv("JENKINS") == "true" {
+		hostName = "docker"
+	}
+
+	s.eventbridge = EventBridgeClient{host: hostName, port: ebPort}
+	err = s.eventbridge.Connect()
 	if err != nil {
 		panic(err)
 	}

@@ -6,4 +6,4 @@ Feature: Scraper Service lambda scrapes sherdog.com for all the fight data
         When lambda is invoked
         Then the original fight records are deleted
         And newly-scraped fight records are inserted into the database
-        And the trigger for the notification service is scheduled in cloudwatch events
+        And the trigger for the notification service is scheduled in eventbridge

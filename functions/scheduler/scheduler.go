@@ -63,13 +63,13 @@ func (cw CloudWatchEventsScheduler) CreateRule(t time.Time) error {
 		ScheduleExpression: &scheduleExpression,
 	}
 
-	output, err := cw.Api.PutRule(context.TODO(), &params)
+	_, err := cw.Api.PutRule(context.TODO(), &params)
 
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Created EventBridge rule with name=%s, ARN=%s, which will be triggered on cron=%s\n", cw.RuleName, *output.RuleArn, scheduleExpression)
+	fmt.Printf("Created EventBridge rule with name=%s, which will be triggered on cron=%s\n", cw.RuleName, scheduleExpression)
 
 	return nil
 }

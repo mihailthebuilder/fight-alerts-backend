@@ -12,6 +12,7 @@ var _steps = steps{}
 func InitializeTestSuite(ctx *godog.TestSuiteContext) {
 	ctx.BeforeSuite(_steps.startContainers)
 	ctx.BeforeSuite(_steps.setUpDatastore)
+	ctx.BeforeSuite(_steps.setUpEventBridgeClient)
 	ctx.AfterSuite(_steps.stopContainers)
 }
 
@@ -20,6 +21,7 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	ctx.Step(`^lambda is invoked$`, _steps.lambdaIsInvoked)
 	ctx.Step(`^the original fight records are deleted$`, _steps.originalFightRecordsAreDeleted)
 	ctx.Step(`^newly-scraped fight records are inserted into the database$`, _steps.newFightRecordsAreInserted)
+	ctx.Step(`^the trigger for the notification service is scheduled in eventbridge$`, _steps.triggerScheduledInEventbridge)
 }
 
 func TestMain(m *testing.M) {

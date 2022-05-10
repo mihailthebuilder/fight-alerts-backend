@@ -33,10 +33,21 @@ var PostgresConxDetails = DbConxDetails{
 	Host:     "postgres",
 }
 
+type EventBridgeConxDetails struct {
+	Port int
+	Host string
+}
+
+var MockEventBridgeConxDetails = EventBridgeConxDetails{
+	Port: 4566,
+	Host: "eventbridge",
+}
+
 type Containers struct {
-	network         testcontainers.Network
-	lambdaContainer testcontainers.Container
-	auroraContainer testcontainers.Container
+	network              testcontainers.Network
+	lambdaContainer      testcontainers.Container
+	auroraContainer      testcontainers.Container
+	eventBridgeContainer testcontainers.Container
 }
 
 func (c *Containers) GetLambdaLog() (io.ReadCloser, error) {
@@ -57,6 +68,11 @@ func (c *Containers) Start() error {
 	}
 
 	err = c.startAuroraContainer()
+	if err != nil {
+		return err
+	}
+
+	err = c.startEventBridgeContainer()
 	if err != nil {
 		return err
 	}
@@ -82,6 +98,11 @@ func (c *Containers) Stop() error {
 		return err
 	}
 
+	err = c.eventBridgeContainer.Terminate(context)
+	if err != nil {
+		return err
+	}
+
 	err = c.network.Remove(context)
 	if err != nil {
 		return err
@@ -97,12 +118,14 @@ func (c *Containers) startLambdaContainer() error {
 		Name:         "lambda",
 		Hostname:     "lambda",
 		Env: map[string]string{
-			"DOCKER_LAMBDA_STAY_OPEN": "1",
-			"AWS_ACCESS_KEY_ID":       "x",
-			"AWS_SECRET_ACCESS_KEY":   "x",
-			"RDS_HOST":                PostgresConxDetails.Host,
-			"RDS_USERNAME":            PostgresConxDetails.User,
-			"RDS_PASSWORD":            PostgresConxDetails.Password,
+			"DOCKER_LAMBDA_STAY_OPEN":  "1",
+			"AWS_ACCESS_KEY_ID":        "x",
+			"AWS_SECRET_ACCESS_KEY":    "x",
+			"RDS_HOST":                 PostgresConxDetails.Host,
+			"RDS_USERNAME":             PostgresConxDetails.User,
+			"RDS_PASSWORD":             PostgresConxDetails.Password,
+			"NOTIFICATION_LAMBDA_ARN":  "arn:aws:lambda:us-east-1:111111111111:function:mock-lambda-arn",
+			"EVENTS_ENDPOINT_OVERRIDE": fmt.Sprintf("http://%s:%d", MockEventBridgeConxDetails.Host, MockEventBridgeConxDetails.Port),
 		},
 		Networks:    []string{MyNetwork},
 		NetworkMode: container.NetworkMode(MyNetwork),
@@ -163,6 +186,33 @@ func (c *Containers) startAuroraContainer() error {
 	}
 
 	err = c.auroraContainer.Start(context)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Containers) startEventBridgeContainer() error {
+	req := testcontainers.ContainerRequest{
+		Image:        "localstack/localstack",
+		ExposedPorts: []string{portStringBuilder(MockEventBridgeConxDetails.Port)},
+		Name:         "eventbridge",
+		Hostname:     MockEventBridgeConxDetails.Host,
+		Env: map[string]string{
+			"SERVICES":       "events",
+			"DEFAULT_REGION": "us-east-1",
+			"DEBUG":          "1",
+		},
+		Networks:    []string{MyNetwork},
+		NetworkMode: container.NetworkMode(MyNetwork),
+	}
+
+	var err error
+	c.eventBridgeContainer, err = testcontainers.GenericContainer(context.Background(), testcontainers.GenericContainerRequest{
+		ContainerRequest: req,
+		Started:          true,
+	})
 	if err != nil {
 		return err
 	}

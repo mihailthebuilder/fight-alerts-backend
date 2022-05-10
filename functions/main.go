@@ -11,6 +11,7 @@ import (
 	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatchevents"
 )
@@ -40,7 +41,30 @@ func setUpDatastore() datastore.Datastore {
 
 func setUpNotificationScheduler() scheduler.CloudWatchEventsScheduler {
 	arn := os.Getenv("NOTIFICATION_LAMBDA_ARN")
-	cfg, _ := config.LoadDefaultConfig(context.TODO())
+
+	endpoint := os.Getenv("EVENTS_ENDPOINT_OVERRIDE")
+
+	cfg, err := config.LoadDefaultConfig(
+		context.Background(),
+		config.WithRegion("us-east-1"),
+		config.WithEndpointResolverWithOptions(aws.EndpointResolverWithOptionsFunc(
+			func(service, region string, options ...interface{}) (aws.Endpoint, error) {
+				if endpoint != "" {
+					return aws.Endpoint{
+						URL:           endpoint,
+						SigningRegion: region,
+					}, nil
+				}
+
+				// returning EndpointNotFoundError will allow the service to fallback to its default resolution
+				return aws.Endpoint{}, &aws.EndpointNotFoundError{}
+			},
+		)),
+	)
+
+	if err != nil {
+		panic(err)
+	}
 
 	client := cloudwatchevents.NewFromConfig(cfg)
 

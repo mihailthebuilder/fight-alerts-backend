@@ -38,13 +38,15 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
     - ~~Update `.feature` file to reflect there's a message inserted into cloudwatch event~~
     - implement the feature in TDD
       - You need to start by deleting all the rules in place for that target. [This API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.ListTargetsByRule) lists all rules for given resources, and [This](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.DeleteRule) deletes the resource.
-      - Once you've deleted the previous rule, you need to use [this API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.PutRule) to create the new rule.
-        - it's simpler to start off with this, then do the deletion
-        - I've built the feature, but am getting a lambda permission error as it can't access the resource. need to fix
-        - now having problems with terraform, need to delete...
-    - implement the feature in the service test. Leave this for last as you're not sure how it will work.
+      - Once you've deleted the previous rule, you need to use [this API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.PutRule) to create the new rule. it's simpler to start off with this, then do the deletion
+        - steps
+          - ~~write the implementation~~
+          - ~~write the unit tests~~
+          - ~~write the service tests~~
+          - deploy in jenkins to make sure everything still works
   - notification service to send SMS
     - add notification service in the `.feature` file 
+- can't get consistent internet access with Lambda. start with [this article](https://stackoverflow.com/questions/51380018/aws-lambda-in-vpc-sometimes-doesnt-have-internet-access)
 - Create architecture diagram
 - Set up cloudwatch event trigger to run the scraper every day
 - Look into [flyway](https://flywaydb.org/) for your db

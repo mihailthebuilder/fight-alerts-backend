@@ -8,8 +8,9 @@ import (
 )
 
 type steps struct {
-	containers Containers
-	datastore  AuroraClient
+	containers  Containers
+	datastore   AuroraClient
+	eventbridge EventBridgeClient
 }
 
 var originalFightRecords = []FightRecord{{Headline: "one", DateTime: time.Now()}, {Headline: "two", DateTime: time.Now()}}
@@ -74,6 +75,41 @@ func (s *steps) newFightRecordsAreInserted() error {
 
 	if len(records) == 0 {
 		return fmt.Errorf("no fight records were inserted into the database")
+	}
+
+	return nil
+}
+
+func (s *steps) triggerScheduledInEventbridge() error {
+
+	rules, err := s.eventbridge.GetAllRuleNamesByNamePrefix("fight-alerts-notification-rule")
+	if err != nil {
+		return err
+	}
+
+	if len(rules) != 1 {
+		return fmt.Errorf("only 1 rule should be created. rules created %#v", rules)
+	}
+
+	ruleName := *rules[0].Name
+
+	if ruleName != "fight-alerts-notification-rule" {
+		return fmt.Errorf("rule should have correct name, instead it's %v", ruleName)
+	}
+
+	targets, err := s.eventbridge.GetAllTargetIdsByRuleName(ruleName)
+	if err != nil {
+		return err
+	}
+
+	if len(targets) != 1 {
+		return fmt.Errorf("only 1 target should be created. targets created %#v", targets)
+	}
+
+	if *targets[0].Id != "fight-alerts-notification-rule-target-id" ||
+		*targets[0].Arn != "arn:aws:lambda:us-east-1:111111111111:function:mock-lambda-arn" {
+		return fmt.Errorf("incorrect target settings - id=%v, arn=%v", *targets[0].Id, *targets[0].Arn)
+
 	}
 
 	return nil

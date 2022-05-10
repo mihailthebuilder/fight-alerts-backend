@@ -9,9 +9,7 @@ import (
 )
 
 type Datastore struct {
-	Db                           *sql.DB
-	Host, Dbname, User, Password string
-	Port                         int
+	Db *sql.DB
 }
 
 type IDatastore interface {
