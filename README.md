@@ -34,15 +34,15 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
 - ~~Figure out how to do the notificiation sender~~
 - Implement notification service as per [proposal](#proposal-for-notification-service)
   - scraper service to insert message in cloudwatch events
-    - ~~Update `.feature` file to reflect there's a message inserted into cloudwatch event~~
-    - implement the feature in TDD
-      - You need to start by deleting all the rules in place for that target. [This API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.ListTargetsByRule) lists all rules for given resources, and [This](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.DeleteRule) deletes the resource.
-      - ~~Once you've deleted the previous rule, you need to use [this API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.PutRule) to create the new rule. it's simpler to start off with this, then do the deletion~~
-        - steps
-          - ~~write the implementation~~
-          - ~~write the unit tests~~
-          - ~~write the service tests~~
-          - ~~deploy in jenkins to make sure everything still works~~
+    - You need to start by deleting all the rules in place for that target. [This API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.ListTargetsByRule) lists all rules for given resources, and [This](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.DeleteRule) deletes the resource.
+      - write service tests
+      - write implementation in TDD way
+      - deploy in jenkins & test in prod
+    - ~~Once you've deleted the previous rule, you need to use [this API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.PutRule) to create the new rule. it's simpler to start off with this, then do the deletion~~
+      - ~~write the implementation~~
+      - ~~write the unit tests~~
+      - ~~write the service tests~~
+      - ~~deploy in jenkins to make sure everything still works~~
   - notification service to send SMS
     - add notification service in the `.feature` file 
 - can't get consistent internet access with Lambda. start with [this article](https://stackoverflow.com/questions/51380018/aws-lambda-in-vpc-sometimes-doesnt-have-internet-access)
