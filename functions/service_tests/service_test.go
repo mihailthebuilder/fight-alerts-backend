@@ -17,11 +17,12 @@ func InitializeTestSuite(ctx *godog.TestSuiteContext) {
 }
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
-	ctx.Step(`^fight records exist in the database$`, _steps.fightRecordsExistInDb)
-	ctx.Step(`^lambda is invoked$`, _steps.lambdaIsInvoked)
+	ctx.Step(`^some fight records exist in the database$`, _steps.someFightRecordsExistInDb)
+	ctx.Step(`^a trigger for the notification service has been set in eventbridge$`, _steps.triggerForNotificationServiceIsSet)
+	ctx.Step(`^the scraper lambda is invoked$`, _steps.scraperLambdaIsInvoked)
 	ctx.Step(`^the original fight records are deleted$`, _steps.originalFightRecordsAreDeleted)
 	ctx.Step(`^newly-scraped fight records are inserted into the database$`, _steps.newFightRecordsAreInserted)
-	ctx.Step(`^the trigger for the notification service is scheduled in eventbridge$`, _steps.triggerScheduledInEventbridge)
+	ctx.Step(`^the original trigger in eventbridge is replaced with the new trigger$`, _steps.eventBridgeTriggerIsReplaced)
 }
 
 func TestMain(m *testing.M) {

@@ -15,13 +15,13 @@ type steps struct {
 
 var originalFightRecords = []FightRecord{{Headline: "one", DateTime: time.Now()}, {Headline: "two", DateTime: time.Now()}}
 
-func (s *steps) fightRecordsExistInDb() error {
+func (s *steps) someFightRecordsExistInDb() error {
 
 	err := s.datastore.insertFightRecordsToEventTable(originalFightRecords)
 	return err
 }
 
-func (s *steps) lambdaIsInvoked() error {
+func (s *steps) scraperLambdaIsInvoked() error {
 	port, err := s.containers.GetLocalhostPort(s.containers.lambdaContainer, LambdaPort)
 
 	if err != nil {
@@ -80,7 +80,7 @@ func (s *steps) newFightRecordsAreInserted() error {
 	return nil
 }
 
-func (s *steps) triggerScheduledInEventbridge() error {
+func (s *steps) eventBridgeTriggerIsReplaced() error {
 
 	rules, err := s.eventbridge.GetAllRuleNamesByNamePrefix("fight-alerts-notification-rule")
 	if err != nil {
@@ -113,4 +113,10 @@ func (s *steps) triggerScheduledInEventbridge() error {
 	}
 
 	return nil
+}
+
+func (s *steps) triggerForNotificationServiceIsSet() error {
+
+	err := s.eventbridge.InsertRuleWithTarget("rule-to-be-deleted", "target-to-be-deleted", "arn:aws:lambda:us-east-1:9999999999:function:arn-to-be-deleted")
+	return err
 }

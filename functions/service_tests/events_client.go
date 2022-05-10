@@ -62,3 +62,23 @@ func (e *EventBridgeClient) GetAllTargetIdsByRuleName(name string) ([]types.Targ
 
 	return lto.Targets, nil
 }
+
+func (e *EventBridgeClient) InsertRuleWithTarget(ruleName, targetId, targetARN string) error {
+	pri := cloudwatchevents.PutRuleInput{Name: &ruleName, ScheduleExpression: aws.String("cron(0 12 10 10 10 2023)")}
+
+	_, err := e.handle.PutRule(context.Background(), &pri)
+	if err != nil {
+		return err
+	}
+
+	target := types.Target{Arn: &targetARN, Id: &targetId}
+
+	pti := cloudwatchevents.PutTargetsInput{Rule: &ruleName, Targets: []types.Target{target}}
+
+	_, err = e.handle.PutTargets(context.Background(), &pti)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
