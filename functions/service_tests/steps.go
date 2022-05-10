@@ -80,7 +80,7 @@ func (s *steps) newFightRecordsAreInserted() error {
 	return nil
 }
 
-func (s *steps) eventBridgeTriggerIsReplaced() error {
+func (s *steps) triggerIsUpdated() error {
 
 	rules, err := s.eventbridge.GetAllRuleNamesByNamePrefix("fight-alerts-notification-rule")
 	if err != nil {
@@ -95,6 +95,10 @@ func (s *steps) eventBridgeTriggerIsReplaced() error {
 
 	if ruleName != "fight-alerts-notification-rule" {
 		return fmt.Errorf("rule should have correct name, instead it's %v", ruleName)
+	}
+
+	if *rules[0].ScheduleExpression == "cron(10 10 10 10 10 2005)" {
+		return fmt.Errorf("schedule expression should have been updated")
 	}
 
 	targets, err := s.eventbridge.GetAllTargetIdsByRuleName(ruleName)
@@ -117,6 +121,12 @@ func (s *steps) eventBridgeTriggerIsReplaced() error {
 
 func (s *steps) triggerForNotificationServiceIsSet() error {
 
-	err := s.eventbridge.InsertRuleWithTarget("rule-to-be-deleted", "target-to-be-deleted", "arn:aws:lambda:us-east-1:9999999999:function:arn-to-be-deleted")
+	err := s.eventbridge.InsertRuleWithTarget(
+		"fight-alerts-notification-rule",
+		"fight-alerts-notification-rule-target-id",
+		"arn:aws:lambda:us-east-1:111111111111:function:mock-lambda-arn",
+		"cron(10 10 10 10 10 2005)",
+	)
+
 	return err
 }

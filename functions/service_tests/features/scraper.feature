@@ -9,4 +9,4 @@ Feature: Scraper Service lambda scrapes sherdog.com for all the fight data
 
         Then the original fight records are deleted
         And newly-scraped fight records are inserted into the database
-        And the original trigger in eventbridge is replaced with the new trigger
+        And the notification service trigger is updated

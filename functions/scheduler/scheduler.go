@@ -32,12 +32,8 @@ type ICloudWatchClient interface {
 }
 
 func (cw CloudWatchEventsScheduler) UpdateTrigger(t time.Time) error {
-	err := cw.ClearPreviousRules()
-	if err != nil {
-		return err
-	}
 
-	err = cw.CreateRule(t)
+	err := cw.CreateRule(t)
 	if err != nil {
 		return err
 	}
@@ -47,10 +43,6 @@ func (cw CloudWatchEventsScheduler) UpdateTrigger(t time.Time) error {
 		return err
 	}
 
-	return nil
-}
-
-func (cw CloudWatchEventsScheduler) ClearPreviousRules() error {
 	return nil
 }
 

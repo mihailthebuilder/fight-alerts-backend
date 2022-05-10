@@ -22,7 +22,7 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	ctx.Step(`^the scraper lambda is invoked$`, _steps.scraperLambdaIsInvoked)
 	ctx.Step(`^the original fight records are deleted$`, _steps.originalFightRecordsAreDeleted)
 	ctx.Step(`^newly-scraped fight records are inserted into the database$`, _steps.newFightRecordsAreInserted)
-	ctx.Step(`^the original trigger in eventbridge is replaced with the new trigger$`, _steps.eventBridgeTriggerIsReplaced)
+	ctx.Step(`^the notification service trigger is updated$`, _steps.triggerIsUpdated)
 }
 
 func TestMain(m *testing.M) {
