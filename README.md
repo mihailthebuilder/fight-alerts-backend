@@ -4,17 +4,16 @@ Backend service to track upcoming MMA fights, written in Go and deployed using A
 
 # Features completed
 
-Service that scrapes a site for upcoming fights
-
-AWS Lambda that runs the service
+AWS Lambda that...
+- scrapes a site for upcoming UFC events
+- stores the data in an Aurora Postgres instance
+- sets an EventBridge rule to trigger on the day of the next event
 
 Terraform deployment instructions
 
-Jenkins test & deployment pipeline, with local Jenkins server hosted in a separate repository
-
 Unit tests & Cucumber service tests
 
-AWS Aurora Postgres instance to host the scraped data
+Jenkins test & deployment pipeline, with local Jenkins server hosted in a separate repository
 
 # Development
 
@@ -38,12 +37,12 @@ Deployment is handled by local Jenkins server according to instructions in [Jenk
     - ~~Update `.feature` file to reflect there's a message inserted into cloudwatch event~~
     - implement the feature in TDD
       - You need to start by deleting all the rules in place for that target. [This API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.ListTargetsByRule) lists all rules for given resources, and [This](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.DeleteRule) deletes the resource.
-      - Once you've deleted the previous rule, you need to use [this API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.PutRule) to create the new rule. it's simpler to start off with this, then do the deletion
+      - ~~Once you've deleted the previous rule, you need to use [this API](https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/service/eventbridge#Client.PutRule) to create the new rule. it's simpler to start off with this, then do the deletion~~
         - steps
           - ~~write the implementation~~
           - ~~write the unit tests~~
           - ~~write the service tests~~
-          - deploy in jenkins to make sure everything still works
+          - ~~deploy in jenkins to make sure everything still works~~
   - notification service to send SMS
     - add notification service in the `.feature` file 
 - can't get consistent internet access with Lambda. start with [this article](https://stackoverflow.com/questions/51380018/aws-lambda-in-vpc-sometimes-doesnt-have-internet-access)
