@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"fight-alerts-backend/scraper"
+	"fight-alerts-backend/scraper-lambda/scraper"
 	"time"
 
 	"github.com/stretchr/testify/mock"

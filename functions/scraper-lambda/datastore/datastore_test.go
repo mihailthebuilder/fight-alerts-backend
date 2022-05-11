@@ -1,7 +1,7 @@
 package datastore
 
 import (
-	"fight-alerts-backend/scraper"
+	"fight-alerts-backend/scraper-lambda/scraper"
 	"fmt"
 	"testing"
 

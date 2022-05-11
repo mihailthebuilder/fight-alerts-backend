@@ -2,7 +2,7 @@ package datastore
 
 import (
 	"database/sql"
-	"fight-alerts-backend/scraper"
+	"fight-alerts-backend/scraper-lambda/scraper"
 	"fmt"
 
 	"github.com/lib/pq"

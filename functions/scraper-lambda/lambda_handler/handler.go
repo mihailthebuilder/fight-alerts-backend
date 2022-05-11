@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"fight-alerts-backend/datastore"
-	"fight-alerts-backend/scheduler"
-	"fight-alerts-backend/scraper"
+	"fight-alerts-backend/scraper-lambda/datastore"
+	"fight-alerts-backend/scraper-lambda/scheduler"
+	"fight-alerts-backend/scraper-lambda/scraper"
 	"fmt"
 	"log"
 )

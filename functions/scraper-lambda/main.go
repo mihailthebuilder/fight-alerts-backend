@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"database/sql"
-	"fight-alerts-backend/datastore"
-	handler "fight-alerts-backend/lambda_handler"
-	"fight-alerts-backend/scheduler"
-	"fight-alerts-backend/scraper"
+	"fight-alerts-backend/scraper-lambda/datastore"
+	handler "fight-alerts-backend/scraper-lambda/lambda_handler"
+	"fight-alerts-backend/scraper-lambda/scheduler"
+	"fight-alerts-backend/scraper-lambda/scraper"
 	"fmt"
 	"os"
 
