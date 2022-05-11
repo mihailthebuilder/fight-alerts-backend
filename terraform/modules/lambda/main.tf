@@ -11,7 +11,7 @@ resource "aws_s3_bucket" "fight_alerts_scraper_lambda" {
 
 data "archive_file" "fight_alerts_scraper_lambda" {
   type        = "zip"
-  source_file = "../functions/bin/scraper"
+  source_file = "../functions/scraper-lambda/bin/scraper"
   output_path = "bin/scraper.zip"
 }
 

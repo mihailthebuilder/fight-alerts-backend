@@ -10,7 +10,7 @@ pipeline {
         stage("test") {
             steps {
                 sh """
-                    cd functions
+                    cd functions/scraper-lambda
                     JENKINS="true" make test
                 """
             }
@@ -19,7 +19,7 @@ pipeline {
         stage("build") {
             steps {
                 sh """
-                    cd functions
+                    cd functions/scraper-lambda
                     make build
                 """
             }
