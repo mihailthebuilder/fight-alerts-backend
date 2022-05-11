@@ -1,7 +1,7 @@
 BASE_DIR_LINUX:=$(shell pwd)
 
 build:
-	GOOS=linux go build -o ./bin/scraper
+	GOOS=linux go build -o ./bin/scraper-lambda
 
 unit-test:
 	go test ./ ./scraper ./lambda_handler ./datastore ./scheduler -coverprofile=./test_results/coverage.out
