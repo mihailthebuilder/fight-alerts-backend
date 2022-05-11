@@ -11,14 +11,14 @@ resource "aws_s3_bucket" "fight_alerts_scraper_lambda" {
 
 data "archive_file" "fight_alerts_scraper_lambda" {
   type        = "zip"
-  source_file = "../functions/scraper-lambda/bin/scraper"
-  output_path = "bin/scraper.zip"
+  source_file = "../functions/scraper-lambda/bin/scraper-lambda"
+  output_path = "bin/scraper-lambda.zip"
 }
 
 resource "aws_s3_bucket_object" "fight_alerts_scraper_lambda" {
   bucket = aws_s3_bucket.fight_alerts_scraper_lambda.id
 
-  key    = "scraper.zip"
+  key    = "scraper-lambda.zip"
   source = data.archive_file.fight_alerts_scraper_lambda.output_path
 
   etag = filemd5(data.archive_file.fight_alerts_scraper_lambda.output_path)
