@@ -8,7 +8,7 @@ unit-test:
 	go tool cover -html=./test_results/coverage.out -o ./test_results/coverage.html
 
 int-test: build
-	cp ./bin/scraper ./service_tests
+	cp ./bin/scraper-lambda ./service_tests
 	cd service_tests && go test
 
 test: unit-test int-test
